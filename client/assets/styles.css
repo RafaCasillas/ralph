@@ -3,6 +3,13 @@ html {
   background-color: #faf8f0;
 }
 
+body {
+  /* overscroll-behavior-y: contain; */
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
 #login{
   background-color: #f78216;
   height: 100%;

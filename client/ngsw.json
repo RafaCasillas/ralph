@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1588013315572,
+  "timestamp": 1588115334055,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -10,15 +10,15 @@
       "urls": [
         "/favicon.ico",
         "/index.html",
-        "/main-es2015.a8cee1d3bfde0f2cfb11.js",
-        "/main-es5.a8cee1d3bfde0f2cfb11.js",
+        "/main-es2015.24ca0c992ee536ed509a.js",
+        "/main-es5.24ca0c992ee536ed509a.js",
         "/manifest.webmanifest",
         "/polyfills-es2015.690002c25ea8557bb4b0.js",
         "/polyfills-es5.9e286f6d9247438cbb02.js",
         "/runtime-es2015.1eba213af0b233498d9d.js",
         "/runtime-es5.1eba213af0b233498d9d.js",
         "/scripts.16b54f5fd58d70b4ac43.js",
-        "/styles.240828cbf5ae84b0c975.css"
+        "/styles.27788dd4c9688a91f7fa.css"
       ],
       "patterns": []
     },
@@ -27,10 +27,11 @@
       "installMode": "lazy",
       "updateMode": "prefetch",
       "urls": [
-        "/assets/1.png",
-        "/assets/2.png",
-        "/assets/3.png",
         "/assets/icono.png",
+        "/assets/icons-ios/apple-launch-1125x2436.png",
+        "/assets/icons-ios/apple-launch-1242x2208.png",
+        "/assets/icons-ios/apple-launch-640x1136.png",
+        "/assets/icons-ios/apple-launch-750x1334.png",
         "/assets/icons/icon-128x128.png",
         "/assets/icons/icon-144x144.png",
         "/assets/icons/icon-152x152.png",
@@ -63,10 +64,11 @@
   ],
   "dataGroups": [],
   "hashTable": {
-    "/assets/1.png": "0f063b652c48e64a5cec030ae9f442bf054f0b6e",
-    "/assets/2.png": "65255f32a90ef8d21fb2efdbc2283bf157386980",
-    "/assets/3.png": "8d802b8201b7e3df4213373078a3f4f33f242251",
     "/assets/icono.png": "82e31e7b357bcdddd591ac314d6df53471fdd6d9",
+    "/assets/icons-ios/apple-launch-1125x2436.png": "e91c6a38babc53801e9770f654285a0ea3fa9872",
+    "/assets/icons-ios/apple-launch-1242x2208.png": "864a2a02b5f2d3b0f9fdcb8ee1ee644b2fd938e8",
+    "/assets/icons-ios/apple-launch-640x1136.png": "91ef306c3a92151457091279567b5ec9be0cd5d7",
+    "/assets/icons-ios/apple-launch-750x1334.png": "4094dbde662263c1a98e03912485f67483aa2693",
     "/assets/icons/icon-128x128.png": "dae3b6ed49bdaf4327b92531d4b5b4a5d30c7532",
     "/assets/icons/icon-144x144.png": "b0bd89982e08f9bd2b642928f5391915b74799a7",
     "/assets/icons/icon-152x152.png": "7479a9477815dfd9668d60f8b3b2fba709b91310",
@@ -77,7 +79,7 @@
     "/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
     "/assets/logo.png": "21250c4cc7d9d27a75c92da0959b4843e3c12921",
     "/assets/logo2.png": "2deec8f209006ce745d4e8ad160643e4c1c25158",
-    "/assets/styles.css": "4eb6dde2f8fd412e12450e9bf917c917931805a6",
+    "/assets/styles.css": "232128a7818ced869b850b4e430df9de0cd7ed3c",
     "/fa-brands-400.31015e861aeb30ff8355.woff2": "509988477da79c146cb93fb728405f18e923c2de",
     "/fa-brands-400.3c45c98f6f6c1b009c08.svg": "d49c07aef6414916b3c6860b42b906e39748e842",
     "/fa-brands-400.5818bbd07dfd7095920a.ttf": "66c86edfd13e63e0e981ce853335c28bc2d20cec",
@@ -94,16 +96,16 @@
     "/fa-solid-900.9451d5fee89b51a20f8a.woff2": "75a88815c47a249eadb5f0edc1675957f860cca7",
     "/fa-solid-900.a940d584750708f5435c.woff": "15c52209092ce0fb7210e40e2a01acc8b4a5c494",
     "/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
-    "/index.html": "8b4a8adfaae3f8211b91e91a50393650892cf32d",
-    "/main-es2015.a8cee1d3bfde0f2cfb11.js": "8313579538c040bcdbbe56788a4c0c13277757ea",
-    "/main-es5.a8cee1d3bfde0f2cfb11.js": "39e9d4e16b38512921bceb4ba2066894534cfd8f",
-    "/manifest.webmanifest": "6bd446cf481e91dc7da6926e0d9b5fb2029c63fa",
+    "/index.html": "4c185ae8bda2d59823b7031dfb3203ab0389aeee",
+    "/main-es2015.24ca0c992ee536ed509a.js": "b2ea508299fa7b3202d005b8a4d88233b91dde2f",
+    "/main-es5.24ca0c992ee536ed509a.js": "794851d04bb6d352dc8d822dddb79ae2ab5d89dc",
+    "/manifest.webmanifest": "8537c66622e5aed90dcfd76abd8863f2036aa0a8",
     "/polyfills-es2015.690002c25ea8557bb4b0.js": "72ad4ccc0a3916ae4598199447cdeadd6d380570",
     "/polyfills-es5.9e286f6d9247438cbb02.js": "e51a1de4f016cd689dbdbef51043dec9518c4111",
     "/runtime-es2015.1eba213af0b233498d9d.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
     "/runtime-es5.1eba213af0b233498d9d.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
     "/scripts.16b54f5fd58d70b4ac43.js": "c989b9b06d4c1e9311a568659cbb1d31520df5bb",
-    "/styles.240828cbf5ae84b0c975.css": "a9582554d0e3d7f072f8e98ebb22166d1db065e7"
+    "/styles.27788dd4c9688a91f7fa.css": "a8dda7f135110f43f4b74d264a5455798ffe6435"
   },
   "navigationUrls": [
     {

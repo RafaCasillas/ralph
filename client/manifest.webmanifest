@@ -1,9 +1,10 @@
 {
-  "name": "client",
-  "short_name": "client",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "name": "Ralph",
+  "short_name": "Ralph",
+  "theme_color": "#f78216",
+  "background_color": "#f78216",
   "display": "standalone",
+  "orientation": "portrait",
   "scope": "./",
   "start_url": "./",
   "icons": [
