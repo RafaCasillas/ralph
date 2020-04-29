@@ -36,6 +36,7 @@ app.use('/api', restaurante_routes);
 app.use('/api', producto_routes);
 app.use('/api', pedido_routes);
 
+// Para que funcione en produccion
 app.get('*', function(req, res, next){
     res.sendFile(path.resolve('client/index.html'));
 });
