@@ -11,7 +11,7 @@ var UsuarioSchema = Schema({
     telefono: String,
     imagen: String,
     domicilio: String,
-    municipio: {type: Schema.ObjectId, ref: 'Municipio'},
+    municipio: String,
     rol: String,
     restaurante: String,
     status: String

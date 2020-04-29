@@ -7,7 +7,7 @@ var RestauranteSchema = Schema({
     propietario: {type: Schema.ObjectId, ref: 'Usuario'},
     nombre: String,
     ubicacion: Array,
-    municipio: {type: Schema.ObjectId, ref: 'Municipio'},
+    municipio: String,
     imagen: String,
     telefono: Number,
     horario: Array,

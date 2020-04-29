@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var SeccionSchema = Schema({
-    restaurante: {type: Schema.ObjectId, ref: 'Restaurante'},
+    restaurante: String,
     nombre: String
 });
 

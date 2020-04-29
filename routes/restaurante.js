@@ -17,6 +17,6 @@ api.get('/restaurantes/:id/:page?', RestauranteControler.obtenerRestaurantes);
 api.post('/crear-seccion-restaurante/:id', md_auth.ensureAuth, RestauranteControler.crearSeccion);
 api.put('/actualizar-seccion-restaurante/:res/:sec', md_auth.ensureAuth, RestauranteControler.actualizarSeccion);
 api.get('/obtener-seccion-restaurante/:id', RestauranteControler.obtenerSeccion);
-api.get('/obtener-secciones-restaurantes/:id/:page?', RestauranteControler.obtenerSecciones);
+api.get('/obtener-secciones-restaurantes/:id/:who/:page?', RestauranteControler.obtenerSecciones);
 
 module.exports = api;

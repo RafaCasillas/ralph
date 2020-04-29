@@ -138,7 +138,7 @@ function obtenerProducto(req, res){
     var productoId = req.params.id;
 
     Producto.findById(productoId, (err, producto) => {
-        if(err) return res.status(500).send({message: 'Error en la petición'});
+        if(err) return res.status(500).send({message: err});
 
         if(!producto) return res.status(404).send({message: 'El producto no existe'});
         
@@ -158,6 +158,7 @@ function obtenerProductos(req, res){
     
     if(req.params.sec && req.params.sec != 0){
         var parametro = {status: 'activo', seccion: req.params.sec}
+        // var parametro = [ { $match: { seccion: req.params.sec }}, { $sample: { size: 6 } } ]    aggregate
     }
 
     if(req.params.nom && req.params.nom != 0){
@@ -170,10 +171,10 @@ function obtenerProductos(req, res){
         page = req.params.page;
     }
     
-    var itemsPerPage = 4;
+    var itemsPerPage = 10;
 
-    Producto.find(parametro).sort().paginate(page, itemsPerPage, (err, productos, total) => {
-        if(err) return res.status(500).send({message: '202 - Error en la petición'});
+    Producto.find(parametro).paginate(page, itemsPerPage, (err, productos, total) => {
+        if(err) return res.status(500).send({message: err});
 
         if(!productos) return res.status(404).send({message: 'No hay productos disponibles'});
 

@@ -4,14 +4,14 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var ProductoSchema = Schema({
-   restaurante: {type: Schema.ObjectId, ref: 'Restaurante'},
+   restaurante: String,
    nombre: String,
    descripcion: String,
    imagen: String,
    precio: Number,
    tiempoEntrega: Number,
-   categoria: {type: Schema.ObjectId, ref: 'Categoria'},
-   seccion: {type: Schema.ObjectId, ref: 'Restaurante'},
+   categoria: String,
+   seccion: String,
    status: String
 });
 

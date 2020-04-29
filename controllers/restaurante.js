@@ -280,15 +280,20 @@ function obtenerSeccion(req, res){
 
 function obtenerSecciones(req, res){
     var restaurante = req.params.id;
+    var itemsPerPage = 3;
 
     var page = 1;
     if(req.params.page){
         page = req.params.page;
     }
-    
-    var itemsPerPage = 4;
 
-    Seccion.find({'restaurante': restaurante}).sort().paginate(page, itemsPerPage, (err, secciones, total) => {
+    if(req.params.who == 1){
+        var itemsPerPage = 30;
+    }
+
+    // Seccion.aggregate([ { $match: { restaurante: '5ea9f726110e020ee7e1c2a0' }}, { $sample: { size: 3 } } ], (err, secciones, total) => {
+
+    Seccion.find({'restaurante': restaurante}).paginate(page, itemsPerPage, (err, secciones, total) => {
         if(err) return res.status(500).send({message: 'Error en la petición'});
 
         if(!secciones) return res.status(404).send({message: 'Las secciones no existen'});
@@ -296,6 +301,7 @@ function obtenerSecciones(req, res){
         return res.status(200).send({
             secciones,
             total,
+            page,
             pages: Math.ceil(total/itemsPerPage)
         });
     });
