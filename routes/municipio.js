@@ -6,7 +6,7 @@ var MunicipioControler = require('../controllers/municipio');
 var api = express.Router();
 var md_auth = require('../middlewares/autenticated');
 
-api.post('/m-registro', MunicipioControler.registrarMunicipio);
+api.post('/m-registro', md_auth.ensureAuth, MunicipioControler.registrarMunicipio);
 api.post('/c-registro', md_auth.ensureAuth, MunicipioControler.registrarCategoriaMunicipio);
 api.get('/municipios', MunicipioControler.obtenerMunicipios);
 api.get('/categorias-municipios', MunicipioControler.obtenerCategorias);

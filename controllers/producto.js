@@ -9,7 +9,7 @@ const fs = require('fs');
 function crearProducto(req, res){
     var params = req.body;
 
-    if( params.nombre && params.descripcion && params.precio && params.tiempoEntrega && params.categoria && params.seccion && params.imagen == 1){
+    if( params.nombre && params.descripcion && params.precio && params.tiempoEntrega && params.categoria != 0 && params.seccion != 0 && params.imagen == 1){
         var producto = new Producto();
 
         producto.nombre = params.nombre;

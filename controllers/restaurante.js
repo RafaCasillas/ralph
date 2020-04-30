@@ -12,7 +12,11 @@ const fs = require('fs');
 function registrarRestaurante(req, res){
     var params = req.body;
 
-    if(params.propietario && params.municipio && params.servicioDomicilio){
+    if(req.usuario.rol != 'ADMIN'){
+        return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+    }
+
+    if(params.propietario && params.municipio != 0 && params.servicioDomicilio != null){
         var restaurante = new Restaurante();
 
         restaurante.municipio = params.municipio;

@@ -13,7 +13,7 @@ const fs = require('fs');
 function registrarUsuario(req, res){
     var params = req.body;
 
-    if(params.nombre && params.apellido && params.telefono && params.correo && params.password && params.municipio){
+    if(params.nombre && params.apellido && params.telefono && params.correo && params.password && params.municipio != 0){
         var usuario = new Usuario();
         usuario.nombre = params.nombre;
         usuario.apellido = params.apellido;
