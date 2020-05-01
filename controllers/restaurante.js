@@ -27,7 +27,7 @@ function registrarRestaurante(req, res){
         restaurante.ubicacion = [];
         restaurante.imagen = null;
         restaurante.telefono = null;
-        restaurante.credito = 0;
+        restaurante.credito = 30;
         restaurante.debe = 0;
         restaurante.horario = [];
 
