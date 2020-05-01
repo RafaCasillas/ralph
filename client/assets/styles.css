@@ -175,8 +175,7 @@ body {
   padding-bottom: 2px;
   padding-inline-end: 80px;
   font-weight: bold;
-  opacity: 90%;
-  /* color: #ff5620; */
+  opacity: 0.9;
   color: black;
 }
 
