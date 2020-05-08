@@ -30,6 +30,7 @@ function registrarRestaurante(req, res){
         restaurante.credito = 30;
         restaurante.debe = 0;
         restaurante.horario = [];
+        restaurante.visitas = 0;
 
 
         Usuario.find({correo: params.propietario.toLowerCase()}

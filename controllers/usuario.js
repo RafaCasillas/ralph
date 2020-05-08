@@ -25,6 +25,7 @@ function registrarUsuario(req, res){
         usuario.restaurante = null;
         usuario.imagen = null;
         usuario.domicilio = null;
+        usuario.visitas = 0;
 
 
         // Comprobar y controlar usuarios duplicados
@@ -133,27 +134,27 @@ function actualizarUsuario(req, res){
     }
 
     // Comprobar y controlar usuarios duplicados
+    if(update.correo){
         Usuario.find({correo: update.correo.toLowerCase()}).exec((err, usuarios) => {
             if(err){ 
-                return res.status(500).send({
-                    message: 'Error en el servidor'
-                });
+                return res.status(500).send({ message: 'Error en el servidor' });
             }
-            
-        var emailDoble = 0;
-        usuarios.forEach((usuario) => {
-            if(usuario && usuario._id != usuarioId && usuario.email == update.email) emailDoble = 1;
+
+            var emailDoble = 0;
+            usuarios.forEach((usuario) => {
+                if(usuario && usuario._id != usuarioId && usuario.email == update.email) emailDoble = 1;
+            });
+
+            if(emailDoble == 1) return res.status(404).send({message: 'Este email ya está en uso, intenta con uno diferente'});
         });
+    }
 
-        if(emailDoble == 1) return res.status(404).send({message: 'Este email ya está en uso, intenta con uno diferente'});
+    Usuario.findByIdAndUpdate(usuarioId, update, {new:true}, (err, usuarioUpdated) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
 
-        Usuario.findByIdAndUpdate(usuarioId, update, {new:true}, (err, usuarioUpdated) => {
-            if(err) return res.status(500).send({message: 'Error en la petición'});
-
-            if(!usuarioUpdated) return res.status(404).send({message: 'No se ha podido actualizar el usuario'});
-
-            return res.status(200).send({usuario: usuarioUpdated});
-        });
+        if(!usuarioUpdated) return res.status(404).send({message: 'No se ha podido actualizar el usuario'});
+        
+        return res.status(200).send({usuario: usuarioUpdated});
     });
 };
 
@@ -162,7 +163,7 @@ function actualizarUsuario(req, res){
 function actualizarImagenUsuario(req, res){
 
     try{    var usuarioId = req.params.id;
-            var file_path = req.files.imagen.path;
+            var file_path = req.files.image.path;
 
             if(req.files.image && req.files.image.type != null){
                 var file_split = file_path.split('/');
@@ -229,7 +230,6 @@ function obtenerImagenUsuario(req, res){
         }
     });
 }
-
 
 
 module.exports = {

@@ -25,8 +25,8 @@ body {
 }
 
 .btn-orange{
-  background-color: #f47b00;
-  border-color: #f57d05;
+  background-color: #f47b00 !important;
+  border-color: #f57d05 !important;
   font-size: 22px;
   border-radius: 4px;
 }
@@ -71,6 +71,11 @@ body {
   border-bottom: 10px;
 }
 
+.navbars{
+  margin-top: 6px;
+  margin-right: -27px;
+}
+
 .navbar .res-nom *{
   color: white !important;
   text-align: left;
@@ -89,6 +94,47 @@ body {
   top: -10%;
   position: absolute;
   text-align: center;
+}
+
+.mat-drawer-container.mat-sidenav-container{
+  overflow: visible;
+  position: fixed;
+  height: 75px;
+}
+
+.mat-drawer{
+  background-color: #faf8f0;
+}
+
+.mat-list-base .mat-list-item {
+  color: black !important;
+  font-size: 18px;
+  margin: 8px;
+}
+
+.drawer-title{
+  color: #fff !important;
+  font-size: 25px;
+  margin: 8px;
+  padding: 20px;
+}
+
+.drawer-list{
+  color: #000000c4 !important;
+  font-size: 20px;
+  margin: 8px;
+  padding: 20px;
+}
+
+.drawer-close{
+  color: #f78216 !important;
+  font-size: 20px;
+  margin: 8px;
+  padding: 20px;
+}
+
+.mat-toolbar {
+  background: #f78216;
 }
 
 .navbar .icono-Ralph img{
@@ -134,6 +180,127 @@ body {
   font-size: 18px;
 }
 
+.status{
+  margin-top: -18px;
+}
+
+.icon-red{
+  font-size: 17px;
+  color: #ff4409;
+}
+
+.icon-green{
+  font-size: 17px;
+  color: #36c536;
+}
+
+.pedido-card-text{  
+  font-size: 22px;
+}
+
+.pedido-line{
+  margin-top: -20px;
+}
+
+.pedido-line2{
+  margin-top: -10px;
+}
+
+.pedido-card-icon{
+  font-size: 22px;
+}
+
+.pedido-card-tiempo{  
+  font-size: 17px;
+  margin-top: -8px;
+  /* margin-bottom: 13px; */
+  font-weight: bold;
+  background-color: #ffd7b2e0;
+  border-radius: 5px;
+  /* color: rgb(51, 51, 51); */
+  color: #000000b8;
+}
+
+.pedido-card-total{  
+  font-size: 28px;
+  font-weight: bold;
+  margin-right: 40px;
+  margin-top: -3px;
+  /* margin-bottom: -20px; */
+  color: green;
+}
+
+.detalle-pedido{
+  margin: -10px;
+  font-size: 20px;
+}
+
+.detalle-pedido-total{
+  font-size: 20px;
+  margin-right: 40px;
+  margin-top: 0px;
+  /* margin-bottom: -20px; */
+  color: green;
+}
+
+.text-detalle-pedido{
+  font-size: 25px;
+}
+
+.detalle-pedido-total2{
+  font-weight: bold;
+  font-size: 28px;
+  color: green;
+}
+
+.pedido-card{
+  margin-top: -10px;
+}
+
+.icon-status-camino{
+  font-size: 22px;
+  color: #f47b00;
+}
+
+.icon-status-completado{
+font-size: 22px;
+color: green;
+}
+
+.icon-status-cancelado{
+font-size: 22px;
+color: #ff4409;
+}
+
+.credito-info{
+  padding-top: 60px;
+  background-color: #fff;
+}
+
+.card-credito{
+  margin-top: -10px;
+}
+
+.credito-card-text{
+  font-size: 23px;
+  margin-top: -20px;
+}
+
+.text-credito{
+  font-size: 20px;
+  color: #22b122;
+}
+
+.text-debe{
+  font-size: 20px;
+  color: rgba(255, 0, 0, 0.863);
+}
+
+.text-depositar{
+  font-size: 27px;
+  margin-top: -7px;
+}
+
 .subtitle{
   font-size: 32px;
   margin-left: 20px;
@@ -141,13 +308,9 @@ body {
 }
 
  .avatar{
-  width: 50px;
-  height: 50px;
-  /* border-radius: 50px; */
-  overflow: hidden;
   margin-top: 2px;
-  margin-right: 3px;
-  margin-left: 10px;
+  margin-right: 15px;
+  margin-left: 0px;
 }
 
 .avatar img{
@@ -199,6 +362,16 @@ body {
   margin-top: 146px;
   margin-right: -21px;
   padding-top: 5px;
+}
+
+.sinpedidos{
+  font-size: 30px;
+  margin: 50px;
+  color: #212529cf;
+}
+
+.sinpedidos-icon{
+  font-size: 60px;
 }
 
 #fondo{
@@ -262,6 +435,7 @@ input[type="file"] {
 .btn-modal-success{
   background-color: #ff5620 !important;
   border-color: #ff4409 !important;
+  color: #ccc;
 }
 
 .btn-modal-option{

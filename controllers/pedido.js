@@ -21,7 +21,7 @@ function crearPedido(req, res){
 
         pedido.usuario = req.usuario.sub;
         pedido.fecha = moment().unix();
-        pedido.status = 'creandose';
+        pedido.status = 'En espera';
                                 
         pedido.save((err, pedidoStored) => {
             if(err){
@@ -45,13 +45,28 @@ function crearPedido(req, res){
 }
 
 function actualizarPedido(req, res){
-    var update = req.body;
     var pedido_id = req.params.id;
 
+    if(req.params.status == 1){
+        var update = { status: 'En preparacion' }
+    }
+
+    if(req.params.status == 2){
+        var update = { status: 'En camino' }
+    }
+
+    if(req.params.status == 3){
+        var update = { status: 'Completado' }
+    }
+
+    if(req.params.status == 4){
+        var update = { status: 'Cancelado' }
+    }
+
     Pedido.findByIdAndUpdate(pedido_id, update, {new:true}, (err, pedidoUpdated) => {
-        if(err) return res.status(500).send({message: '57 - Error en la petición'});
+        if(err) return res.status(500).send({message: '52 - Error en la petición'});
         
-        if(!pedidoUpdated) return res.status(404).send({message: '59 - No se ha podido actualizar el pedido'});
+        if(!pedidoUpdated) return res.status(404).send({message: '54 - No se ha podido actualizar el pedido'});
         
         return res.status(200).send({pedido: pedidoUpdated});
     });
@@ -60,7 +75,10 @@ function actualizarPedido(req, res){
 function obtenerPedido(req, res){
     var pedidoId = req.params.id;
 
-    Pedido.findById(pedidoId, (err, pedido) => {
+    let page = 1;
+    let itemsPerPage = 1;
+
+    Pedido.findById(pedidoId).populate('usuario').paginate(page, itemsPerPage, (err, pedido) => {
         if(err) return res.status(500).send({message: '64 - Error en la petición'});
 
         if(!pedido) return res.status(404).send({message: 'El pedido no existe'});
@@ -71,23 +89,29 @@ function obtenerPedido(req, res){
 
 function obtenerPedidos(req, res){
 
-    var parametro = {status: ['en espera', 'en preparacion'], restaurante: req.params.id};
+    var parametro = {status: ['En espera', 'En preparacion'], restaurante: req.params.id};
     var fecha = 'fecha';
+    var itemsPerPage = 10;
 
     if(req.params.stats && req.params.stats == 1){
+        var parametro = {status: ['En camino', 'Completado', 'Cancelado'], restaurante: req.params.id};
+        var fecha = '-fecha';
+        var itemsPerPage = 5;
+    }
+
+    if(req.params.stats && req.params.stats == 2){
         var parametro = {restaurante: req.params.id};
         var fecha = '-fecha';
+        var itemsPerPage = 5;
     }
     
-
     var page = 1;
     if(req.params.page){
         page = req.params.page;
     }
     
-    var itemsPerPage = 4;
 
-    Pedido.find(parametro).sort(fecha).paginate(page, itemsPerPage, (err, pedidos, total) => {
+    Pedido.find(parametro).sort(fecha).populate('usuario').paginate(page, itemsPerPage, (err, pedidos, total) => {
         if(err) return res.status(500).send({message: '202 - Error en la petición'});
 
         if(!pedidos) return res.status(404).send({message: 'No hay pedidos disponibles'});
@@ -119,5 +143,4 @@ module.exports = {
     obtenerPedido,
     obtenerPedidos,
     eliminarPedido
-    // crearNotificacion
 }

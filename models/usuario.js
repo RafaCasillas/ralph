@@ -14,7 +14,8 @@ var UsuarioSchema = Schema({
     municipio: String,
     rol: String,
     restaurante: String,
-    status: String
+    status: String,
+    visitas: Number
 });
 
 module.exports = mongoose.model('Usuario', UsuarioSchema);

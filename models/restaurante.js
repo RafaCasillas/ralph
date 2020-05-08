@@ -14,7 +14,8 @@ var RestauranteSchema = Schema({
     status: String,
     credito: Number,
     debe: Number,
-    servicioDomicilio: Boolean
+    servicioDomicilio: Boolean,
+    visitas: Number
 });
 
 module.exports = mongoose.model('Restaurante', RestauranteSchema);

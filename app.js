@@ -12,6 +12,7 @@ var municipio_routes = require('./routes/municipio');
 var restaurante_routes = require('./routes/restaurante');
 var producto_routes = require('./routes/producto');
 var pedido_routes = require('./routes/pedido');
+var notificaciones_routes = require('./routes/notificacion');
 
 
 // Cargar middlewares
@@ -35,11 +36,14 @@ app.use('/api', municipio_routes);
 app.use('/api', restaurante_routes);
 app.use('/api', producto_routes);
 app.use('/api', pedido_routes);
+app.use('/api', notificaciones_routes);
 
+  
 // Para que funcione en produccion
 app.get('*', function(req, res, next){
     res.sendFile(path.resolve('client/index.html'));
 });
+
 
 // Exportar
 module.exports = app;
