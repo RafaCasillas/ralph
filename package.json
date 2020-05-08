@@ -19,7 +19,8 @@
     "mongoose": "^5.9.9",
     "mongoose-pagination": "^1.0.0",
     "path": "^0.12.7",
-    "urlsafe-base64": "^1.0.0"
+    "urlsafe-base64": "^1.0.0",
+    "web-push": "^3.4.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.3"
