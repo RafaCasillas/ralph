@@ -21,7 +21,7 @@ function registrarRestaurante(req, res){
 
         restaurante.municipio = params.municipio;
         restaurante.servicioDomicilio = params.servicioDomicilio;
-        restaurante.status = 'inactivo';
+        restaurante.status = 'por activar';
 
         restaurante.nombre = null;
         restaurante.ubicacion = [];
@@ -192,6 +192,20 @@ function obtenerRestaurante(req, res){
     });
 }
 
+function obtenerRestaurantesAdmin(req, res){    
+    
+    var page = 1;
+    var itemsPerPage = 100;
+
+    Restaurante.find().sort('-nombre').paginate(page, itemsPerPage, (err, restaurantes) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+
+        if(!restaurantes) return res.status(404).send({message: 'El restaurantes no existe'});
+        
+        return res.status(200).send({restaurantes: restaurantes});
+    });
+}
+
 function obtenerRestaurantes(req, res){
     
     var municipio = req.params.id;
@@ -312,15 +326,51 @@ function obtenerSecciones(req, res){
     });
 }
 
+function creditoa30(req, res){
+    var restauranteId = req.params.id
+
+    if(req.usuario.rol != 'ADMIN'){
+        return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+    }
+
+    Restaurante.findByIdAndUpdate(restauranteId, {credito: 30}, {new:true}, (err, restaurante) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+
+        if(!restaurante) return res.status(404).send({message: 'El restaurante no existe'});
+
+        return res.status(200).send({restaurante: restaurante});
+    });
+}
+
+function darDeAltaRestaurante(req, res){
+    var restauranteId = req.params.id
+
+    if(req.usuario.rol != 'ADMIN'){
+        return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+    }
+
+    Restaurante.findByIdAndUpdate(restauranteId, {status: 'inactivo'}, {new:true}, (err, restaurante) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+
+        if(!restaurante) return res.status(404).send({message: 'El restaurante no existe'});
+
+        return res.status(200).send({restaurante: restaurante});
+    });
+}
+
+
 module.exports = {
     registrarRestaurante,
     actualizarRestaurante,
     actualizarImagenRestaurante,
     obtenerImagenRestaurante,
     obtenerRestaurante,
+    obtenerRestaurantesAdmin,
     obtenerRestaurantes,
     crearSeccion,
     actualizarSeccion,
     obtenerSeccion,
-    obtenerSecciones
+    obtenerSecciones,
+    creditoa30,
+    darDeAltaRestaurante
 }

@@ -22,9 +22,6 @@ function registrarUsuario(req, res){
         usuario.correo = params.correo.toLowerCase();
         usuario.rol = 'USUARIO';
         usuario.status = 'activo';
-        usuario.restaurante = null;
-        usuario.imagen = null;
-        usuario.domicilio = null;
         usuario.visitas = 0;
 
 

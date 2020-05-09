@@ -4,6 +4,7 @@ var Pedido = require('../models/pedido');
 
 var mongoosePaginate = require('mongoose-pagination');
 var moment = require('moment');
+var notificacion = require('./notificacion')
 
 
 function crearPedido(req, res){
@@ -24,19 +25,16 @@ function crearPedido(req, res){
         pedido.status = 'En espera';
                                 
         pedido.save((err, pedidoStored) => {
-            if(err){
-                console.log(err);
-                return res.status(500).send({
-                    message: '35 - Error al guardar el pedido'
-                });
-            }
+            if(err) return res.status(500).send({message: 'Error al guardar el pedido'});
 
-            if(pedidoStored){
-                return res.status(200).send({pedido: pedidoStored});                    
-            } else {
-                return res.status(404).send({message: 'No se ha registrado el pedido'});
+            if(!pedidoStored) return res.status(404).send({message: 'No se ha registrado el pedido'});
+
+            if(pedidoStored) {
+                notificacion.NotificacionRestaurante('Tienes un nuevo pedido', '', pedidoStored.restaurante, '/restaurante/inicio');
+                notificacion.NotificacionUsuario('Tu pedido está en proceso', '', pedidoStored.usuario, '/mis-pedidos');
+                return res.status(200).send({pedido: pedidoStored});
             }
-            });
+        });
     } else {
         res.status(200).send({
             message: 'Envia todos los campos necesarios'
@@ -64,9 +62,9 @@ function actualizarPedido(req, res){
     }
 
     Pedido.findByIdAndUpdate(pedido_id, update, {new:true}, (err, pedidoUpdated) => {
-        if(err) return res.status(500).send({message: '52 - Error en la petición'});
+        if(err) return res.status(500).send({message: 'Error en la petición'});
         
-        if(!pedidoUpdated) return res.status(404).send({message: '54 - No se ha podido actualizar el pedido'});
+        if(!pedidoUpdated) return res.status(404).send({message: 'No se ha podido actualizar el pedido'});
         
         return res.status(200).send({pedido: pedidoUpdated});
     });
@@ -79,7 +77,7 @@ function obtenerPedido(req, res){
     let itemsPerPage = 1;
 
     Pedido.findById(pedidoId).populate('usuario').paginate(page, itemsPerPage, (err, pedido) => {
-        if(err) return res.status(500).send({message: '64 - Error en la petición'});
+        if(err) return res.status(500).send({message: 'Error en la petición'});
 
         if(!pedido) return res.status(404).send({message: 'El pedido no existe'});
         
@@ -112,7 +110,7 @@ function obtenerPedidos(req, res){
     
 
     Pedido.find(parametro).sort(fecha).populate('usuario').paginate(page, itemsPerPage, (err, pedidos, total) => {
-        if(err) return res.status(500).send({message: '202 - Error en la petición'});
+        if(err) return res.status(500).send({message: 'Error en la petición'});
 
         if(!pedidos) return res.status(404).send({message: 'No hay pedidos disponibles'});
 

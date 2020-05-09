@@ -6,8 +6,8 @@ const webpush = require('web-push');
 const urlsafeBase64 = require('urlsafe-base64');
 var path = require('path');
 const fs = require('fs');
-const url = 'https://ralph.com.mx/api/';
-// const url = 'http://localhost:3000/api/';
+const api = 'https://ralph.com.mx/api/';
+// const api = 'http://localhost:3000/api/';
 
 var Notificacion = require('../models/notificacion');
 
@@ -47,24 +47,51 @@ function saveSubscripcion(req, res){
           if(!notificacionStored) return res.status(404).send({message: 'La publicación no se guardó'});
     
           if(notificacionStored){
-            localNotification('Ralph', 'Has activado correctamente las notificaciones', req.usuario.restaurante);
+            NotificacionRestaurante('Ralph', 'Has activado correctamente las notificaciones', req.usuario.restaurante);
             return res.status(200);
           }
       })  
 };
 
 
-function localNotification(title, body, restaurante){
+function NotificacionRestaurante(title, body, restaurante, url){
     const post = {
       "notification": {
         title: title,
         body: body,
-        icon: url + 'logo',
-        badge: url + 'logo'
+        icon: api + 'logo',
+        badge: api + 'logo',
+        data: {
+          url: url
+        }
       }
     };
 
     Notificacion.find({restaurante: restaurante}).exec((err, notificaciones) => {
+      if(err) res.status(500).send({ message: 'Error en el servidor' });
+    
+      if(!notificaciones) return res.status(404).send({message: 'No hay notificaciones'});
+
+      if(notificaciones){
+        sendPush(post, notificaciones);
+      }
+    });
+}
+
+function NotificacionUsuario(title, body, usuario, url){
+    const post = {
+      "notification": {
+        title: title,
+        body: body,
+        icon: api + 'logo',
+        badge: api + 'logo',
+        data: {
+          url: url
+        }
+      }
+    };
+
+    Notificacion.find({usuario: usuario}).exec((err, notificaciones) => {
       if(err) res.status(500).send({ message: 'Error en el servidor' });
     
       if(!notificaciones) return res.status(404).send({message: 'No hay notificaciones'});
@@ -82,8 +109,8 @@ function pushNotification(req){
         "notification": {
           title: req.body.title,
           body: req.body.body,
-          icon: url + 'logo',
-          badge: url + 'logo',
+          icon: api + 'logo',
+          badge: api + 'logo',
           data: {
             url: req.body.url
           }
@@ -139,5 +166,7 @@ module.exports = {
     saveSubscripcion,
     key,
     pushNotification,
+    NotificacionRestaurante,
+    NotificacionUsuario,
     obtenerLogo
 }
