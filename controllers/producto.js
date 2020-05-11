@@ -25,7 +25,6 @@ function crearProducto(req, res){
                                 
         producto.save((err, productoStored) => {
             if(err){
-                console.log(err);
                 return res.status(500).send({
                     message: '33 - Error al guardar el producto'
                 });

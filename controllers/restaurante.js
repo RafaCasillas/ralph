@@ -37,7 +37,7 @@ function registrarRestaurante(req, res){
                     ).exec((err, usuario) => {
                         if(err){ 
                             return res.status(500).send({
-                                message: '34 - Error al guardar el restaurante'
+                                message: 'Error al guardar el restaurante'
                             });
                         }
 
@@ -54,22 +54,22 @@ function registrarRestaurante(req, res){
                                 if(err){ 
                                     console.log(err);
                                     return res.status(500).send({
-                                        message: '51 - Error al guardar el restaurnante'
+                                        message: 'Error al guardar el restaurnante'
                                     });
                                 }                                
                                 
                                 if(RestauranteStored){
                                     Usuario.findByIdAndUpdate(usuario[0]._id, {rol: 'RESTAURANTE', restaurante: RestauranteStored._id}, {new:true}, (err, userUpdated) =>{
-                                        if(err) return res.status(500).send({message: '57 - Error en la petición'});
+                                        if(err) return res.status(500).send({message: 'Error en la petición'});
                                     
-                                        if(!userUpdated) return res.status(404).send({message: '59 - No se ha podido actualizar el usuario'});
+                                        if(!userUpdated) return res.status(404).send({message: 'No se ha podido actualizar el usuario'});
                                     
                                         return res.status(200).send({restaurante: RestauranteStored, usuario: userUpdated});                                
                                     })                                        
                                     .catch(err => {
                                                 console.log(err);
                                                 return res.status(500).send({
-                                                    message: '66 - Error al guardar el restaurnante'
+                                                    message: 'Error al guardar el restaurante'
                                                 });
                                             });
                                 } else {
@@ -246,7 +246,7 @@ function crearSeccion(req, res){
         seccion.save((err, seccionStored) => {
             if(err){ 
                 return res.status(500).send({
-                message: '227 - Error al guardar la seccion'
+                message: '227 - Error al guardar la sección'
                 });
             }
 
@@ -256,13 +256,13 @@ function crearSeccion(req, res){
                 });
             } else {
                 return res.status(404).send({
-                    message: '237 - No se ha registrado la seccion'
+                    message: '237 - No se ha registrado la sección'
                 });
             }
         });
     } else {
         res.status(200).send({
-            message: 'Envia todos los campos necesarios'
+            message: 'Envía todos los campos necesarios'
         });
     }
 }

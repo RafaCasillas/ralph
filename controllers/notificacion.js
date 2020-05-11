@@ -73,7 +73,7 @@ function NotificacionRestaurante(title, body, restaurante, url){
       if(!notificaciones) return res.status(404).send({message: 'No hay notificaciones'});
 
       if(notificaciones){
-        sendPush(post, notificaciones);
+        return sendPush(post, notificaciones);
       }
     });
 }
@@ -97,7 +97,7 @@ function NotificacionUsuario(title, body, usuario, url){
       if(!notificaciones) return res.status(404).send({message: 'No hay notificaciones'});
 
       if(notificaciones){
-        sendPush(post, notificaciones);
+        return sendPush(post, notificaciones);
       }
     });
 }
@@ -136,7 +136,7 @@ function pushNotification(req){
       if(!notificaciones) return res.status(404).send({message: 'No hay notificaciones'});
         
       if(notificaciones){
-        sendPush(post, notificaciones);
+        return sendPush(post, notificaciones);
       }
     });
 };

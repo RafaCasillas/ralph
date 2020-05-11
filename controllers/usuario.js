@@ -30,13 +30,13 @@ function registrarUsuario(req, res){
                     ).exec((err, usuarios) => {
                         if(err){ 
                             return res.status(500).send({
-                                message: '35 - Error al guardar el usuario'
+                                message: 'Error al guardar el usuario'
                             });
                         }
 
                         if(usuarios && usuarios.length >= 1) {
                             return res.status(200).send({
-                                message: 'El correo que intentas registrar ya existe'
+                                message: 'El correo con el que te intentas registrar ya existe, prueba con otro diferente'
                             });
                         } else {
                             // Cifra la contraseña y guarda los datos
@@ -47,7 +47,7 @@ function registrarUsuario(req, res){
                                     if(err){ 
                                         console.log(err);
                                         return res.status(500).send({
-                                        message: '50 - Error al guardar el usuario'
+                                        message: 'Error al guardar el usuario'
                                     });
                                     }
                                     if(usuarioStored){
@@ -67,7 +67,7 @@ function registrarUsuario(req, res){
 
     } else {
         res.status(200).send({
-            message: 'Envia todos los campos necesarios'
+            message: 'Envía todos los campos necesarios'
         });
     }
 }
@@ -84,23 +84,22 @@ function logearUsuario(req, res){
 
         if(usuario){
             bcrypt.compare(password, usuario.password, (err, check) => {
-                if(check){
-                    
+                if(check){                    
                     if(params.gettoken){
                         return res.status(200).send({
                             token: jwt.createToken(usuario)
                         });
                     } else {
                         usuario.password = undefined;
-                        return res.status(200).send({usuario});}
-
+                        return res.status(200).send({usuario});
+                    }
                 } else {
                     // Devolver error
-                    return res.status(404).send({message: 'El usuario no se ha podido logear'});
+                    return res.status(404).send({message: 'Contraseña incorrecta'});
                 }
             });
         } else {
-            return res.status(404).send({message: 'El usuario no se ha podido identificar'});
+            return res.status(404).send({message: 'El usuario no existe'});
         }
     })
 }
@@ -128,22 +127,6 @@ function actualizarUsuario(req, res){
 
     if(usuarioId != req.usuario.sub){
         return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
-    }
-
-    // Comprobar y controlar usuarios duplicados
-    if(update.correo){
-        Usuario.find({correo: update.correo.toLowerCase()}).exec((err, usuarios) => {
-            if(err){ 
-                return res.status(500).send({ message: 'Error en el servidor' });
-            }
-
-            var emailDoble = 0;
-            usuarios.forEach((usuario) => {
-                if(usuario && usuario._id != usuarioId && usuario.email == update.email) emailDoble = 1;
-            });
-
-            if(emailDoble == 1) return res.status(404).send({message: 'Este email ya está en uso, intenta con uno diferente'});
-        });
     }
 
     Usuario.findByIdAndUpdate(usuarioId, update, {new:true}, (err, usuarioUpdated) => {
@@ -203,7 +186,7 @@ function actualizarImagenUsuario(req, res){
             }
 
     }   catch(err) {
-            return res.status(500).send({message: '212 - Error en el servidor'});
+            return res.status(500).send({message: 'Error en el servidor'});
         }
     } 
 
