@@ -14,6 +14,7 @@ api.put('/actualizar-imagen-producto/:res/:prod', [md_auth.ensureAuth, md_upload
 api.get('/obtener-imagen-producto/:imageFile', ProductoControler.obtenerImagenProducto);
 api.get('/producto/:id', ProductoControler.obtenerProducto);
 api.get('/productos/:res?/:cat?/:sec?/:nom?/:page?', ProductoControler.obtenerProductos);
+api.get('/productos-random/:res?/:cat?/:sec?/:nom?', ProductoControler.obtenerProductosRandom);
 api.delete('/producto/:id', md_auth.ensureAuth, ProductoControler.eliminarProducto);
 
 module.exports = api;

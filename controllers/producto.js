@@ -147,22 +147,25 @@ function obtenerProducto(req, res){
 
 function obtenerProductos(req, res){
 
-    if(req.params.res && req.params.res != 0){
+    if(req.params.res && req.params.res != 0 && req.params.cat == 0){
         var parametro = {status: 'activo', restaurante: req.params.res}
+        var itemsPerPage = 7;
     }
     
     if(req.params.cat && req.params.cat != 0){
-        var parametro = {status: 'activo', categoria: req.params.cat}
+        var parametro = {status: 'activo', restaurante: req.params.res, categoria: req.params.cat}
+        var itemsPerPage = 10;
     }
     
     if(req.params.sec && req.params.sec != 0){
         var parametro = {status: 'activo', seccion: req.params.sec}
-        // var parametro = [ { $match: { seccion: req.params.sec }}, { $sample: { size: 6 } } ]    aggregate
+        var itemsPerPage = 10;
     }
 
     if(req.params.nom && req.params.nom != 0){
         var parametro = {status: 'activo', nombre: req.params.nom}
         // var parametro = {status: 'activo', $text: { $search: req.params.nom}}
+        var itemsPerPage = 30;
     }
 
     var page = 1;
@@ -170,8 +173,6 @@ function obtenerProductos(req, res){
         page = req.params.page;
     }
     
-    var itemsPerPage = 10;
-
     Producto.find(parametro).paginate(page, itemsPerPage, (err, productos, total) => {
         if(err) return res.status(500).send({message: err});
 
@@ -182,6 +183,39 @@ function obtenerProductos(req, res){
             total,
             pages: Math.ceil(total/itemsPerPage)
         })
+    });
+}
+
+function obtenerProductosRandom(req, res){
+
+    if(req.params.res && req.params.res != 0  && req.params.cat == 0){
+        var parametro = {status: 'activo', restaurante: req.params.res}
+        var totalNumer = 7;
+    }
+    
+    if(req.params.cat && req.params.cat != 0){
+        var parametro = {status: 'activo', restaurante: req.params.res, categoria: req.params.cat}
+        var totalNumer = 10;
+    }
+    
+    if(req.params.sec && req.params.sec != 0){
+        var parametro = {status: 'activo', seccion: req.params.sec}
+        var totalNumer = 10;
+    }
+
+    if(req.params.nom && req.params.nom != 0){
+        var parametro = {status: 'activo', nombre: req.params.nom}
+        // var parametro = {status: 'activo', $text: { $search: req.params.nom}}
+        var totalNumer = 30;
+    }
+
+    
+    Producto.aggregate([ { $match: parametro}, { $sample: { size: totalNumer } } ], (err, productos) => {
+        if(err) return res.status(500).send({message: err});
+
+        if(!productos) return res.status(404).send({message: 'No hay productos disponibles'});
+
+        return res.status(200).send({productos: productos});
     });
 }
 
@@ -206,5 +240,6 @@ module.exports = {
     obtenerImagenProducto,
     obtenerProducto,
     obtenerProductos,
+    obtenerProductosRandom,
     eliminarProducto
 }

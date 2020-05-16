@@ -102,8 +102,32 @@ function NotificacionUsuario(title, body, usuario, url){
     });
 }
 
+function NotificacionAdmin(title, body){
+    const post = {
+      "notification": {
+        title: title,
+        body: body,
+        icon: api + 'logo',
+        badge: api + 'logo',
+        data: {
+          url: '/admin/inicio'
+        }
+      }
+    };
 
-function pushNotification(req){
+    Notificacion.find({usuario: '5eb0c26fb1739471c9b7b998'}).exec((err, notificaciones) => {
+      if(err) res.status(500).send({ message: 'Error en el servidor' });
+    
+      if(!notificaciones) return res.status(404).send({message: 'No hay notificaciones'});
+
+      if(notificaciones){
+        return sendPush(post, notificaciones);
+      }
+    });
+}
+
+
+function pushNotification(req, res){
 
     const post = {
         "notification": {
@@ -117,16 +141,21 @@ function pushNotification(req){
         }
     };
 
-    if(req.body.usuario != null && req.body.restaurante != null){
-        var params ={$or: [{usuario: req.body.usuario},{restaurante: req.body.restaurante}]}
+    if(req.body.restaurantes != null){
+      var params = { restaurante: { $gt: 1 } }
+    }
 
-    } else if(req.body.usuario != null){
-        var params = {usuario: req.body.usuario}
+    // if(req.body.usuario != null && req.body.restaurante != null){
+    //     var params ={$or: [{usuario: req.body.usuario},{restaurante: req.body.restaurante}]}
 
-    } else if(req.body.restaurante != null){
-        var params = {restaurante: req.body.restaurante}
+    // } else if(req.body.usuario != null){
+    //     var params = {usuario: req.body.usuario}
 
-    } else {
+    // } else if(req.body.restaurante != null){
+    //     var params = {restaurante: req.body.restaurante}
+
+    // } 
+    else {
       return
     }
 
@@ -136,7 +165,8 @@ function pushNotification(req){
       if(!notificaciones) return res.status(404).send({message: 'No hay notificaciones'});
         
       if(notificaciones){
-        return sendPush(post, notificaciones);
+        sendPush(post, notificaciones);
+        return res.status(200).send({notificaciones: notificaciones});
       }
     });
 };
@@ -168,5 +198,6 @@ module.exports = {
     pushNotification,
     NotificacionRestaurante,
     NotificacionUsuario,
+    NotificacionAdmin,
     obtenerLogo
 }

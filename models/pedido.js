@@ -12,7 +12,8 @@ var PedidoSchema = Schema({
     ganancia: Number,
     contenido: Array,
     status: String,
-    direccion: String
+    direccion: String,
+    envio: Number
 });
 
 module.exports = mongoose.model('Pedido', PedidoSchema);

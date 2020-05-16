@@ -206,27 +206,23 @@ function obtenerRestaurantesAdmin(req, res){
     });
 }
 
-function obtenerRestaurantes(req, res){
-    
+function obtenerRestaurantes(req, res){    
     var municipio = req.params.id;
-    var page = 1;
 
-    if(req.params.page){
-        page = req.params.page;
+    if(req.params.who == 0){
+        var peticion = { municipio: municipio, status: 'activo' };
+    } else {
+        var peticion = { municipio: municipio };
     }
 
-    var itemsPerPage = 4;
-
-    Restaurante.find({status: 'activo', municipio: municipio}).sort().paginate(page, itemsPerPage, (err, restaurantes, total) => {
-        if(err) return res.status(500).send({message: '202 - Error en la petición'});
+    var totalNumer = 28;
+    
+    Restaurante.aggregate([ { $match: peticion}, { $sample: { size: totalNumer } } ], (err, restaurantes) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
 
         if(!restaurantes) return res.status(404).send({message: 'No hay restaurantes disponibles'});
 
-        return res.status(200).send({
-            restaurantes,
-            total,
-            pages: Math.ceil(total/itemsPerPage)
-        })
+        return res.status(200).send({restaurantes: restaurantes})
     });
 }
     

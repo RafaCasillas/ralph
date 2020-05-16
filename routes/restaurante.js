@@ -14,7 +14,7 @@ api.put('/actualizar-imagen-restaurante/:id', [md_auth.ensureAuth, md_upload], R
 api.get('/obtener-imagen-restaurante/:imageFile', RestauranteControler.obtenerImagenRestaurante);
 api.get('/restaurante/:id', RestauranteControler.obtenerRestaurante);
 api.get('/restaurantes-admin/', md_auth.ensureAuth, RestauranteControler.obtenerRestaurantesAdmin);
-api.get('/restaurantes/:id/:page?', RestauranteControler.obtenerRestaurantes);
+api.get('/restaurantes/:id/:who', RestauranteControler.obtenerRestaurantes);
 api.post('/crear-seccion-restaurante/:id', md_auth.ensureAuth, RestauranteControler.crearSeccion);
 api.put('/actualizar-seccion-restaurante/:res/:sec', md_auth.ensureAuth, RestauranteControler.actualizarSeccion);
 api.get('/obtener-seccion-restaurante/:id', RestauranteControler.obtenerSeccion);
