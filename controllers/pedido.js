@@ -1,6 +1,7 @@
 'use strict'
 
 var Pedido = require('../models/pedido');
+var Usuario = require('../models/usuario');
 
 var mongoosePaginate = require('mongoose-pagination');
 var moment = require('moment');
@@ -24,19 +25,30 @@ function crearPedido(req, res){
         pedido.usuario = req.usuario.sub;
         pedido.fecha = moment().unix();
         pedido.status = 'En espera';
-                                
-        pedido.save((err, pedidoStored) => {
+
+        Usuario.findById((pedido.usuario), (err, usuario) => {
             if(err) return res.status(500).send({message: 'Error al guardar el pedido'});
 
-            if(!pedidoStored) return res.status(404).send({message: 'No se ha registrado el pedido'});
+            if(!usuario) return res.status(404).send({message: 'Tu cuenta no existe'});
 
-            if(pedidoStored) {
-                notificacion.NotificacionRestaurante('Tienes un nuevo pedido', '', pedidoStored.restaurante, '/restaurante/inicio');
-                notificacion.NotificacionUsuario('Tu pedido está en proceso', '', pedidoStored.usuario, '/mis-pedidos');
-                notificacion.NotificacionAdmin('Hay un nuevo pedido', '');
-                return res.status(200).send({pedido: pedidoStored});
+            if(usuario._id && usuario.nombre){
+                
+                pedido.save((err, pedidoStored) => {
+                    if(err) return res.status(500).send({message: 'Error al guardar el pedido'});
+        
+                    if(!pedidoStored) return res.status(404).send({message: 'No se ha registrado el pedido'});
+        
+                    if(pedidoStored) {
+                        notificacion.NotificacionRestaurante('Tienes un nuevo pedido', '', pedidoStored.restaurante, '/restaurante/inicio');
+                        notificacion.NotificacionUsuario('Tu pedido está en proceso', '', pedidoStored.usuario, '/mis-pedidos');
+                        notificacion.NotificacionAdmin('Hay un nuevo pedido', '');
+                        return res.status(200).send({pedido: pedidoStored});
+                    }
+                });
             }
-        });
+
+        })
+                                
     } else {
         res.status(200).send({
             message: 'Envia todos los campos necesarios'
