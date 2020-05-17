@@ -5,7 +5,8 @@ var Schema = mongoose.Schema;
 
 var MunicipioSchema = Schema({
     icono: String,
-    nombre: String
+    nombre: String,
+    visitas: Number
 });
 
 module.exports = mongoose.model('Municipio', MunicipioSchema);

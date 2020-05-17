@@ -45,10 +45,10 @@ function registrarUsuario(req, res){
                             
                                 usuario.save((err, usuarioStored) => {
                                     if(err){ 
-                                        console.log(err);
+                                        // console.log(err);
                                         return res.status(500).send({
-                                        message: 'Error al guardar el usuario'
-                                    });
+                                            message: 'Error al guardar el usuario'
+                                        });
                                     }
                                     if(usuarioStored){
                                         return res.status(200).send({

@@ -107,10 +107,10 @@ function actualizarImagenProducto(req, res){
             }
 
     }   catch(err) {
-        console.log(err);
-            return res.status(500).send({message: '115 - Error en el servidor'});
-        }
-    } 
+    // console.log(err);
+        return res.status(500).send({message: '115 - Error en el servidor'});
+    }
+} 
 
 function removeFilesOfUploads(res, file_path, message){
     fs.unlink(file_path, (err) => {

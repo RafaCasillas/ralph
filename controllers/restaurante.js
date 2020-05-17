@@ -52,7 +52,7 @@ function registrarRestaurante(req, res){
                                 
                             restaurante.save((err, RestauranteStored) => {
                                 if(err){ 
-                                    console.log(err);
+                                    // console.log(err);
                                     return res.status(500).send({
                                         message: 'Error al guardar el restaurnante'
                                     });
@@ -67,11 +67,11 @@ function registrarRestaurante(req, res){
                                         return res.status(200).send({restaurante: RestauranteStored, usuario: userUpdated});                                
                                     })                                        
                                     .catch(err => {
-                                                console.log(err);
-                                                return res.status(500).send({
-                                                    message: 'Error al guardar el restaurante'
-                                                });
-                                            });
+                                        // console.log(err);
+                                        return res.status(500).send({
+                                            message: 'Error al guardar el restaurante'
+                                        });
+                                    });
                                 } else {
                                     return res.status(404).send({
                                         message: 'No se ha registrado el restaurante'
@@ -154,7 +154,7 @@ function actualizarImagenRestaurante(req, res){
             }
 
     }   catch(err) {
-        console.log(err);
+        // console.log(err);
             return res.status(500).send({message: '152 - Error en el servidor'});
         }
     } 
@@ -212,7 +212,7 @@ function obtenerRestaurantes(req, res){
     if(req.params.who == 0){
         var peticion = { municipio: municipio, status: 'activo' };
     } else {
-        var peticion = { municipio: municipio };
+        var peticion = { municipio: municipio};
     }
 
     var totalNumer = 28;

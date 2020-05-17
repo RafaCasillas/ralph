@@ -6,7 +6,7 @@ var md_auth = require('../middlewares/autenticated');
 
 
 api.post('/crear-pedido', md_auth.ensureAuth, PedidoControler.crearPedido);
-api.get('/actualizar-pedido/:id/:status', md_auth.ensureAuth, PedidoControler.actualizarPedido);
+api.get('/actualizar-pedido/:id/:usuario/:status', md_auth.ensureAuth, PedidoControler.actualizarPedido);
 api.get('/pedido/:id/:who', md_auth.ensureAuth, PedidoControler.obtenerPedido);
 api.get('/contar-pedidos/:id/:who', md_auth.ensureAuth, PedidoControler.contarPedidos);
 api.get('/pedidos/:id/:page?/:stats?', md_auth.ensureAuth, PedidoControler.obtenerPedidos);

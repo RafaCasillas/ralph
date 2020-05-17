@@ -13,6 +13,7 @@ var restaurante_routes = require('./routes/restaurante');
 var producto_routes = require('./routes/producto');
 var pedido_routes = require('./routes/pedido');
 var notificaciones_routes = require('./routes/notificacion');
+var stats_routes = require('./routes/stats');
 
 
 // Cargar middlewares
@@ -37,6 +38,7 @@ app.use('/api', restaurante_routes);
 app.use('/api', producto_routes);
 app.use('/api', pedido_routes);
 app.use('/api', notificaciones_routes);
+app.use('/api', stats_routes);
 
   
 // Para que funcione en produccion

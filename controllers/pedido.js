@@ -46,13 +46,20 @@ function crearPedido(req, res){
 
 function actualizarPedido(req, res){
     var pedido_id = req.params.id;
+    var usuario_id = req.params.usuario;
 
     if(req.params.status == 1){
         var update = { status: 'En preparacion' }
+        if(usuario_id != 0){
+            notificacion.NotificacionUsuario('Tu pedido está en preparación', '', usuario_id, '/mis-pedidos');
+        }
     }
 
     if(req.params.status == 2){
         var update = { status: 'En camino' }
+        if(usuario_id != 0){
+            notificacion.NotificacionUsuario('Tu pedido está en camino', '', usuario_id, '/mis-pedidos');
+        }
     }
 
     if(req.params.status == 3){
