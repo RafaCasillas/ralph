@@ -24,9 +24,9 @@ function registrarUsuario(req, res){
         usuario.status = 'activo';
         usuario.visitas = 0;
 
-        // return res.status(200).send({
-        //     message: 'Estamos en mantenimiento, vuelve a intentarlo mañana'
-        // });
+        return res.status(200).send({
+            message: 'Estamos en mantenimiento, vuelve a intentarlo mañana'
+        });
 
         // Comprobar y controlar usuarios duplicados
         Usuario.find({correo: usuario.correo.toLowerCase()}
