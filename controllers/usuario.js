@@ -8,6 +8,8 @@ var mongoosePaginate = require('mongoose-pagination');
 var path = require('path');
 const fs = require('fs');
 
+const notificacion = require('./notificacion');
+
 
 // Registro
 function registrarUsuario(req, res){
@@ -21,52 +23,61 @@ function registrarUsuario(req, res){
         usuario.municipio = params.municipio;
         usuario.correo = params.correo.toLowerCase();
         usuario.rol = 'USUARIO';
-        usuario.status = 'activo';
+        usuario.status = 'por activar';
         usuario.visitas = 0;
 
-        return res.status(200).send({
-            message: 'Estamos en mantenimiento, vuelve a intentarlo mañana'
-        });
+        // return res.status(200).send({
+        //     message: 'Estamos en mantenimiento, vuelve a intentarlo mañana'
+        // });
+
+        if(params.status != 0){
+            return res.status(200).send({
+                message: 'Estamos en mantenimiento, vuelve a intentarlo más tarde'
+            });
+        }
 
         // Comprobar y controlar usuarios duplicados
-        Usuario.find({correo: usuario.correo.toLowerCase()}
-                    ).exec((err, usuarios) => {
+        Usuario.find({$or: [
+            {telefono: usuario.telefono},
+            {correo: usuario.correo.toLowerCase()}
+        ]}).exec((err, usuarios) => {
+            if(err){ 
+                return res.status(500).send({message: 'Error al guardar el usuario'});
+            }
+
+            var emailDoble = 0;
+            var telefonoDoble = 0;
+            usuarios.forEach((user) => {
+                if(user && user.telefono == usuario.telefono) telefonoDoble = 1;
+                if(user && user.correo == usuario.correo) emailDoble = 1;
+            });
+
+            if(emailDoble == 1 && telefonoDoble == 1) return res.status(404).send({message: 'Este correo y este teléfono ya están en uso, intenta con unos diferentes'});
+            if(emailDoble == 1) return res.status(404).send({message: 'Este correo ya está en uso, intenta con uno diferente'});
+            if(telefonoDoble == 1) return res.status(404).send({message: 'Este teléfono ya está en uso, intenta con uno diferente'});
+
+
+            if(usuarios.length == 0){
+            
+                // Cifra la contraseña y guarda los datos
+                bcrypt.hash(params.password, null, null, (err, hash) => {
+                    usuario.password = hash;
+                
+                    usuario.save((err, usuarioStored) => {
                         if(err){ 
-                            return res.status(500).send({
-                                message: 'Error al guardar el usuario'
-                            });
+                            return res.status(500).send({message: 'Error al guardar el usuario'});
                         }
 
-                        if(usuarios && usuarios.length >= 1) {
-                            return res.status(200).send({
-                                message: 'El correo con el que te intentas registrar ya existe, prueba con otro diferente'
-                            });
-                        } else {
-                            // Cifra la contraseña y guarda los datos
-                            bcrypt.hash(params.password, null, null, (err, hash) => {
-                                usuario.password = hash;
-                            
-                                usuario.save((err, usuarioStored) => {
-                                    if(err){ 
-                                        // console.log(err);
-                                        return res.status(500).send({
-                                            message: 'Error al guardar el usuario'
-                                        });
-                                    }
-                                    if(usuarioStored){
-                                        return res.status(200).send({
-                                            usuario: usuarioStored
-                                        });
-                                    } else {
-                                        return res.status(404).send({
-                                            message: 'No se ha registrado el usuario'
-                                        })
-                                    }
-                                });
-                            });
+                        if(usuarioStored){
+                            return res.status(200).send({usuario: usuarioStored});
 
+                        } else {
+                            return res.status(404).send({message: 'No se ha registrado el usuario'})
                         }
                     });
+                });
+            }
+        });
 
     } else {
         res.status(200).send({
@@ -79,28 +90,32 @@ function registrarUsuario(req, res){
 function logearUsuario(req, res){
     var params = req.body;
 
-    var correo = params.correo;
+    var correo = params.correo.toLowerCase();
     var password = params.password;
 
     Usuario.findOne({correo: correo}, (err, usuario) => {
         if(err) return res.status(500).send({message: 'Error en la petición'});
 
         if(usuario){
-            bcrypt.compare(password, usuario.password, (err, check) => {
-                if(check){                    
-                    if(params.gettoken){
-                        return res.status(200).send({
-                            token: jwt.createToken(usuario)
-                        });
+            if(usuario.status != 'activo'){
+                return res.status(404).send({message: 'No has sido dado de alta'});
+            } else {
+                bcrypt.compare(password, usuario.password, (err, check) => {
+                    if(check){                    
+                        if(params.gettoken){
+                            return res.status(200).send({
+                                token: jwt.createToken(usuario)
+                            });
+                        } else {
+                            usuario.password = undefined;
+                            return res.status(200).send({usuario});
+                        }
                     } else {
-                        usuario.password = undefined;
-                        return res.status(200).send({usuario});
+                        // Devolver error
+                        return res.status(404).send({message: 'Contraseña incorrecta'});
                     }
-                } else {
-                    // Devolver error
-                    return res.status(404).send({message: 'Contraseña incorrecta'});
-                }
-            });
+                });
+            }
         } else {
             return res.status(404).send({message: 'El usuario no existe'});
         }
@@ -122,24 +137,24 @@ function obtenerUsuario(req, res){
 }
 
 // Edición de datos de usuario
-function actualizarUsuario(req, res){
-    var usuarioId = req.params.id;
-    var update = req.body;
+// function actualizarUsuario(req, res){
+//     var usuarioId = req.params.id;
+//     var update = req.body;
 
-    delete update.password;
+//     delete update.password;
 
-    if(usuarioId != req.usuario.sub){
-        return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
-    }
+//     if(usuarioId != req.usuario.sub){
+//         return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+//     }
 
-    Usuario.findByIdAndUpdate(usuarioId, update, {new:true}, (err, usuarioUpdated) => {
-        if(err) return res.status(500).send({message: 'Error en la petición'});
+//     Usuario.findByIdAndUpdate(usuarioId, update, {new:true}, (err, usuarioUpdated) => {
+//         if(err) return res.status(500).send({message: 'Error en la petición'});
 
-        if(!usuarioUpdated) return res.status(404).send({message: 'No se ha podido actualizar el usuario'});
+//         if(!usuarioUpdated) return res.status(404).send({message: 'No se ha podido actualizar el usuario'});
         
-        return res.status(200).send({usuario: usuarioUpdated});
-    });
-};
+//         return res.status(200).send({usuario: usuarioUpdated});
+//     });
+// };
 
 
 // // Subir archivos de imagen/avatar de usuario
@@ -219,7 +234,7 @@ module.exports = {
     registrarUsuario,
     logearUsuario,
     obtenerUsuario,
-    actualizarUsuario,
+    // actualizarUsuario,
     actualizarImagenUsuario,
     obtenerImagenUsuario
 }

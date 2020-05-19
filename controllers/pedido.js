@@ -26,6 +26,7 @@ function crearPedido(req, res){
         pedido.fecha = moment().unix();
         pedido.status = 'En espera';
 
+
         Usuario.findById((pedido.usuario), (err, usuario) => {
             if(err) return res.status(500).send({message: 'Error al guardar el pedido'});
 

@@ -6,6 +6,12 @@ const webpush = require('web-push');
 const urlsafeBase64 = require('urlsafe-base64');
 var path = require('path');
 const fs = require('fs');
+
+const twilio = require('../twilio');
+const client = require('twilio')(twilio.accountSID, twilio.authToken);
+var Usuario = require('../models/usuario');
+
+
 const api = 'https://ralph.com.mx/api/';
 // const api = 'http://localhost:3000/api/';
 
@@ -190,6 +196,54 @@ function obtenerLogo(req, res){
   });
 }
 
+function codigoVerificacion(req, res){
+  var telefono = 52 + req.params.tel;
+
+    client
+      .verify
+      .services(twilio.serviceID)
+      .verifications
+      .create({
+        to: `+${telefono}`,
+        channel: 'sms'
+      })
+      .then((data) => {
+        return res.status(200).send(data)
+      })
+}
+
+function verificarTelefono(req, res){
+  var tel = req.params.tel;
+  var telefono = 52 + req.params.tel;
+  var codigo = req.params.cod;
+
+    client
+      .verify
+      .services(twilio.serviceID)
+      .verificationChecks
+      .create({
+        to: `+${telefono}`,
+        code: codigo
+      })
+      .then((data) => {
+        res.status(200).send(data);
+
+        if(data.status == "approved"){
+            Usuario.find(({telefono: tel}), (err, usuario) => {
+                if(err) return          
+                if(!usuario) return     
+                if(usuario[0] && usuario[0]._id && usuario[0].nombre){
+                    Usuario.findByIdAndUpdate(usuario[0]._id, {status: 'activo'}, {new:true}, (err, usuarioUpdated) =>{
+                      if(err) return            
+                      if(!usuarioUpdated) return            
+                      if(usuarioUpdated) return                   
+                    })
+                } else {return}
+            })
+        } else {return}
+      })
+}
+
 
 
 module.exports = {
@@ -199,5 +253,7 @@ module.exports = {
     NotificacionRestaurante,
     NotificacionUsuario,
     NotificacionAdmin,
-    obtenerLogo
+    obtenerLogo,
+    codigoVerificacion,
+    verificarTelefono
 }
