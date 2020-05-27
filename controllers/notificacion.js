@@ -199,11 +199,7 @@ function obtenerLogo(req, res){
 function codigoVerificacion(req, res){
   var telefono = 52 + req.params.tel;
 
-    client
-      .verify
-      .services(twilio.serviceID)
-      .verifications
-      .create({
+    client.verify.services(twilio.serviceID).verifications.create({
         to: `+${telefono}`,
         channel: 'sms'
       })
@@ -217,11 +213,7 @@ function verificarTelefono(req, res){
   var telefono = 52 + req.params.tel;
   var codigo = req.params.cod;
 
-    client
-      .verify
-      .services(twilio.serviceID)
-      .verificationChecks
-      .create({
+    client.verify.services(twilio.serviceID).verificationChecks.create({
         to: `+${telefono}`,
         code: codigo
       })
@@ -244,7 +236,22 @@ function verificarTelefono(req, res){
       })
 }
 
+function mensajeSMS(req, res){
+  var tel = req.params.tel;
+  var telefono = 52 + req.params.tel;
+  var mensaje = 'Hola ralph.com.mx';
 
+// function mensajeSMS(telefono, mensaje){
+    client.messages.create({
+        to: `+${telefono}`,
+        from: '+12018229349',
+        body: mensaje
+    })
+    .then((message) => {
+      console.log(message);
+      return res.status(200).send(message);
+    })
+}
 
 module.exports = {
     saveSubscripcion,
@@ -255,5 +262,6 @@ module.exports = {
     NotificacionAdmin,
     obtenerLogo,
     codigoVerificacion,
-    verificarTelefono
+    verificarTelefono,
+    mensajeSMS
 }

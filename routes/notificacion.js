@@ -13,6 +13,7 @@ api.post('/push', md_auth.ensureAuth, NotificacionesControler.pushNotification);
 api.get('/logo', NotificacionesControler.obtenerLogo);
 api.get('/codigo/:tel', NotificacionesControler.codigoVerificacion);
 api.get('/verificacion/:tel/:cod', NotificacionesControler.verificarTelefono);
+api.get('/sms/:tel/', NotificacionesControler.mensajeSMS);
 
 
 module.exports = api;

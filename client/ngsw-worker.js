@@ -1929,38 +1929,7 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
             this.scope.addEventListener('fetch', (event) => this.onFetch(event));
             this.scope.addEventListener('message', (event) => this.onMessage(event));
             this.scope.addEventListener('push', (event) => this.onPush(event));
-            this.scope.addEventListener('notificationclick', (event) => {
-                const notificacion = event.notification;
-                const accion = event.action;
-            
-                const respuesta = clients.matchAll()
-                .then(clientes => {
-            
-                    let cliente = clientes.find(c => {
-                        return c.visibilityState === 'visible';
-                    });
-            
-                    if(cliente !== undefined){
-                        cliente.navigate(notificacion.data.url);
-                        cliente.focus();
-                    } else {
-                        clients.openWindow(notificacion.data.url);
-                    }
-            
-                    return notificacion.close();            
-                });
-
-                event.waitUntil(respuesta);            
-            });
-
-            // this.scope.addEventListener('notificationclick', (event) => {
-            //     console.log('Notification clicked', event);
-            //     event.notification.close();            
-            //     clients.openWindow(event.notification.data.url);
-            //     event.waitUntil(clients.openWindow(event.notification.data.url));
-            // });
-            // this.scope.addEventListener('notificationclick', (event) => this.onClick(event));
-
+            this.scope.addEventListener('notificationclick', (event) => this.onClick(event));
             // The debugger generates debug pages in response to debugging requests.
             this.debugger = new DebugHandler(this, this.adapter);
             // The IdleScheduler will execute idle tasks after a given delay.

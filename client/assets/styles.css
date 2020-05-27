@@ -100,6 +100,43 @@ body {
   font-weight: bold !important;
 }
 
+.btn-left button{
+  text-align: justify !important;
+}
+
+.btn-blue{
+  /* background-color: #3a5695 !important; */
+  /* border-color: #344c85 !important; */
+  background-color: #0d70da !important;
+  border-color: #0e66c5 !important;
+  font-size: 18px !important;
+  text-align: left !important;
+}
+
+.btn-blue i{
+  font-size: 27px !important;
+}
+
+.btn-red{
+  background-color: #dd4a39 !important;
+  border-color: #c74335 !important;
+  font-size: 18px !important;
+  text-align: left !important;
+}
+
+.btn-red i{
+  font-size: 23px !important;
+}
+
+.btn-gray{
+  font-size: 18px !important;
+  text-align: left !important;
+}
+
+.btn-gray i{
+  font-size: 23px !important;
+}
+
 .text-inicio{
   font-size: 20px;
   text-align: center;

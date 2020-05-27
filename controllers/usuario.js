@@ -22,9 +22,11 @@ function registrarUsuario(req, res){
         usuario.telefono = params.telefono;
         usuario.municipio = params.municipio;
         usuario.correo = params.correo.toLowerCase();
+        usuario.plataforma = params.plataforma;
         usuario.rol = 'USUARIO';
         usuario.status = 'por activar';
         usuario.visitas = 0;
+
 
         // return res.status(200).send({
         //     message: 'Estamos en mantenimiento, vuelve a intentarlo mañana'
