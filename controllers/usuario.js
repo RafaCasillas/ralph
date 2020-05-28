@@ -60,7 +60,7 @@ function registrarUsuario(req, res){
 
 
             if(usuarios.length == 0){
-            
+
                 // Cifra la contraseña y guarda los datos
                 bcrypt.hash(params.password, null, null, (err, hash) => {
                     usuario.password = hash;
