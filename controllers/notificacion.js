@@ -121,7 +121,7 @@ function NotificacionAdmin(title, body){
       }
     };
 
-    Notificacion.find({usuario: '5eb0c26fb1739471c9b7b998'}).exec((err, notificaciones) => {
+    Notificacion.find({usuario: '5eaaefea7fdccd3336b9711c'}).exec((err, notificaciones) => {
       if(err) res.status(500).send({ message: 'Error en el servidor' });
     
       if(!notificaciones) return res.status(404).send({message: 'No hay notificaciones'});
