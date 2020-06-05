@@ -83,7 +83,7 @@ const visitasId = '5ec08bc14eb7f2219ca7ca92';
                     
                     if(!municipio) return
                     
-                    return console.log(municipio);
+                    return
                 });
             }
         });
@@ -104,7 +104,7 @@ const visitasId = '5ec08bc14eb7f2219ca7ca92';
                     
                     if(!usuario) return
                     
-                    return console.log(usuario);
+                    return
                 });
             }
         });

@@ -138,25 +138,95 @@ function obtenerUsuario(req, res){
     });
 }
 
-// Edición de datos de usuario
-// function actualizarUsuario(req, res){
-//     var usuarioId = req.params.id;
-//     var update = req.body;
+// Conseguir datos de varios usuarios
+function obtenerUsuarios(req, res){
+    var restauranteId = req.params.id;
 
-//     delete update.password;
+    Usuario.find({restaurante: restauranteId}, (err, usuarios) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
 
-//     if(usuarioId != req.usuario.sub){
-//         return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
-//     }
-
-//     Usuario.findByIdAndUpdate(usuarioId, update, {new:true}, (err, usuarioUpdated) => {
-//         if(err) return res.status(500).send({message: 'Error en la petición'});
-
-//         if(!usuarioUpdated) return res.status(404).send({message: 'No se ha podido actualizar el usuario'});
+        if(!usuarios) return res.status(404).send({message: 'El usuarios no existe'});
         
-//         return res.status(200).send({usuario: usuarioUpdated});
-//     });
-// };
+        return res.status(200).send({usuarios: usuarios});
+    });
+}
+
+// Edición de datos de usuario
+function actualizarUsuario(req, res){
+    var usuarioId = req.usuario.sub;
+    var update = req.body;
+
+    delete update.password;
+
+    // if(usuarioId != req.usuario.sub){
+    //     return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+    // }
+
+    if(req.usuario.rol =! 'ADMIN'){
+        return res.status(500).send({message: 'Error en el servidor'});
+    }
+
+    Usuario.findByIdAndUpdate(usuarioId, update, {new:true}, (err, usuarioUpdated) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+
+        if(!usuarioUpdated) return res.status(404).send({message: 'No se ha podido actualizar el usuario'});
+        
+        return res.status(200).send({usuario: usuarioUpdated});
+    });
+};
+
+// Edición de datos de usuario
+function actualizarPermisosUsuario(req, res){
+    var usuarioId = req.params.id;
+
+    if(req.usuario.rol =! 'ADMIN'){
+        return res.status(500).send({message: 'Error en el servidor'});
+    }
+
+    
+    if(req.params.permiso == 1){
+        var update = {rol: 'RESTAURANTE'};
+
+    } else if(req.params.permiso == 2){
+        var update = {rol: 'EMPLEADO'};
+
+    } else {
+
+        var correo = req.params.permiso;
+        var restauranteId = req.params.id;
+
+        return Usuario.find({correo: correo.toLowerCase()}).exec((err, usuario) => {
+            if(err){ 
+                return res.status(500).send({message: 'Error al guardar el restaurante'});
+            }
+        
+            if(usuario && usuario.length >= 1) {
+                    
+                Usuario.findByIdAndUpdate(usuario[0]._id, {rol: 'RESTAURANTE', restaurante: restauranteId}, {new:true}, (err, userUpdated) =>{
+                    if(err) return res.status(500).send({message: 'Error en la petición'});
+                
+                    if(!userUpdated) return res.status(404).send({message: 'No se ha podido actualizar el usuario'});
+                
+                    return res.status(200).send({usuario: userUpdated});                                
+                })                                        
+                .catch(err => {
+                    // console.log(err);
+                    return res.status(500).send({message: 'Error al guardar el restaurante'});
+                });
+            } else {
+                return res.status(404).send({message: 'El correo con el que intentas registrar no existe'});
+            }
+        });
+    }
+
+    Usuario.findByIdAndUpdate(usuarioId, update, {new:true}, (err, usuarioUpdated) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+
+        if(!usuarioUpdated) return res.status(404).send({message: 'No se ha podido actualizar el usuario'});
+        
+        return res.status(200).send({usuario: usuarioUpdated});
+    });
+};
 
 
 // // Subir archivos de imagen/avatar de usuario
@@ -236,7 +306,9 @@ module.exports = {
     registrarUsuario,
     logearUsuario,
     obtenerUsuario,
-    // actualizarUsuario,
+    obtenerUsuarios,
+    actualizarUsuario,
+    actualizarPermisosUsuario,
     actualizarImagenUsuario,
     obtenerImagenUsuario
 }
