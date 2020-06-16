@@ -24,7 +24,7 @@ function registrarUsuario(req, res){
         usuario.correo = params.correo.toLowerCase();
         usuario.plataforma = params.plataforma;
         usuario.rol = 'USUARIO';
-        usuario.status = req.ip;
+        usuario.status = 'por activar';
         usuario.visitas = 0;
 
 

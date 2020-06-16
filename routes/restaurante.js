@@ -19,7 +19,7 @@ api.post('/crear-seccion-restaurante/:id', md_auth.ensureAuth, RestauranteContro
 api.put('/actualizar-seccion-restaurante/:res/:sec', md_auth.ensureAuth, RestauranteControler.actualizarSeccion);
 api.get('/obtener-seccion-restaurante/:id', RestauranteControler.obtenerSeccion);
 api.get('/obtener-secciones-restaurantes/:id/:who/:page?', RestauranteControler.obtenerSecciones);
-api.get('/creditoa30/:id', md_auth.ensureAuth, RestauranteControler.creditoa30);
+api.get('/credito/:id/:num/:can', md_auth.ensureAuth, RestauranteControler.ActualizarCredito);
 api.get('/alta-restaurante/:id', md_auth.ensureAuth, RestauranteControler.darDeAltaRestaurante);
 
 module.exports = api;

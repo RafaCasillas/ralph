@@ -27,7 +27,7 @@ function registrarRestaurante(req, res){
         restaurante.ubicacion = [];
         restaurante.imagen = null;
         restaurante.telefono = null;
-        restaurante.credito = 30;
+        restaurante.credito = 0;
         restaurante.debe = 0;
         restaurante.horario = [];
         restaurante.visitas = 0;
@@ -322,14 +322,27 @@ function obtenerSecciones(req, res){
     });
 }
 
-function creditoa30(req, res){
+function ActualizarCredito(req, res){
     var restauranteId = req.params.id
+    var cantidad = req.params.can
+    var creditoOdebo = req.params.num
+
+    if(creditoOdebo == 1){
+        var params = {credito: cantidad};
+
+    } else if (creditoOdebo == 2){
+        var params = {debe: cantidad};
+
+    } else {
+        return
+    } 
+
 
     if(req.usuario.rol != 'ADMIN'){
         return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
     }
 
-    Restaurante.findByIdAndUpdate(restauranteId, {credito: 30}, {new:true}, (err, restaurante) => {
+    Restaurante.findByIdAndUpdate(restauranteId, params, {new:true}, (err, restaurante) => {
         if(err) return res.status(500).send({message: 'Error en la petición'});
 
         if(!restaurante) return res.status(404).send({message: 'El restaurante no existe'});
@@ -367,6 +380,6 @@ module.exports = {
     actualizarSeccion,
     obtenerSeccion,
     obtenerSecciones,
-    creditoa30,
+    ActualizarCredito,
     darDeAltaRestaurante
 }

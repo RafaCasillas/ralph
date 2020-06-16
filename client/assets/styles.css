@@ -10,6 +10,10 @@ body {
   -webkit-touch-callout: none;
 }
 
+.row{
+  flex-wrap: nowrap !important;
+}
+
 #login{
   background-color: #f78216;
   height: 100%;
@@ -143,7 +147,7 @@ body {
 }
 
 .text-municipio{
-  font-size: 27px;
+  font-size: 25px;
   text-align: center;
 }
 
@@ -547,7 +551,7 @@ color: #ff4409;
 }
 
 .subtitle{
-  font-size: 32px;
+  font-size: 30px;
   margin-left: 20px;
   color: black;
 }
@@ -583,7 +587,7 @@ color: #ff4409;
 }
 
 .restaurante-nombre{
-  font-size: 28px;
+  font-size: 26px;
   margin-left: 0px;
   color: black;
 }
@@ -809,7 +813,7 @@ input[type="file"] {
 }
 
 .modal .btn{
-  font-size: 20px !important;
+  font-size: 19px !important;
 }
 
 .modal-footer{
@@ -825,4 +829,8 @@ input[type="file"] {
 
 .modal-header *{
   font-size: 22px !important;
+}
+
+.clickable {
+  cursor: pointer;
 }
