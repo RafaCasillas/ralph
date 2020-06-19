@@ -222,6 +222,8 @@ body {
   font-size: 22px;
   margin-top: 2px;
   margin-left: -4px;
+  /* font-size: 5vw; */
+  /* Viewport is the browser window size. 1vw = 1% of viewport width. If the viewport is 50cm wide, 1vw is 0.5cm. */
 }
 
 .navbar .res-nom-xbig *{
