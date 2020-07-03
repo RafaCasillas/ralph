@@ -12,8 +12,11 @@ var moment = require('moment');
                 //  VALORES EN TIEMPO UNIX
                 //     un día = 86400
                 //     una semana (7 dias) = 604800
+                //     xDias (20 dias) = 1728000
                 //     un mes (30 días) = 2592000
-                       const unMes = 2592000;
+
+                        const xDias = 1728000
+                        const unMes = 2592000;
 
 
 
@@ -23,9 +26,9 @@ function nuevoCupon(req, res){
 
 
     // Cupón Bienvenido
-    if(codigoActivacion == 'codigo' || codigoActivacion == 'cod'){
+    if(codigoActivacion == 'noerapenal' || codigoActivacion == 'ralph2020' || codigoActivacion == 'ralphesfelicidad'){
         Cupon.find({usuario: usuarioId, nombre: 'Bienvenido'}, (err, cupones) => {
-            console.log(cupones);
+
             if(err) return res.status(500).send({message: 'Error en la petición'});
 
             if(!cupones) return res.status(404).send({message: 'El cupón no existe'});
@@ -51,9 +54,9 @@ function cuponBienvenido(usuarioId){
 
     cupon.usuario = usuarioId;
     cupon.nombre = 'Bienvenido';
-    cupon.cupones = [30, 30, 30, 10];
+    cupon.cupones = [40, 30, 30];
     cupon.compraMinima = 100;
-    cupon.fechaVencimiento = (moment().unix() + unMes);
+    cupon.fechaVencimiento = (moment().unix() + xDias);
     cupon.status = 'Vigente';
 
     cupon.save((err, cuponStored) => {
@@ -68,8 +71,18 @@ function cuponBienvenido(usuarioId){
 
 function obtenerCupones(req, res){    
     var usuarioId = req.usuario.sub;
+
+    if(req.params.n == 1){
+        var parametro = {usuario: usuarioId, status: 'Vigente'};
+
+    } else if (req.params.n == 2){
+        var parametro = {usuario: usuarioId, nombre: 'Bienvenido'};
+
+    } else {
+        return
+    }
     
-    Cupon.find({usuario: usuarioId, status: 'Vigente'}, (err, cupones) => {
+    Cupon.find(parametro, (err, cupones) => {
         if(err) return res.status(500).send({message: 'Error en la petición'});
 
         if(!cupones) return res.status(404).send({message: 'No hay ningún cupón'});

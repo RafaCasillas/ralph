@@ -28,6 +28,14 @@ body {
   border-radius: 10px;
 }
 
+.recado-grande{
+  font-size: 20px;
+}
+
+.recado-chico{
+  font-size: 15px;
+}
+
 .badgeRed .badge {
   position: absolute;
   margin-top: -10px;
@@ -83,7 +91,15 @@ body {
 
 .navbar-default .pedidosBadge {
   top: 3px !important;
-  right: -8px !important;
+  right: -10px !important;
+  padding: 4px 6px !important;
+  border-radius: 30% !important;
+  font-size: 16px !important; 
+}
+
+.navbar-default .cuponesBadge {
+  top: 3px !important;
+  right: 20px !important;
   padding: 4px 6px !important;
   border-radius: 30% !important;
   font-size: 16px !important; 
@@ -486,6 +502,14 @@ body {
   color: green;
 }
 
+.detalle-pedido-total3{
+  font-size: 20px;
+  margin-right: 40px;
+  margin-top: 0px;
+  /* margin-bottom: -20px; */
+  color: black;
+}
+
 .text-detalle-pedido{
   font-size: 25px;
 }
@@ -498,6 +522,17 @@ body {
 
 .pedido-card{
   margin-top: -10px;
+}
+
+.icono-inactivo{
+  background-color: #3c3838;
+  color: white;
+  font-size: 60px;
+  margin-top: -200px;
+  padding-left: 90px !important;
+  padding-top: 60px !important;
+  padding-bottom: 50px !important;
+  opacity: 70%;
 }
 
 .icon-status-camino{

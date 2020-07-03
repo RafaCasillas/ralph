@@ -9,11 +9,11 @@ var PedidoSchema = Schema({
     fecha: String,
     total: Number,
     comision: Number,
-    ganancia: Number,
     contenido: Array,
     status: String,
     direccion: String,
-    envio: Number
+    envio: Number,
+    cupon: Number
 });
 
 module.exports = mongoose.model('Pedido', PedidoSchema);

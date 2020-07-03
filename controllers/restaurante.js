@@ -29,6 +29,7 @@ function registrarRestaurante(req, res){
         restaurante.telefono = null;
         restaurante.credito = 0;
         restaurante.debe = 0;
+        restaurante.ralphDebe = 0;
         restaurante.horario = [];
         restaurante.visitas = 0;
 
@@ -332,6 +333,9 @@ function ActualizarCredito(req, res){
 
     } else if (creditoOdebo == 2){
         var params = {debe: cantidad};
+
+    } else if (creditoOdebo == 3){
+        var params = {ralphDebe: cantidad};
 
     } else {
         return

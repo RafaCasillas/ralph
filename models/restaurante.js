@@ -14,6 +14,7 @@ var RestauranteSchema = Schema({
     status: String,
     credito: Number,
     debe: Number,
+    ralphDebe: Number,
     servicioDomicilio: Boolean,
     visitas: Number
 });

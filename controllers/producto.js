@@ -186,6 +186,24 @@ function obtenerProductos(req, res){
     });
 }
 
+function obtenerProductosRestaurante(req, res){
+
+    var itemsPerPage = 10;
+    var page = 1;
+    
+    Producto.find({seccion: req.params.sec}).sort('status').paginate(page, itemsPerPage, (err, productos, total) => {
+        if(err) return res.status(500).send({message: err});
+
+        if(!productos) return res.status(404).send({message: 'No hay productos disponibles'});
+
+        return res.status(200).send({
+            productos,
+            total,
+            pages: Math.ceil(total/itemsPerPage)
+        })
+    });
+}
+
 function obtenerProductosRandom(req, res){
 
     if(req.params.res && req.params.res != 0  && req.params.cat == 0){
@@ -219,6 +237,28 @@ function obtenerProductosRandom(req, res){
     });
 }
 
+function activarProducto(req, res){
+    var producto_id = req.params.id;
+
+    if(req.params.status == 1){
+        var parametro = {status: 'activo'};
+
+    } else if(req.params.status == 2){
+        var parametro = {status: 'inactivo'};
+
+    } else {
+        return
+    }
+
+    Producto.findByIdAndUpdate(producto_id, parametro, {new:true}, (err, productoUpdated) => {
+        if(err) return res.status(500).send({message: 'Error al borrar la publicacion'});
+
+        if(!productoUpdated) return res.status(404).send({message: 'No se ha borrado la publicación'});
+
+        return res.status(200).send({producto: productoUpdated});
+    })
+}
+
 function eliminarProducto(req, res){
     var producto_id = req.params.id;
 
@@ -240,6 +280,8 @@ module.exports = {
     obtenerImagenProducto,
     obtenerProducto,
     obtenerProductos,
+    obtenerProductosRestaurante,
     obtenerProductosRandom,
+    activarProducto,
     eliminarProducto
 }

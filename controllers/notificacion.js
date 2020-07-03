@@ -67,6 +67,8 @@ function NotificacionRestaurante(title, body, restaurante, url){
         body: body,
         icon: api + 'logo',
         badge: api + 'logo',
+        // sound: 'http://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/theme_01.mp3',
+        requireInteraction: true,
         data: {
           url: url
         }
@@ -115,6 +117,7 @@ function NotificacionAdmin(title, body){
         body: body,
         icon: api + 'logo',
         badge: api + 'logo',
+        requireInteraction: true,
         data: {
           url: '/admin/inicio'
         }
@@ -141,6 +144,7 @@ function pushNotification(req, res){
           body: req.body.body,
           icon: api + 'logo',
           badge: api + 'logo',
+          requireInteraction: true,
           data: {
             url: req.body.url
           }

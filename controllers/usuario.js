@@ -301,6 +301,18 @@ function obtenerImagenUsuario(req, res){
     });
 }
 
+// function contarUsuarios(req, res){
+//     var restauranteId = req.params.id;
+
+//     Usuario.countDocuments({restaurante: restauranteId}, (err, usuarios) => {
+//         if(err) return res.status(500).send({message: 'Error en la petición'});
+
+//         if(!usuarios) return res.status(404).send({message: 'El usuarios no existe'});
+        
+//         return res.status(200).send({usuarios: usuarios});
+//     });
+// }
+
 
 module.exports = {
     registrarUsuario,

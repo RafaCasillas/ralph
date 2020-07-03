@@ -11,7 +11,7 @@ var notificacion = require('./notificacion')
 function crearPedido(req, res){
     var params = req.body;
 
-    if( params.contenido && params.direccion && params.total && params.comision && params.ganancia && params.restaurante){
+    if( params.contenido && params.direccion && params.total && params.comision && params.restaurante){
         var pedido = new Pedido();
 
         pedido.restaurante = params.restaurante;
@@ -19,7 +19,7 @@ function crearPedido(req, res){
         pedido.direccion = params.direccion;
         pedido.total = params.total;
         pedido.comision = params.comision;
-        pedido.ganancia = params.ganancia;
+        pedido.cupon = params.cupon;
         pedido.envio = params.envio;
 
         pedido.usuario = req.usuario.sub;
