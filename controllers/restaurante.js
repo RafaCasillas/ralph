@@ -362,7 +362,15 @@ function darDeAltaRestaurante(req, res){
         return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
     }
 
-    Restaurante.findByIdAndUpdate(restauranteId, {status: 'inactivo'}, {new:true}, (err, restaurante) => {
+    if(req.params.status == 1){
+        var parametro = {status: 'inactivo'};
+        
+    } else if(req.params.status == 2){
+        var parametro = {status: 'activo'};
+
+    } else { return }
+
+    Restaurante.findByIdAndUpdate(restauranteId, parametro, {new:true}, (err, restaurante) => {
         if(err) return res.status(500).send({message: 'Error en la petición'});
 
         if(!restaurante) return res.status(404).send({message: 'El restaurante no existe'});

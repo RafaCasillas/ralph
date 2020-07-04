@@ -20,6 +20,6 @@ api.put('/actualizar-seccion-restaurante/:res/:sec', md_auth.ensureAuth, Restaur
 api.get('/obtener-seccion-restaurante/:id', RestauranteControler.obtenerSeccion);
 api.get('/obtener-secciones-restaurantes/:id/:who/:page?', RestauranteControler.obtenerSecciones);
 api.get('/credito/:id/:num/:can', md_auth.ensureAuth, RestauranteControler.ActualizarCredito);
-api.get('/alta-restaurante/:id', md_auth.ensureAuth, RestauranteControler.darDeAltaRestaurante);
+api.get('/alta-restaurante/:id/:status', md_auth.ensureAuth, RestauranteControler.darDeAltaRestaurante);
 
 module.exports = api;
