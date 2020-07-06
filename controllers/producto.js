@@ -9,7 +9,7 @@ const fs = require('fs');
 function crearProducto(req, res){
     var params = req.body;
 
-    if( params.nombre && params.descripcion && params.precio && params.tiempoEntrega && params.categoria != 0 && params.seccion != 0 && params.imagen == 1){
+    if( params.nombre && params.descripcion && params.precio && params.tiempoEntrega && params.categoria != 0 && params.seccion != 0){
         var producto = new Producto();
 
         producto.nombre = params.nombre;
@@ -148,7 +148,7 @@ function obtenerProducto(req, res){
 function obtenerProductos(req, res){
 
     if(req.params.res && req.params.res != 0 && req.params.cat == 0){
-        var parametro = {status: 'activo', restaurante: req.params.res}
+        var parametro = {status: 'activo', restaurante: req.params.res, imagen: {$ne: null}}
         var itemsPerPage = 7;
     }
     
@@ -207,7 +207,7 @@ function obtenerProductosRestaurante(req, res){
 function obtenerProductosRandom(req, res){
 
     if(req.params.res && req.params.res != 0  && req.params.cat == 0){
-        var parametro = {status: 'activo', restaurante: req.params.res}
+        var parametro = {status: 'activo', restaurante: req.params.res, imagen: {$ne: null}}
         var totalNumer = 7;
     }
     
@@ -262,12 +262,52 @@ function activarProducto(req, res){
 function eliminarProducto(req, res){
     var producto_id = req.params.id;
 
-    Producto.find({restaurante: req.usuario.restaurante, '_id': producto_id}).deleteOne((err, productoRemoved) => {
+    Producto.findById(producto_id, (err, producto) => {
         if(err) return res.status(500).send({message: 'Error al borrar la publicacion'});
 
-        if(!productoRemoved) return res.status(404).send({message: 'No se ha borrado la publicación'});
+        if(!producto) return res.status(404).send({message: 'No se ha borrado la publicación'});
 
-        return res.status(200).send({producto: productoRemoved});
+        if(producto.imagen){
+            var old_image = producto.imagen
+            var path_old_file = './uploads/productos/'+old_image;
+            fs.unlink(path_old_file, (err) => {
+                if(err) return res.status(500).send({message: 'Error'});
+            })
+    
+        }
+
+        Producto.find({restaurante: req.usuario.restaurante, '_id': producto_id}).deleteOne((err, productoRemoved) => {
+            if(err) return res.status(500).send({message: 'Error al borrar la publicacion'});
+    
+            if(!productoRemoved) return res.status(404).send({message: 'No se ha borrado la publicación'});
+    
+            return res.status(200).send({producto: productoRemoved});
+        })
+    })
+
+}
+
+function eliminarImagen(req, res){
+    var producto_id = req.params.id; 
+
+    Producto.findById(producto_id, (err, producto) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+
+        if(producto.imagen && producto.imagen != null){
+            var old_image = producto.imagen
+            var path_old_file = './uploads/productos/'+old_image;
+            fs.unlink(path_old_file, (err) => {
+                if(err) return res.status(500).send({message: 'Error'});
+
+                Producto.findByIdAndUpdate(producto_id, {imagen: null}, {new:true}, (err, productoUpdated) => {
+                    if(err) return res.status(500).send({message: 'Error al actualizar la publicacion'});
+
+                    if(!productoUpdated) return res.status(404).send({message: 'No se ha borrado la publicación'});
+        
+                    return res.status(200).send({producto: productoUpdated});
+                })
+            });
+        }
     })
 }
 
@@ -283,5 +323,6 @@ module.exports = {
     obtenerProductosRestaurante,
     obtenerProductosRandom,
     activarProducto,
-    eliminarProducto
+    eliminarProducto,
+    eliminarImagen
 }

@@ -48,12 +48,12 @@ const visitasId = '5ec08bc14eb7f2219ca7ca92';
         if(usuarioId != 0){
             nuevaVisitaUsuario(usuarioId);
         }
-    
+
         Stats.findById((visitasId), (err, stats) => {
             if(err) return
             
             if(!stats) return
-            
+        
             if(stats){
                 var newVisitas = stats.visitas + 1;
 

@@ -158,7 +158,7 @@ function actualizarImagenRestaurante(req, res){
         // console.log(err);
             return res.status(500).send({message: '152 - Error en el servidor'});
         }
-    } 
+} 
 
 function removeFilesOfUploads(res, file_path, message){
     fs.unlink(file_path, (err) => {

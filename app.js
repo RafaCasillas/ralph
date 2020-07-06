@@ -44,9 +44,9 @@ app.use('/api', cupon_routes);
 
   
 // Para que funcione en produccion
-// app.get('*', function(req, res, next){
-//     res.sendFile(path.resolve('client/index.html'));
-// });
+app.get('*', function(req, res, next){
+    res.sendFile(path.resolve('client/index.html'));
+});
 
 
 // Exportar
