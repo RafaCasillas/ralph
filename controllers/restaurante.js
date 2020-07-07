@@ -323,6 +323,18 @@ function obtenerSecciones(req, res){
     });
 }
 
+function eliminarSeccion(req, res){
+    var seccion_id = req.params.id;
+
+    Seccion.find({_id: seccion_id}).deleteOne((err, seccionRemoved) => {
+        if(err) return res.status(500).send({message: 'Error al borrar la seccion'});
+
+        if(!seccionRemoved) return res.status(404).send({message: 'No se ha borrado la seccion'});
+
+        return res.status(200).send({seccion: seccionRemoved});
+    })
+}
+
 function ActualizarCredito(req, res){
     var restauranteId = req.params.id
     var cantidad = req.params.can
@@ -392,6 +404,7 @@ module.exports = {
     actualizarSeccion,
     obtenerSeccion,
     obtenerSecciones,
+    eliminarSeccion,
     ActualizarCredito,
     darDeAltaRestaurante
 }
