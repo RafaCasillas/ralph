@@ -273,7 +273,6 @@ function eliminarProducto(req, res){
             fs.unlink(path_old_file, (err) => {
                 if(err) return res.status(500).send({message: 'Error'});
             })
-    
         }
 
         Producto.find({restaurante: req.usuario.restaurante, '_id': producto_id}).deleteOne((err, productoRemoved) => {
@@ -294,18 +293,22 @@ function eliminarImagen(req, res){
         if(err) return res.status(500).send({message: 'Error en la petición'});
 
         if(producto.imagen && producto.imagen != null){
-            var old_image = producto.imagen
+
+            var product = producto;
+
+            Producto.findByIdAndUpdate(producto_id, {imagen: null}, {new:true}, (err, productoUpdated) => {
+                if(err) return res.status(500).send({message: 'Error al actualizar la publicacion'});
+
+                if(!productoUpdated) return res.status(404).send({message: 'No se ha borrado la publicación'});
+    
+                console.log(productoUpdated);
+                return res.status(200).send({producto: productoUpdated});
+            })
+
+            var old_image = product.imagen
             var path_old_file = './uploads/productos/'+old_image;
             fs.unlink(path_old_file, (err) => {
-                if(err) return res.status(500).send({message: 'Error'});
-
-                Producto.findByIdAndUpdate(producto_id, {imagen: null}, {new:true}, (err, productoUpdated) => {
-                    if(err) return res.status(500).send({message: 'Error al actualizar la publicacion'});
-
-                    if(!productoUpdated) return res.status(404).send({message: 'No se ha borrado la publicación'});
-        
-                    return res.status(200).send({producto: productoUpdated});
-                })
+                // if(err) return res.status(500).send({message: 'Error'});
             });
         }
     })

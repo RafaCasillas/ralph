@@ -18,6 +18,6 @@ api.get('/productosR/:sec', ProductoControler.obtenerProductosRestaurante);
 api.get('/productos-random/:res?/:cat?/:sec?/:nom?', ProductoControler.obtenerProductosRandom);
 api.get('/activar-producto/:id/:status', md_auth.ensureAuth, ProductoControler.activarProducto);
 api.delete('/producto/:id', md_auth.ensureAuth, ProductoControler.eliminarProducto);
-api.delete('/imagen-producto/:id', md_auth.ensureAuth, ProductoControler.eliminarImagen);
+api.get('/imagen-producto/:id', md_auth.ensureAuth, ProductoControler.eliminarImagen);
 
 module.exports = api;
