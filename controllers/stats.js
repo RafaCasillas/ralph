@@ -481,6 +481,16 @@ function cuponExpirado(req, res){
 }
 
 
+function stats(req, res){
+    Stats.find((err, stats) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+        
+        if(!stats) return res.status(404).send({message: 'No se ha podido actualizar el pedido'});
+        
+        return res.status(200).send(stats);
+    })
+}
+
 
 module.exports = {
     crearStats,
@@ -493,5 +503,6 @@ module.exports = {
     promoCupon,
     nuevoClickCategoria,
     nuevoPedido,
-    cuponExpirado
+    cuponExpirado,
+    stats
 }

@@ -16,5 +16,6 @@ api.get('/promo-cupon/:status', StatsControler.promoCupon);
 api.get('/click-categoria/:id', StatsControler.nuevoClickCategoria);
 api.get('/nuevo-pedido/:status', StatsControler.nuevoPedido);
 api.get('/cupon-expirado/:status', StatsControler.cuponExpirado);
+api.get('/allstats', StatsControler.stats);
 
 module.exports = api;
