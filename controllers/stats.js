@@ -52,6 +52,9 @@ function nuevaVisitaApp(req, res){
         nuevaVisitaUsuario(usuarioId);
     }
 
+    var rol = req.params.rol.toLowerCase();
+    nuevaVisita(rol);
+
     Stats.findById((visitasId), (err, stats) => {
         if(err) return
         
@@ -72,11 +75,11 @@ function nuevaVisitaApp(req, res){
 }
 
 
-function nuevaVisita(req, res){
+function nuevaVisita12hr(req, res){
 
     var rol = req.params.rol.toLowerCase();
 
-    Stats.findOne({nombre: 'visitas'}, (err, stat) => {
+    Stats.findOne({nombre: 'visitas unicas por dia'}, (err, stat) => {
         if(err) return res.status(500).send({message: 'Error en la petición'});
         
         if(!stat) return res.status(404).send({message: 'No se ha podido actualizar el pedido'});
@@ -108,6 +111,46 @@ function nuevaVisita(req, res){
                 if(!stats) return res.status(404).send({message: 'No se ha podido actualizar el pedido'});
                 
                 return res.status(200).send(stats);
+            });
+        }
+    });
+}
+
+
+function nuevaVisita(rol){
+
+    Stats.findOne({nombre: 'visitas totales'}, (err, stat) => {
+        if(err) return
+        
+        if(!stat) return
+        
+        if(stat){
+            if(rol == 0){
+                stat.contenido.null = stat.contenido.null + 1;
+
+            } else if(rol == 'usuario'){
+                stat.contenido.usuario = stat.contenido.usuario + 1;
+
+            } else if(rol == 'restaurante'){
+                stat.contenido.restaurante = stat.contenido.restaurante + 1;
+
+            } else if(rol == 'empleado'){
+                stat.contenido.empleado = stat.contenido.empleado + 1;
+
+            } else if(rol == 'repartidor'){
+                stat.contenido.repartidor = stat.contenido.repartidor + 1;
+
+            } else if(rol == 'admin'){
+                stat.contenido.admin = stat.contenido.admin + 1;
+            }
+
+
+            Stats.findByIdAndUpdate(stat._id, stat, {new:true}, (err, stats) => {
+                if(err) return
+        
+                if(!stats) return
+                
+                return
             });
         }
     });
@@ -388,7 +431,7 @@ function nuevoClickCategoria(req, res){
         if(!categoria) return res.status(404).send({message: 'No se ha podido actualizar el pedido'});
         
         if(categoria){
-            var newClick = categoria.clicks + 1;
+            var newClick = categoria.click + 1;
 
             Categoria.findByIdAndUpdate(categoriaId, {clicks: newClick}, {new:true}, (err, categorias) => {
                 if(err) return res.status(500).send({message: 'Error en la petición'});
@@ -495,6 +538,7 @@ function stats(req, res){
 module.exports = {
     crearStats,
     nuevaVisitaApp,
+    nuevaVisita12hr,
     nuevaVisita,
     nuevaVisitaRestaurante,
     obtenerVisitas,

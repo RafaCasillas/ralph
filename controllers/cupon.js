@@ -42,10 +42,25 @@ function nuevoCupon(req, res){
             }            
         });
 
+    } else if(codigoActivacion == 'ralphmeencanta' || codigoActivacion == 'yousoralph'){
+        Cupon.find({usuario: usuarioId, nombre: 'Envío gratis'}, (err, cupones) => {
+
+            if(err) return res.status(500).send({message: 'Error en la petición'});
+
+            if(!cupones) return res.status(404).send({message: 'El cupón no existe'});
+
+            if(cupones.length == 0){
+                cuponEnvioGratis(usuarioId);
+                return res.status(200).send({message: 'Cupón creado correctamente'});
+
+            } else{
+                return res.status(200).send({message: 'Ya has usado este cupón'});
+            }            
+        });
+
     } else {
         return res.status(200).send({message: 'Código inválido'});
     }
-
 }
 
 
@@ -60,11 +75,31 @@ function cuponBienvenido(usuarioId){
     cupon.status = 'Vigente';
 
     cupon.save((err, cuponStored) => {
-        if(err) return 'Error al guardar el cupón';
+        if(err) return
 
-        if(cuponStored) return 'Cupón creado correctamente';
+        if(cuponStored) return
 
-        else return 'No se ha registrado el cupón';
+        else return
+    });
+}
+
+
+function cuponEnvioGratis(usuarioId){
+    var cupon = new Cupon();
+
+    cupon.usuario = usuarioId;
+    cupon.nombre = 'Envío gratis';
+    cupon.cupones = [20, 20, 20];
+    cupon.compraMinima = 0;
+    cupon.fechaVencimiento = (moment().unix() + xDias);
+    cupon.status = 'Vigente';
+
+    cupon.save((err, cuponStored) => {
+        if(err) return
+
+        if(cuponStored) return
+
+        else return
     });
 }
 

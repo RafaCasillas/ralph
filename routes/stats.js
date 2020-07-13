@@ -6,8 +6,8 @@ var StatsControler = require('../controllers/stats');
 var api = express.Router();
 
 api.post('/new-stats', StatsControler.crearStats);
-api.get('/stats/:mun/:usuario', StatsControler.nuevaVisitaApp);
-api.get('/nueva-visita/:rol', StatsControler.nuevaVisita);
+api.get('/stats/:mun/:usuario/:rol', StatsControler.nuevaVisitaApp);
+api.get('/nueva-visita/:rol', StatsControler.nuevaVisita12hr);
 api.get('/stat/:res', StatsControler.nuevaVisitaRestaurante);
 api.get('/visitas', StatsControler.obtenerVisitas);
 api.get('/visitafb/:campania/:tipo/:numero/:mun/:usuario', StatsControler.nuevavisitaFB);
