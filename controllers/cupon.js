@@ -90,7 +90,7 @@ function cuponEnvioGratis(usuarioId){
     cupon.usuario = usuarioId;
     cupon.nombre = 'Envío gratis';
     cupon.cupones = [20, 20, 20];
-    cupon.compraMinima = 0;
+    cupon.compraMinima = 20;
     cupon.fechaVencimiento = (moment().unix() + xDias);
     cupon.status = 'Vigente';
 

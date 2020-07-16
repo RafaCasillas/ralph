@@ -3,6 +3,7 @@
 var Restaurante = require('../models/restaurante');
 var Usuario = require('../models/usuario');
 var Seccion = require('../models/seccion-restaurante');
+var Horario = require('../models/horario');
 
 var mongoosePaginate = require('mongoose-pagination');
 var path = require('path');
@@ -392,6 +393,159 @@ function darDeAltaRestaurante(req, res){
 }
 
 
+function crearHorario(req, res){
+    var params = req.body;
+    var horario = new Horario();
+    horario.restaurante = params.restaurante;
+    horario.nombre = params.nombre;
+    horario.apertura = params.apertura;
+    horario.cierre = params.cierre;
+
+    // if(req.usuario.rol != 'ADMIN'){
+    //     return res.status(200).send({message: 'funcion activada'});
+    // }
+
+    if(params){
+        horario.save((err, horarioStored) => {
+            if(err){ 
+                return res.status(500).send({message: 'Error al guardar el horario'});
+            }
+
+            if(horarioStored){
+                return res.status(200).send({horario: horarioStored});
+
+            } else {
+                return res.status(404).send({message: 'No se ha registrado el horario'});
+            }
+        });
+    } else {
+        res.status(200).send({message: 'Envia todos los campos necesarios'});
+    }
+}
+
+
+function abrirRestaurantes(req, res){
+    if(req.params.con != 'estaesmicontrasena'){
+        return res.status(200).send('funcion activada');
+    };
+
+    // if(req.usuario.rol != 'ADMIN'){
+    //     return res.status(200).send({message: 'funcion activada'});
+    // }
+    
+    res.status(200).send('Función activada correctamente');
+
+    
+    setInterval(() => {
+        var date = new Date();
+        var dia = date.getDay();
+        var hora = date.getHours();
+        var minuto = date.getMinutes();
+
+
+        // var min = date.getMinutes();
+    
+        // if(min >= 0 && min < 10){
+        //     var minuto = 0;
+            
+        // } else if(min >= 25 && min < 35){
+        //     var minuto = 30;
+        // }
+
+        // abrirlos(dia, hora, minuto);
+        pedido(dia, hora, minuto);
+
+    }, 1800000);
+    
+    setTimeout(() => {
+        var date = new Date();
+        var dia = date.getDay();
+        var hora = date.getHours();
+        var minuto = date.getMinutes();
+
+        pedido(dia, hora, minuto);
+
+    }, 1000);
+}
+
+
+var Pedido = require('../models/pedido');
+
+
+function pedido(dia, hora, minuto){
+    var pedido = new Pedido();
+    pedido.restaurante = '5eb504b22242eb66ca714e7b';
+    pedido.contenido = [ 
+        {
+            "cantidad" : "1",
+            "seccion" : "Dia : " + dia,
+            "producto" : "Horario = " + hora + " : " + minuto,
+            "total" : 95,
+            "nota" : "Sin cebolla",
+            "comision" : 9.5,
+        }
+    ];
+    pedido.total = "125";
+    pedido.comision = "12.5";
+    pedido.direccion = "casa";
+
+    pedido.save((err, pedidoStored) => {
+        if(err){ 
+            return
+        }
+
+        if(pedidoStored){
+            return
+
+        } else {
+            return
+        }
+    });
+}
+
+function abrirlos(dia, hora, minuto){
+    // Dias de la semana => 0 = Domingo, 1 = Lunes, 2 = Martes, 3 = Miercoles, 4 = Jueves, 5 = Viernes, 6 = Sabado
+    var dia = 5;
+    var hora = 14;
+    var minuto = 30;
+
+    Horario.find((err, restaurantes) => {
+        if(err) return
+        if(!restaurantes) return
+
+        restaurantes.forEach((restaurante) => {
+            // Abrir restaurantes
+            if(restaurante.apertura[dia] >= hora && restaurante.apertura[dia] < (hora+1)){
+                // Comprobacion de si abren a la media y si estamos en la media
+                if(restaurante.apertura[dia].toString().length >= 3){
+                    if(minuto == 30){
+                        console.log(restaurante.nombre +' is open');
+                    }
+                } else {
+                    if(minuto != 30){
+                        console.log(restaurante.nombre +' is open');
+                    }
+                }
+            }
+
+            // Cerrar restaurantes
+            if(restaurante.cierre[dia] >= hora && restaurante.cierre[dia] < (hora+1)){
+                // Comprobacion de si abren a la media y si estamos en la media
+                if(restaurante.cierre[dia].toString().length >= 3){
+                    if(minuto == 30){
+                        console.log(restaurante.nombre +' is closed');
+                    }
+                } else {
+                    if(minuto != 30){
+                        console.log(restaurante.nombre +' is closed');
+                    }
+                }
+            }
+        });
+    })
+}
+
+
 module.exports = {
     registrarRestaurante,
     actualizarRestaurante,
@@ -406,5 +560,108 @@ module.exports = {
     obtenerSecciones,
     eliminarSeccion,
     ActualizarCredito,
-    darDeAltaRestaurante
+    darDeAltaRestaurante,
+    crearHorario,
+    abrirRestaurantes
 }
+
+
+
+
+
+
+
+// {
+//     "restaurante" : "5ee7b6dc06de0d53a65623cd",
+//     "nombre" : "El Sazón de la Abuela",
+//     "apertura" : [null,8,8,8,8,8,8],
+//     "cierre" :  [null,15.5,15.5,15.5,15.5,15.5,15.5]
+// }
+
+
+// {
+//     "restaurante" : "5eb4ac7db1739471c9b7b9eb",
+//     "nombre" : "Azotea",
+//     "apertura" : [9,9,9,9,9,9,9],
+//     "cierre" :  [23,23,23,23,23,23,23]
+// }
+
+
+// {
+//     "restaurante" : "5f0612faef8bca480c1d22bb",
+//     "nombre" : "Subway",
+//     "apertura" : [11.5,9,9,9,9,9,9],
+//     "cierre" :  [19.5,21,21,21,21,21,19]
+// }
+
+
+// {
+//     "restaurante" : "5efe49355a48f417a322ea3c",
+//     "nombre" : "Salaatti",
+//     "apertura" : [13,13,10,10,10,10,10],
+//     "cierre" :  [19.5,19.5,19.5,19.5,19.5,19.5,19.5]
+// }
+
+
+// {
+//     "restaurante" : "5edeb94106de0d53a6562377",
+//     "nombre" : "Sushi Sai",
+//     "apertura" : [13,13,13,13,13,13,13],
+//     "cierre" :  [23,23,23,23,23,23,23]
+// }
+
+
+// {
+//     "restaurante" : "5eacb494b1739471c9b7b932",
+//     "nombre" : "Bull Dogos",
+//     "apertura" : [14.5,14.5,14.5,14.5,14.5,14.5,14.5],
+//     "cierre" :  [22.5,22.5,22.5,22.5,22.5,22.5,22.5]
+// }
+
+
+// {
+//     "restaurante" : "5edaa7be0158fd557164144c",
+//     "nombre" : "Social",
+//     "apertura" : [null,null,15,15,15,15,15],
+//     "cierre" :  [null,null,23,23,23,23,23]
+// }
+
+
+// {
+//     "restaurante" : "5ebb3c181a1d6a45ec2e81ad",
+//     "nombre" : "La Boloneza Restaurant",
+//     "apertura" : [8,null,8,8,8,8,8],
+//     "cierre" :  [18,null,18,18,18,18,18]
+// }
+
+
+// {
+//     "restaurante" : "5eac9667b1739471c9b7b913",
+//     "nombre" : "POLOMO",
+//     "apertura" : [9,9,9,9,9,9,9],
+//     "cierre" :  [12,12,12,12,12,12,12]
+// }
+
+
+// {
+//     "restaurante" : "5eb44150b1739471c9b7b9cf",
+//     "nombre" : "Los Portales",
+//     "apertura" : [9,9,9,null,9,9,9],
+//     "cierre" :  [18,18,18,null,18,18,18]
+// }
+
+
+// {
+//     "restaurante" : "5eac9627b1739471c9b7b912",
+//     "nombre" : "Salad Green",
+//     "apertura" : [10,10,null,10,10,10,10],
+//     "cierre" :  [18,18,null,18,18,18,18]
+// }
+
+
+// {
+//     "restaurante" : "5f04ba2a4f468f35845ea0e4",
+//     "nombre" : "El chiguilo",
+//     "apertura" : [11,11,11,11,11,11,11],
+//     "cierre" :  [19,19,19,19,19,19,19]
+// }

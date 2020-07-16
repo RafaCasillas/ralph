@@ -211,6 +211,10 @@ function contarPedidos(req, res){
 function eliminarPedido(req, res){
     var pedido_id = req.params.id;
 
+    if(req.usuario.rol != 'ADMIN'){
+        return res.status(200).send({message: 'No tienes permiso para actualizar los datos'});
+    }
+
     Pedido.find({_id: pedido_id}).deleteOne((err, pedidoRemoved) => {
         if(err) return res.status(500).send({message: 'Error al borrar la publicacion'});
 

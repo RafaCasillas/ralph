@@ -5,6 +5,10 @@ var Usuario = require('../models/usuario');
 var Municipio = require('../models/municipio');
 var Restaurante = require('../models/restaurante');
 var Categoria = require('../models/categoria');
+var Cupon = require('../models/cupon');
+var Notificacion = require('../models/notificacion');
+var Pedido = require('../models/pedido');
+var Producto = require('../models/producto');
 
 const visitasId = '5ec08bc14eb7f2219ca7ca92';
 
@@ -433,7 +437,7 @@ function nuevoClickCategoria(req, res){
         if(categoria){
             var newClick = categoria.click + 1;
 
-            Categoria.findByIdAndUpdate(categoriaId, {clicks: newClick}, {new:true}, (err, categorias) => {
+            Categoria.findByIdAndUpdate(categoriaId, {click: newClick}, {new:true}, (err, categorias) => {
                 if(err) return res.status(500).send({message: 'Error en la petición'});
         
                 if(!categorias) return res.status(404).send({message: 'No se ha podido actualizar el pedido'});
@@ -535,6 +539,51 @@ function stats(req, res){
 }
 
 
+function getStats(req, res){
+    var collection = req.params.collection;
+    
+    if(collection == 1){
+        var Parametro = Usuario;
+
+    } else if(collection == 2){
+        var Parametro = Municipio;
+
+    } else if(collection == 3){
+        var Parametro = Restaurante;
+
+    } else if(collection == 4){
+        var Parametro = Categoria;
+
+    } else if(collection == 5){
+        var Parametro = Cupon;
+
+    } else if(collection == 6){
+        var Parametro = Notificacion;
+
+    } else if(collection == 7){
+        var Parametro = Pedido;
+
+    } else if(collection == 8){
+        var Parametro = Producto;
+    }
+
+    var page = req.params.page;
+    var itemsPerPage = 10;
+
+    Parametro.find().sort().paginate(page, itemsPerPage, (err, stats, total) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+        
+        if(!stats) return res.status(404).send({message: 'No se ha podido actualizar el pedido'});
+        
+        return res.status(200).send({
+            stats,
+            total,
+            pages: Math.ceil(total/itemsPerPage)
+        })
+    })
+}
+
+
 module.exports = {
     crearStats,
     nuevaVisitaApp,
@@ -548,5 +597,6 @@ module.exports = {
     nuevoClickCategoria,
     nuevoPedido,
     cuponExpirado,
-    stats
+    stats,
+    getStats
 }

@@ -22,5 +22,7 @@ api.get('/obtener-secciones-restaurantes/:id/:who/:page?', RestauranteControler.
 api.delete('/eliminar-seccion/:id', RestauranteControler.eliminarSeccion);
 api.get('/credito/:id/:num/:can', md_auth.ensureAuth, RestauranteControler.ActualizarCredito);
 api.get('/alta-restaurante/:id/:status', md_auth.ensureAuth, RestauranteControler.darDeAltaRestaurante);
+api.post('/crear-horario', md_auth.ensureAuth, RestauranteControler.crearHorario);
+api.get('/abrirrestaurantes/:con', md_auth.ensureAuth, RestauranteControler.abrirRestaurantes);
 
 module.exports = api;
