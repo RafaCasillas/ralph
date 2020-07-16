@@ -5,6 +5,7 @@ var Usuario = require('../models/usuario');
 var Seccion = require('../models/seccion-restaurante');
 var Horario = require('../models/horario');
 
+var notificacion = require('./notificacion')
 var mongoosePaginate = require('mongoose-pagination');
 var path = require('path');
 const fs = require('fs');
@@ -401,9 +402,9 @@ function crearHorario(req, res){
     horario.apertura = params.apertura;
     horario.cierre = params.cierre;
 
-    // if(req.usuario.rol != 'ADMIN'){
-    //     return res.status(200).send({message: 'funcion activada'});
-    // }
+    if(req.usuario.rol != 'ADMIN'){
+        return res.status(200).send({message: 'funcion activada'});
+    }
 
     if(params){
         horario.save((err, horarioStored) => {
@@ -429,9 +430,9 @@ function abrirRestaurantes(req, res){
         return res.status(200).send('funcion activada');
     };
 
-    // if(req.usuario.rol != 'ADMIN'){
-    //     return res.status(200).send({message: 'funcion activada'});
-    // }
+    if(req.usuario.rol != 'ADMIN'){
+        return res.status(200).send({message: 'funcion activada'});
+    }
     
     res.status(200).send('Función activada correctamente');
 
@@ -442,20 +443,16 @@ function abrirRestaurantes(req, res){
 
         var dia = date.getDay();
         var hora = date.getHours();
-        var minuto = date.getMinutes();
-
-
-        // var min = date.getMinutes();
+        var min = date.getMinutes();
     
-        // if(min >= 0 && min < 10){
-        //     var minuto = 0;
+        if(min >= 0 && min < 10){
+            var minuto = 0;
             
-        // } else if(min >= 25 && min < 35){
-        //     var minuto = 30;
-        // }
+        } else if(min >= 25 && min < 35){
+            var minuto = 30;
+        }
 
-        // abrirlos(dia, hora, minuto);
-        pedido(dia, hora, minuto);
+        abrirlos(dia, hora, minuto, min);
 
     }, 1800000);
     
@@ -466,49 +463,51 @@ function abrirRestaurantes(req, res){
         var dia = date.getDay();
         var hora = date.getHours();
         var minuto = date.getMinutes();
-
-        pedido(dia, hora, minuto);
-
+        notificacion.NotificacionAdmin('Se activó el abrir restaurantes', 'El día ' + dia + ', a las ' + hora + ' : ' + minuto);
     }, 1000);
 }
 
 
-var Pedido = require('../models/pedido');
+// var Pedido = require('../models/pedido');
 
 
-function pedido(dia, hora, minuto){
-    var pedido = new Pedido();
-    pedido.restaurante = '5eb504b22242eb66ca714e7b';
-    pedido.contenido = [ 
-        {
-            "cantidad" : "1",
-            "seccion" : "Dia : " + dia,
-            "producto" : "Horario = " + hora + " : " + minuto,
-            "total" : 95,
-            "nota" : "Sin cebolla",
-            "comision" : 9.5,
-        }
-    ];
-    pedido.total = "125";
-    pedido.comision = "12.5";
-    pedido.direccion = "casa";
+// function pedido(dia, hora, minuto){
+//     var pedido = new Pedido();
+//     pedido.restaurante = '5eb504b22242eb66ca714e7b';
+//     pedido.contenido = [ 
+//         {
+//             "cantidad" : "1",
+//             "seccion" : "Dia : " + dia,
+//             "producto" : "Horario = " + hora + " : " + minuto,
+//             "total" : 95,
+//             "nota" : "Sin cebolla",
+//             "comision" : 9.5,
+//         }
+//     ];
+//     pedido.total = "125";
+//     pedido.comision = "12.5";
+//     pedido.direccion = "casa";
 
-    pedido.save((err, pedidoStored) => {
-        if(err){ 
-            return
-        }
+//     pedido.save((err, pedidoStored) => {
+//         if(err){ 
+//             return
+//         }
 
-        if(pedidoStored){
-            return
+//         if(pedidoStored){
+//             return
 
-        } else {
-            return
-        }
-    });
-}
+//         } else {
+//             return
+//         }
+//     });
+// }
 
-function abrirlos(dia, hora, minuto){
+function abrirlos(dia, hora, minuto, min){
     // Dias de la semana => 0 = Domingo, 1 = Lunes, 2 = Martes, 3 = Miercoles, 4 = Jueves, 5 = Viernes, 6 = Sabado
+
+    if(hora == 8){
+        notificacion.NotificacionAdmin('Se activó el abrir restaurantes', 'El día ' + dia + ', a las ' + hora + ' : ' + min);
+    }
 
     Horario.find((err, restaurantes) => {
         if(err) return
@@ -520,11 +519,11 @@ function abrirlos(dia, hora, minuto){
                 // Comprobacion de si abren a la media y si estamos en la media
                 if(restaurante.apertura[dia].toString().length >= 3){
                     if(minuto == 30){
-                        console.log(restaurante.nombre +' is open');
+                        activarDesactivar(restaurante.restaurante, 2);
                     }
                 } else {
                     if(minuto != 30){
-                        console.log(restaurante.nombre +' is open');
+                        activarDesactivar(restaurante.restaurante, 2);
                     }
                 }
             }
@@ -534,11 +533,11 @@ function abrirlos(dia, hora, minuto){
                 // Comprobacion de si abren a la media y si estamos en la media
                 if(restaurante.cierre[dia].toString().length >= 3){
                     if(minuto == 30){
-                        console.log(restaurante.nombre +' is closed');
+                        activarDesactivar(restaurante.restaurante, 1);
                     }
                 } else {
                     if(minuto != 30){
-                        console.log(restaurante.nombre +' is closed');
+                        activarDesactivar(restaurante.restaurante, 1);
                     }
                 }
             }
@@ -546,6 +545,19 @@ function abrirlos(dia, hora, minuto){
     })
 }
 
+function activarDesactivar(restauranteId, status){
+    if(status == 1){
+        var parametro = {status: 'inactivo'};
+        
+    } else if(status == 2){
+        var parametro = {status: 'activo'};
+    }
+
+    Restaurante.findByIdAndUpdate(restauranteId, parametro, {new:true}, (err, restaurante) => {
+        if(err) return
+        if(!restaurante) return
+    });
+}
 
 module.exports = {
     registrarRestaurante,
