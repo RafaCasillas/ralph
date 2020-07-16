@@ -9,6 +9,7 @@ var Cupon = require('../models/cupon');
 var Notificacion = require('../models/notificacion');
 var Pedido = require('../models/pedido');
 var Producto = require('../models/producto');
+var Horario = require('../models/horario');
 
 const visitasId = '5ec08bc14eb7f2219ca7ca92';
 
@@ -565,6 +566,9 @@ function getStats(req, res){
 
     } else if(collection == 8){
         var Parametro = Producto;
+    
+    } else if(collection == 9){
+        var Parametro = Horario;
     }
 
     var page = req.params.page;

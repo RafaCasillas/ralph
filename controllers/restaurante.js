@@ -437,7 +437,9 @@ function abrirRestaurantes(req, res){
 
     
     setInterval(() => {
-        var date = new Date();
+        var now = new Date();
+        var date = new Date(now.getTime() - 18000000);
+
         var dia = date.getDay();
         var hora = date.getHours();
         var minuto = date.getMinutes();
@@ -458,7 +460,9 @@ function abrirRestaurantes(req, res){
     }, 1800000);
     
     setTimeout(() => {
-        var date = new Date();
+        var now = new Date();
+        var date = new Date(now.getTime() - 18000000);
+
         var dia = date.getDay();
         var hora = date.getHours();
         var minuto = date.getMinutes();
@@ -505,9 +509,6 @@ function pedido(dia, hora, minuto){
 
 function abrirlos(dia, hora, minuto){
     // Dias de la semana => 0 = Domingo, 1 = Lunes, 2 = Martes, 3 = Miercoles, 4 = Jueves, 5 = Viernes, 6 = Sabado
-    var dia = 5;
-    var hora = 14;
-    var minuto = 30;
 
     Horario.find((err, restaurantes) => {
         if(err) return
@@ -664,4 +665,12 @@ module.exports = {
 //     "nombre" : "El chiguilo",
 //     "apertura" : [11,11,11,11,11,11,11],
 //     "cierre" :  [19,19,19,19,19,19,19]
+// }
+
+
+// {
+//     "restaurante" : "5ee51ad106de0d53a65623ba",
+//     "nombre" : "Mariscos el Cangrejito",
+//     "apertura" : [11,null,11,11,11,11,11],
+//     "cierre" :  [19,null,19,19,19,19,19]
 // }
