@@ -313,6 +313,76 @@ function obtenerImagenUsuario(req, res){
 //     });
 // }
 
+function activarUsuario(req, res){
+    var usuarioId = req.params.id;
+
+    if(req.usuario.rol != 'ADMIN'){
+        return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+    }
+
+    if(req.params.status == 1){
+        var parametro = 'activo';
+
+    } else if(req.params.status == 2){
+        var parametro = 'inactivo';
+
+    } else {
+        return
+    }
+
+    Usuario.findByIdAndUpdate(usuarioId, {status: parametro}, {new:true}, (err, usuarios) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+
+        if(!usuarios) return res.status(404).send({message: 'El usuarios no existe'});
+        
+        return res.status(200).send({usuarios: usuarios});
+    });
+}
+
+function contarUsuarios(req, res){
+    var status = req.params.status;
+    var x = req.params.parametro;
+
+    if(req.usuario.rol != 'ADMIN'){
+        return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+    }
+
+    if(status == 1){
+        var parametro = {municipio: x};
+
+    } else if(status == 2){
+        var parametro = {rol: x};
+
+    } else {
+        var parametro = {municipio: status, rol: x};
+    }
+    console.log(parametro);
+
+    Usuario.countDocuments(parametro, (err, usuarios) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+
+        if(!usuarios) return res.status(404).send({message: 'El usuarios no existe'});
+        
+        return res.status(200).send({usuarios: usuarios});
+    });
+}
+
+
+function todosLosUsuarios(req, res){
+    if(req.usuario.rol != 'ADMIN'){
+        return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+    }
+    
+    Usuario.find({status: 'activo'}, (err, usuarios) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+
+        if(!usuarios) return res.status(404).send({message: 'El usuarios no existe'});
+        
+        return res.status(200).send({usuarios: usuarios});
+    });
+}
+
+
 
 module.exports = {
     registrarUsuario,
@@ -322,5 +392,8 @@ module.exports = {
     actualizarUsuario,
     actualizarPermisosUsuario,
     actualizarImagenUsuario,
-    obtenerImagenUsuario
+    obtenerImagenUsuario,
+    activarUsuario,
+    contarUsuarios,
+    todosLosUsuarios
 }

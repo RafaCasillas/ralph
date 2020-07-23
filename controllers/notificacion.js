@@ -53,7 +53,7 @@ function saveSubscripcion(req, res){
           if(!notificacionStored) return res.status(404).send({message: 'La publicación no se guardó'});
     
           if(notificacionStored){
-            NotificacionRestaurante('Ralph', 'Has activado correctamente las notificaciones', req.usuario.restaurante);
+            NotificacionUsuario('Ralph', 'Has activado correctamente las notificaciones', req.usuario.sub);
             return res.status(200);
           }
       })  
@@ -71,7 +71,16 @@ function NotificacionRestaurante(title, body, restaurante, url){
         requireInteraction: true,
         data: {
           url: url
-        }
+        },
+        webpush: {
+          headers: {
+            Urgency: 'high'
+          }
+        },
+        android: {
+          priority: 'high'
+        },
+        priority: 10
       }
     };
 
@@ -120,7 +129,16 @@ function NotificacionAdmin(title, body){
         requireInteraction: true,
         data: {
           url: '/admin/inicio'
-        }
+        },
+        webpush: {
+          headers: {
+            Urgency: 'high'
+          }
+        },
+        android: {
+          priority: 'high'
+        },
+        priority: 10
       }
     };
 
@@ -256,6 +274,8 @@ function mensajeSMS(req, res){
       return res.status(200).send(message);
     })
 }
+
+
 
 module.exports = {
     saveSubscripcion,

@@ -31,8 +31,9 @@ function crearPedido(req, res){
             if(err) return res.status(500).send({message: 'Error al guardar el pedido'});
 
             if(!usuario) return res.status(404).send({message: 'Tu cuenta no existe'});
-
+            
             if(usuario._id && usuario.nombre){
+                if(usuario.status == 'inactivo') return res.status(404).send({message: 'No se puede completar el pedido. Tu cuenta ha sido bloqueada temporalmente'});
                 
                 pedido.save((err, pedidoStored) => {
                     if(err) return res.status(500).send({message: 'Error al guardar el pedido'});
@@ -40,9 +41,9 @@ function crearPedido(req, res){
                     if(!pedidoStored) return res.status(404).send({message: 'No se ha registrado el pedido'});
         
                     if(pedidoStored) {
+                        notificacion.NotificacionAdmin('Hay un nuevo pedido', '');
                         notificacion.NotificacionRestaurante('Tienes un nuevo pedido', '', pedidoStored.restaurante, '/restaurante/inicio');
                         notificacion.NotificacionUsuario('Tu pedido está en proceso', '', pedidoStored.usuario, '/mis-pedidos');
-                        notificacion.NotificacionAdmin('Hay un nuevo pedido', '');
                         return res.status(200).send({pedido: pedidoStored});
                     }
                 });

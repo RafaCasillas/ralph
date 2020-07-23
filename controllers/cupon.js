@@ -141,8 +141,68 @@ function actualizarCupon(req, res){
 }
 
 
+function actualizarCupon2(req, res){
+    var cupon_id = req.params.id;
+    
+    if(req.usuario.rol != 'ADMIN'){
+        return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+    }
+    
+    // if(req.params.x.charAt(0) == '['){
+    //     var parametro = {cupones: req.params.x};
+
+    // } else {
+        var tiempo = (moment().unix() + (req.params.x * 86400))
+        var parametro = {fechaVencimiento: tiempo};
+    // }
+
+    Cupon.findByIdAndUpdate(cupon_id, parametro, {new:true}, (err, cuponUpdated) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+        
+        if(!cuponUpdated) return res.status(404).send({message: 'No se ha podido actualizar el cupon'});
+        
+        return res.status(200).send({cupon: cuponUpdated});
+    });
+}
+
+
+function eliminarCupon(req, res){
+    var cupon_id = req.params.id;
+
+    if(req.usuario.rol != 'ADMIN'){
+        return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+    }
+
+    Cupon.find({_id: cupon_id}).deleteOne((err, cuponRemoved) => {
+        if(err) return res.status(500).send({message: 'Error al borrar el cupon'});
+
+        if(!cuponRemoved) return res.status(404).send({message: 'No se ha borrado el cupon'});
+
+        return res.status(200).send({cupon: cuponRemoved});
+    })
+}
+
+
+function todosLosCupones(req, res){
+    if(req.usuario.rol != 'ADMIN'){
+        return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+    }
+    
+    Cupon.find((err, cupones) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+
+        if(!cupones) return res.status(404).send({message: 'El cupones no existe'});
+        
+        return res.status(200).send({cupones: cupones});
+    });
+}
+
+
 module.exports = {
     nuevoCupon,
     obtenerCupones,
-    actualizarCupon
+    actualizarCupon,
+    actualizarCupon2,
+    eliminarCupon,
+    todosLosCupones
 }

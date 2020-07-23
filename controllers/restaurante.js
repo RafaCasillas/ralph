@@ -581,7 +581,7 @@ module.exports = {
 
 
 
-
+// https://ralph.com.mx/api/crear-horario
 
 
 // {
@@ -685,4 +685,52 @@ module.exports = {
 //     "nombre" : "Mariscos el Cangrejito",
 //     "apertura" : [11,null,11,11,11,11,11],
 //     "cierre" :  [19,null,19,19,19,19,19]
+// }
+
+
+// {
+//     "restaurante" : "5eb45078b1739471c9b7b9da",
+//     "nombre" : "CafeCalli",
+//     "apertura" : [8.5,null,8.5,8.5,8.5,8.5,8.5],
+//     "cierre" :  [10.5,null,10.5,10.5,10.5,10.5,10.5]
+// }
+
+
+// {
+//     "restaurante" : "5ee39bb506de0d53a65623b3",
+//     "nombre" : "La casa de pekin",
+//     "apertura" : [10,10,10,10,10,10,10],
+//     "cierre" :  [18.5,18.5,18.5,18.5,18.5,18.5,18.5]
+// }
+
+
+// {
+//     "restaurante" : "5ee16b4f06de0d53a656237f",
+//     "nombre" : "Bodeguita de Krusty",
+//     "apertura" : [13,13,13,13,13,13,13],
+//     "cierre" :  [23,18,23,23,23,23,23]
+// }
+
+
+// {
+//     "restaurante" : "5f0368ad4f468f35845ea0d1",
+//     "nombre" : "Mazter pizza",
+//     "apertura" : [13,13,13,13,13,13,13],
+//     "cierre" :  [23,23,23,23,23,23,23]
+// }
+
+
+// {
+//     "restaurante" : "5eb0c638b1739471c9b7b99d",
+//     "nombre" : "Postrecitos con amor",
+//     "apertura" : [null,16,16,16,16,16,null],
+//     "cierre" :  [21,21,21,21,21,21,21]
+// }
+
+
+// {
+//     "restaurante" : "5efd19285a48f417a322e9f7",
+//     "nombre" : "Los molcajetes",
+//     "apertura" : [10,10,null,10,10,10,10],
+//     "cierre" :  [18.5,18.5,null,18.5,18.5,18.5,18.5]
 // }

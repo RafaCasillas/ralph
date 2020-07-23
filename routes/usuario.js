@@ -18,6 +18,9 @@ api.put('/actualizar-imagen-usuario/:id', [md_auth.ensureAuth, md_upload], Usuar
 api.get('/obtener-imagen-usuario/:imageFile', UsuarioControler.obtenerImagenUsuario);
 api.put('/actualizar-usuario', md_auth.ensureAuth, UsuarioControler.actualizarUsuario);
 api.get('/actualizar-permisos-usuario/:id/:permiso', md_auth.ensureAuth, UsuarioControler.actualizarPermisosUsuario);
+api.get('/usuario-activar/:id/:status', md_auth.ensureAuth, UsuarioControler.activarUsuario);
+api.get('/usuario-contar/:status/:parametro', md_auth.ensureAuth, UsuarioControler.contarUsuarios);
+api.get('/todos-los-usuarios', md_auth.ensureAuth, UsuarioControler.todosLosUsuarios);
 
 
 module.exports = api;
