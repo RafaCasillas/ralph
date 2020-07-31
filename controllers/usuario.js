@@ -40,7 +40,7 @@ function registrarUsuario(req, res){
 
         // Comprobar y controlar usuarios duplicados
         Usuario.find({$or: [
-            {telefono: usuario.telefono},
+            // {telefono: usuario.telefono},
             {correo: usuario.correo.toLowerCase()}
         ]}).exec((err, usuarios) => {
             if(err){ 
@@ -373,7 +373,22 @@ function todosLosUsuarios(req, res){
         return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
     }
     
-    Usuario.find({status: 'activo'}, (err, usuarios) => {
+    Usuario.find({status: 'activo', municipio: {$ne: '5ea75e24006fd271928efe35'}}, (err, usuarios) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+
+        if(!usuarios) return res.status(404).send({message: 'El usuarios no existe'});
+        
+        return res.status(200).send({usuarios: usuarios});
+    });
+}
+
+
+function usuariosSinActivar(req, res){
+    if(req.usuario.rol != 'ADMIN'){
+        return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+    }
+    
+    Usuario.find({status: 'por activar', municipio: {$ne: '5ea75e24006fd271928efe35'}}, (err, usuarios) => {
         if(err) return res.status(500).send({message: 'Error en la petición'});
 
         if(!usuarios) return res.status(404).send({message: 'El usuarios no existe'});
@@ -395,5 +410,6 @@ module.exports = {
     obtenerImagenUsuario,
     activarUsuario,
     contarUsuarios,
-    todosLosUsuarios
+    todosLosUsuarios,
+    usuariosSinActivar
 }

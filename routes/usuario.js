@@ -21,6 +21,7 @@ api.get('/actualizar-permisos-usuario/:id/:permiso', md_auth.ensureAuth, Usuario
 api.get('/usuario-activar/:id/:status', md_auth.ensureAuth, UsuarioControler.activarUsuario);
 api.get('/usuario-contar/:status/:parametro', md_auth.ensureAuth, UsuarioControler.contarUsuarios);
 api.get('/todos-los-usuarios', md_auth.ensureAuth, UsuarioControler.todosLosUsuarios);
+api.get('/usuarios-sin-activar', md_auth.ensureAuth, UsuarioControler.usuariosSinActivar);
 
 
 module.exports = api;
