@@ -40,7 +40,7 @@ function registrarUsuario(req, res){
 
         // Comprobar y controlar usuarios duplicados
         Usuario.find({$or: [
-            // {telefono: usuario.telefono},
+            {telefono: usuario.telefono},
             {correo: usuario.correo.toLowerCase()}
         ]}).exec((err, usuarios) => {
             if(err){ 
