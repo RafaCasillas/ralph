@@ -436,8 +436,33 @@ function abrirRestaurantes(req, res){
     
     res.status(200).send('Función activada correctamente');
 
+
+    var miFuncion =  setInterval(() => {
+        var now = new Date();
+        var date = new Date(now.getTime() - 18000000);
+
+        var dia = date.getDay();
+        var hora = date.getHours();
+        var min = date.getMinutes();
     
-    setInterval(() => {
+        if(min >= 0 && min < 10){
+            var minuto = 0;
+            
+        } else if(min >= 25 && min < 35){
+            var minuto = 30;
+        }
+
+
+        if(hora == 0){
+            clearInterval(miFuncion);
+        }
+
+
+        abrirlos(dia, hora, minuto, min);
+
+    }, 1800000);
+    
+    setTimeout(() => {
         var now = new Date();
         var date = new Date(now.getTime() - 18000000);
 
@@ -454,60 +479,13 @@ function abrirRestaurantes(req, res){
 
         abrirlos(dia, hora, minuto, min);
 
-    }, 1800000);
-    
-    setTimeout(() => {
-        var now = new Date();
-        var date = new Date(now.getTime() - 18000000);
-
-        var dia = date.getDay();
-        var hora = date.getHours();
-        var minuto = date.getMinutes();
         notificacion.NotificacionAdmin('Se activó el abrir restaurantes', 'El día ' + dia + ', a las ' + hora + ' : ' + minuto);
-    }, 1000);
+    }, 100);
 }
 
 
-// var Pedido = require('../models/pedido');
-
-
-// function pedido(dia, hora, minuto){
-//     var pedido = new Pedido();
-//     pedido.restaurante = '5eb504b22242eb66ca714e7b';
-//     pedido.contenido = [ 
-//         {
-//             "cantidad" : "1",
-//             "seccion" : "Dia : " + dia,
-//             "producto" : "Horario = " + hora + " : " + minuto,
-//             "total" : 95,
-//             "nota" : "Sin cebolla",
-//             "comision" : 9.5,
-//         }
-//     ];
-//     pedido.total = "125";
-//     pedido.comision = "12.5";
-//     pedido.direccion = "casa";
-
-//     pedido.save((err, pedidoStored) => {
-//         if(err){ 
-//             return
-//         }
-
-//         if(pedidoStored){
-//             return
-
-//         } else {
-//             return
-//         }
-//     });
-// }
-
 function abrirlos(dia, hora, minuto, min){
     // Dias de la semana => 0 = Domingo, 1 = Lunes, 2 = Martes, 3 = Miercoles, 4 = Jueves, 5 = Viernes, 6 = Sabado
-
-    if(hora == 8){
-        notificacion.NotificacionAdmin('Se activó el abrir restaurantes', 'El día ' + dia + ', a las ' + hora + ' : ' + min);
-    }
 
     Horario.find((err, restaurantes) => {
         if(err) return
@@ -556,6 +534,7 @@ function activarDesactivar(restauranteId, status){
     Restaurante.findByIdAndUpdate(restauranteId, parametro, {new:true}, (err, restaurante) => {
         if(err) return
         if(!restaurante) return
+        notificacion.NotificacionUnica('Se ' + status +' el restaurante: ', restaurante.nombre);
     });
 }
 
@@ -733,4 +712,20 @@ module.exports = {
 //     "nombre" : "Los molcajetes",
 //     "apertura" : [10,10,null,10,10,10,10],
 //     "cierre" :  [18.5,18.5,null,18.5,18.5,18.5,18.5]
+// }
+
+
+// {
+//     "restaurante" : "5f187d44431e9c4328947b96",
+//     "nombre" : "Loncheria Yazid 1",
+//     "apertura" : [8.5,8.5,8.5,8.5,8.5,8.5,8.5],
+//     "cierre" :  [14,14,14,14,14,14,14]
+// }
+
+
+// {
+//     "restaurante" : "5f187d44431e9c4328947b96",
+//     "nombre" : "Loncheria Yazid 2",
+//     "apertura" : [19.5,null,19.5,19.5,19.5,19.5,19.5],
+//     "cierre" :  [23,null,23,23,23,23,23]
 // }

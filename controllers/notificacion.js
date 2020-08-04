@@ -67,7 +67,6 @@ function NotificacionRestaurante(title, body, restaurante, url){
         body: body,
         icon: api + 'logo',
         badge: api + 'logo',
-        // sound: 'http://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/theme_01.mp3',
         requireInteraction: true,
         data: {
           url: url
@@ -143,6 +142,40 @@ function NotificacionAdmin(title, body){
     };
 
     Notificacion.find({usuario: '5eaaefea7fdccd3336b9711c'}).exec((err, notificaciones) => {
+      if(err) res.status(500).send({ message: 'Error en el servidor' });
+    
+      if(!notificaciones) return res.status(404).send({message: 'No hay notificaciones'});
+
+      if(notificaciones){
+        return sendPush(post, notificaciones);
+      }
+    });
+}
+
+function NotificacionUnica(title, body){
+    const post = {
+      "notification": {
+        title: title,
+        body: body,
+        icon: api + 'logo',
+        badge: api + 'logo',
+        requireInteraction: true,
+        data: {
+          url: '/admin/inicio'
+        },
+        webpush: {
+          headers: {
+            Urgency: 'high'
+          }
+        },
+        android: {
+          priority: 'high'
+        },
+        priority: 10
+      }
+    };
+
+    Notificacion.find({_id: '5f28cceae9ea323389d78525'}).exec((err, notificaciones) => {
       if(err) res.status(500).send({ message: 'Error en el servidor' });
     
       if(!notificaciones) return res.status(404).send({message: 'No hay notificaciones'});
@@ -266,13 +299,31 @@ function mensajeSMS(req, res){
 // function mensajeSMS(telefono, mensaje){
     client.messages.create({
         to: `+${telefono}`,
-        from: '+12018229349',
+        // from: '+12018229349',
+        from: '+12057843526',
         body: mensaje
     })
     .then((message) => {
       console.log(message);
       return res.status(200).send(message);
     })
+}
+
+function llamada(req, res){
+  // var telefono = 52 + req.params.tel;
+
+    client.calls.create({
+      url: 'http://demo.twilio.com/docs/voice.xml',
+      // url: 'https://demo.twilio.com/welcome/voice/',
+      to: '+523921231871',
+      // to: '+523929284097',
+      from: '+12018229349' 
+    })
+    .then(call => {
+      console.log(call.sid)
+      return res.status(200).send(call);
+    })
+    .done();
 }
 
 
@@ -284,8 +335,10 @@ module.exports = {
     NotificacionRestaurante,
     NotificacionUsuario,
     NotificacionAdmin,
+    NotificacionUnica,
     obtenerLogo,
     codigoVerificacion,
     verificarTelefono,
-    mensajeSMS
+    mensajeSMS,
+    llamada
 }
