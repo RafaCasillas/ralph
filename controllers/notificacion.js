@@ -152,40 +152,6 @@ function NotificacionAdmin(title, body){
     });
 }
 
-function NotificacionUnica(title, body){
-    const post = {
-      "notification": {
-        title: title,
-        body: body,
-        icon: api + 'logo',
-        badge: api + 'logo',
-        requireInteraction: true,
-        data: {
-          url: '/admin/inicio'
-        },
-        webpush: {
-          headers: {
-            Urgency: 'high'
-          }
-        },
-        android: {
-          priority: 'high'
-        },
-        priority: 10
-      }
-    };
-
-    Notificacion.find({_id: '5f28cceae9ea323389d78525'}).exec((err, notificaciones) => {
-      if(err) res.status(500).send({ message: 'Error en el servidor' });
-    
-      if(!notificaciones) return res.status(404).send({message: 'No hay notificaciones'});
-
-      if(notificaciones){
-        return sendPush(post, notificaciones);
-      }
-    });
-}
-
 
 function pushNotification(req, res){
 
@@ -335,7 +301,6 @@ module.exports = {
     NotificacionRestaurante,
     NotificacionUsuario,
     NotificacionAdmin,
-    NotificacionUnica,
     obtenerLogo,
     codigoVerificacion,
     verificarTelefono,

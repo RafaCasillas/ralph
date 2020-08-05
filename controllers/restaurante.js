@@ -534,7 +534,6 @@ function activarDesactivar(restauranteId, status){
     Restaurante.findByIdAndUpdate(restauranteId, parametro, {new:true}, (err, restaurante) => {
         if(err) return
         if(!restaurante) return
-        notificacion.NotificacionUnica('Se ' + status +' el restaurante: ', restaurante.nombre);
     });
 }
 
@@ -671,7 +670,7 @@ module.exports = {
 //     "restaurante" : "5eb45078b1739471c9b7b9da",
 //     "nombre" : "CafeCalli",
 //     "apertura" : [8.5,null,8.5,8.5,8.5,8.5,8.5],
-//     "cierre" :  [10.5,null,10.5,10.5,10.5,10.5,10.5]
+//     "cierre" :  [22.5,null,22.5,22.5,22.5,22.5,22.5]
 // }
 
 
