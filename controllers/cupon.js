@@ -71,7 +71,7 @@ function cuponBienvenido(usuarioId){
     cupon.nombre = 'Bienvenido';
     cupon.cupones = [40, 30, 30];
     cupon.compraMinima = 100;
-    cupon.fechaVencimiento = (moment().unix() + xDias);
+    cupon.fechaVencimiento = (moment().unix() + unMes);
     cupon.status = 'Vigente';
 
     cupon.save((err, cuponStored) => {
@@ -91,7 +91,7 @@ function cuponEnvioGratis(usuarioId){
     cupon.nombre = 'Envío gratis';
     cupon.cupones = [20, 20, 20];
     cupon.compraMinima = 20;
-    cupon.fechaVencimiento = (moment().unix() + xDias);
+    cupon.fechaVencimiento = (moment().unix() + unMes);
     cupon.status = 'Vigente';
 
     cupon.save((err, cuponStored) => {

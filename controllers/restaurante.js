@@ -573,8 +573,8 @@ module.exports = {
 // {
 //     "restaurante" : "5eb4ac7db1739471c9b7b9eb",
 //     "nombre" : "Azotea",
-//     "apertura" : [9,9,9,9,9,9,9],
-//     "cierre" :  [23,23,23,23,23,23,23]
+//     "apertura" : [9,9,9,null,9,9,9],
+//     "cierre" :  [23,23,23,null,23,23.5,23.5]
 // }
 
 
@@ -645,8 +645,8 @@ module.exports = {
 // {
 //     "restaurante" : "5eac9627b1739471c9b7b912",
 //     "nombre" : "Salad Green",
-//     "apertura" : [10,10,null,10,10,10,10],
-//     "cierre" :  [18,18,null,18,18,18,18]
+//     "apertura" : [null,10,null,10,10,10,10],
+//     "cierre" :  [null,18,null,18,18,18,18]
 // }
 
 

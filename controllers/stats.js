@@ -543,6 +543,10 @@ function stats(req, res){
 function getStats(req, res){
     var collection = req.params.collection;
     
+    var page = req.params.page;
+    var itemsPerPage = 10;
+
+
     if(collection == 1){
         var Parametro = Usuario;
 
@@ -554,15 +558,19 @@ function getStats(req, res){
 
     } else if(collection == 4){
         var Parametro = Categoria;
+        var itemsPerPage = 30;
 
     } else if(collection == 5){
         var Parametro = Cupon;
+        var itemsPerPage = 1000;
 
     } else if(collection == 6){
         var Parametro = Notificacion;
+        var itemsPerPage = 1000;
 
     } else if(collection == 7){
         var Parametro = Pedido;
+        var itemsPerPage = 1000;
 
     } else if(collection == 8){
         var Parametro = Producto;
@@ -571,10 +579,8 @@ function getStats(req, res){
         var Parametro = Horario;
     }
 
-    var page = req.params.page;
-    var itemsPerPage = 10;
 
-    Parametro.find().sort().paginate(page, itemsPerPage, (err, stats, total) => {
+    Parametro.find().sort('-_id').paginate(page, itemsPerPage, (err, stats, total) => {
         if(err) return res.status(500).send({message: 'Error en la petición'});
         
         if(!stats) return res.status(404).send({message: 'No se ha podido actualizar el pedido'});

@@ -301,6 +301,7 @@ function obtenerImagenUsuario(req, res){
     });
 }
 
+
 // function contarUsuarios(req, res){
 //     var restauranteId = req.params.id;
 
@@ -312,6 +313,7 @@ function obtenerImagenUsuario(req, res){
 //         return res.status(200).send({usuarios: usuarios});
 //     });
 // }
+
 
 function activarUsuario(req, res){
     var usuarioId = req.params.id;
@@ -330,14 +332,15 @@ function activarUsuario(req, res){
         return
     }
 
-    Usuario.findByIdAndUpdate(usuarioId, {status: parametro}, {new:true}, (err, usuarios) => {
+    Usuario.findByIdAndUpdate(usuarioId, {status: parametro}, {new:true}, (err, usuario) => {
         if(err) return res.status(500).send({message: 'Error en la petición'});
 
-        if(!usuarios) return res.status(404).send({message: 'El usuarios no existe'});
+        if(!usuario) return res.status(404).send({message: 'El usuario no existe'});
         
-        return res.status(200).send({usuarios: usuarios});
+        return res.status(200).send({usuario: usuario});
     });
 }
+
 
 function contarUsuarios(req, res){
     var status = req.params.status;
@@ -383,17 +386,51 @@ function todosLosUsuarios(req, res){
 }
 
 
-function usuariosSinActivar(req, res){
+function todosLosUsuarios2(req, res){
     if(req.usuario.rol != 'ADMIN'){
         return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
     }
+    var itemsPerPage = 10;
+
+    var page = 1;
+    if(req.params.page){
+        page = req.params.page;
+    }
     
-    Usuario.find({status: 'por activar', municipio: {$ne: '5ea75e24006fd271928efe35'}}, (err, usuarios) => {
+    Usuario.find({status: 'activo', municipio: {$ne: '5ea75e24006fd271928efe35'}}).sort('-_id').paginate(page, itemsPerPage, (err, usuarios, total) => {
         if(err) return res.status(500).send({message: 'Error en la petición'});
 
         if(!usuarios) return res.status(404).send({message: 'El usuarios no existe'});
         
-        return res.status(200).send({usuarios: usuarios});
+        return res.status(200).send({usuarios: 
+            usuarios,
+            total,
+            pages: Math.ceil(total/itemsPerPage)});
+    });
+}
+
+
+function usuariosSinActivar(req, res){
+    if(req.usuario.rol != 'ADMIN'){
+        return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+    }
+
+    var itemsPerPage = 10;
+
+    var page = 1;
+    if(req.params.page){
+        page = req.params.page;
+    }
+    
+    Usuario.find({status: 'por activar', municipio: {$ne: '5ea75e24006fd271928efe35'}}).sort('-_id').paginate(page, itemsPerPage, (err, usuarios, total) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+
+        if(!usuarios) return res.status(404).send({message: 'El usuarios no existe'});
+        
+        return res.status(200).send({usuarios: 
+            usuarios,
+            total,
+            pages: Math.ceil(total/itemsPerPage)});
     });
 }
 
@@ -411,5 +448,6 @@ module.exports = {
     activarUsuario,
     contarUsuarios,
     todosLosUsuarios,
+    todosLosUsuarios2,
     usuariosSinActivar
 }
