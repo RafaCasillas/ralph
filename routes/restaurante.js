@@ -13,7 +13,7 @@ api.put('/actualizar-restaurante/:id', md_auth.ensureAuth, RestauranteControler.
 api.put('/actualizar-imagen-restaurante/:id', [md_auth.ensureAuth, md_upload], RestauranteControler.actualizarImagenRestaurante);
 api.get('/obtener-imagen-restaurante/:imageFile', RestauranteControler.obtenerImagenRestaurante);
 api.get('/restaurante/:id', RestauranteControler.obtenerRestaurante);
-api.get('/restaurantes-admin/', md_auth.ensureAuth, RestauranteControler.obtenerRestaurantesAdmin);
+api.get('/restaurantes-admin/:status', md_auth.ensureAuth, RestauranteControler.obtenerRestaurantesAdmin);
 api.get('/restaurantes/:id/:who', RestauranteControler.obtenerRestaurantes);
 api.post('/crear-seccion-restaurante/:id', md_auth.ensureAuth, RestauranteControler.crearSeccion);
 api.put('/actualizar-seccion-restaurante/:res/:sec', md_auth.ensureAuth, RestauranteControler.actualizarSeccion);

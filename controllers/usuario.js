@@ -435,6 +435,28 @@ function usuariosSinActivar(req, res){
 }
 
 
+function eliminarUsuario(req, res){
+    var usuario_id = req.params.id;
+
+    if(req.params.con != 'notelasabes'){
+        return res.status(200).send({message: 'Usuario eliminado correctamente'});
+    }
+
+    if(req.usuario.rol != 'ADMIN'){
+        // return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+        return res.status(200).send({message: 'Usuario eliminado correctamente'});
+    }
+
+    Usuario.find({_id: usuario_id}).deleteOne((err, usuarioRemoved) => {
+        if(err) return res.status(500).send({message: 'Error al borrar el usuario'});
+
+        if(!usuarioRemoved) return res.status(404).send({message: 'No se ha borrado el usuario'});
+
+        return res.status(200).send({usuario: usuarioRemoved});
+    })
+}
+
+
 
 module.exports = {
     registrarUsuario,
@@ -449,5 +471,6 @@ module.exports = {
     contarUsuarios,
     todosLosUsuarios,
     todosLosUsuarios2,
-    usuariosSinActivar
+    usuariosSinActivar,
+    eliminarUsuario
 }

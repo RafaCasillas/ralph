@@ -196,16 +196,28 @@ function obtenerRestaurante(req, res){
 }
 
 function obtenerRestaurantesAdmin(req, res){    
-    
+
     var page = 1;
     var itemsPerPage = 100;
 
-    Restaurante.find().sort('-nombre').paginate(page, itemsPerPage, (err, restaurantes) => {
+
+    if(req.params.status == 0){
+        var parametro = {};
+
+    } else if(req.params.status == 1){
+        var parametro = {status: {$ne: 'por activar'}};
+
+    } else if(req.params.status == 2){
+        var parametro = {status: 'por activar'};
+    }
+
+
+    Restaurante.find(parametro).sort('nombre').paginate(page, itemsPerPage, (err, restaurantes, total) => {
         if(err) return res.status(500).send({message: 'Error en la petición'});
 
         if(!restaurantes) return res.status(404).send({message: 'El restaurantes no existe'});
         
-        return res.status(200).send({restaurantes: restaurantes});
+        return res.status(200).send({restaurantes, total});
     });
 }
 
