@@ -394,6 +394,9 @@ function darDeAltaRestaurante(req, res){
     } else if(req.params.status == 2){
         var parametro = {status: 'activo'};
 
+    } else if(req.params.status == 3){
+        var parametro = {status: 'por activar'};
+
     } else { return }
 
     Restaurante.findByIdAndUpdate(restauranteId, parametro, {new:true}, (err, restaurante) => {

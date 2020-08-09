@@ -153,7 +153,7 @@ function NotificacionAdmin(title, body){
 }
 
 
-function pushNotification(req, res){
+function pushNotifications(req, res){
 
     const post = {
         "notification": {
@@ -199,11 +199,42 @@ function pushNotification(req, res){
 };
 
 
+function pushNotification(req, res){
+
+    const post = {
+        "notification": {
+          title: 'Ralph',
+          body: 'Notificación de prueba',
+          icon: api + 'logo',
+          badge: api + 'logo',
+          requireInteraction: true,
+          // data: {
+          //   url: req.body.url
+          // }
+        }
+    };
+
+    var usuarioId = req.params.id;
+
+    Notificacion.find({usuario: usuarioId}).exec((err, notificaciones) => {
+      if(err) res.status(500).send({ message: 'Error en el servidor' });
+  
+      if(!notificaciones) return res.status(404).send({message: 'No hay notificaciones'});
+        
+      if(notificaciones){
+        sendPush(post, notificaciones);
+        return res.status(200).send({notificaciones: notificaciones});
+      }
+    });
+};
+
+
 function sendPush(post, notificaciones){
   notificaciones.forEach((notificacion) => {
       webpush.sendNotification(notificacion.subscripcion, JSON.stringify(post))
   });
 };
+
 
 function obtenerLogo(req, res){
   var path_file = './icono.png';
@@ -217,6 +248,7 @@ function obtenerLogo(req, res){
   });
 }
 
+
 function codigoVerificacion(req, res){
   var telefono = 52 + req.params.tel;
 
@@ -228,6 +260,7 @@ function codigoVerificacion(req, res){
         return res.status(200).send(data)
       })
 }
+
 
 function verificarTelefono(req, res){
   var tel = req.params.tel;
@@ -257,6 +290,7 @@ function verificarTelefono(req, res){
       })
 }
 
+
 function mensajeSMS(req, res){
   var tel = req.params.tel;
   var telefono = 52 + req.params.tel;
@@ -275,21 +309,30 @@ function mensajeSMS(req, res){
     })
 }
 
-function llamada(req, res){
-  // var telefono = 52 + req.params.tel;
 
-    client.calls.create({
-      url: 'http://demo.twilio.com/docs/voice.xml',
-      // url: 'https://demo.twilio.com/welcome/voice/',
-      to: '+523921231871',
-      // to: '+523929284097',
-      from: '+12018229349' 
-    })
-    .then(call => {
-      console.log(call.sid)
-      return res.status(200).send(call);
-    })
-    .done();
+function llamada(req, res){
+  var usuarioId = req.params.usuario;
+
+  Usuario.findById((usuarioId), (err, usuario) => {
+    if(err) return          
+    if(!usuario) return     
+    if(usuario && usuario._id){
+      var telefono = 52 + usuario.telefono;
+
+        client.calls.create({
+          url: 'http://demo.twilio.com/docs/voice.xml',
+          // url: 'https://demo.twilio.com/welcome/voice/',
+          to: telefono,
+          from: '+12018229349' 
+        })
+        .then(call => {
+          console.log(call.sid)
+          return res.status(200).send(call);
+        })
+        .done();
+    } else {return}
+  })
+
 }
 
 
@@ -298,6 +341,7 @@ module.exports = {
     saveSubscripcion,
     key,
     pushNotification,
+    pushNotifications,
     NotificacionRestaurante,
     NotificacionUsuario,
     NotificacionAdmin,

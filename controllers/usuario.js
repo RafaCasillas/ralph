@@ -435,6 +435,24 @@ function usuariosSinActivar(req, res){
 }
 
 
+function todosEmpleados(req, res){
+    if(req.usuario.rol != 'ADMIN'){
+        return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+    }
+
+    var itemsPerPage = 1000;
+    var page = 1;
+    
+    Usuario.find({$or: [{rol: 'RESTAURANTE'}, {rol: 'EMPLEADO'}]}).paginate(page, itemsPerPage, (err, usuarios) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+
+        if(!usuarios) return res.status(404).send({message: 'El usuarios no existe'});
+        
+        return res.status(200).send({usuarios: usuarios});
+    })
+}
+
+
 function eliminarUsuario(req, res){
     var usuario_id = req.params.id;
 
@@ -472,5 +490,6 @@ module.exports = {
     todosLosUsuarios,
     todosLosUsuarios2,
     usuariosSinActivar,
+    todosEmpleados,
     eliminarUsuario
 }

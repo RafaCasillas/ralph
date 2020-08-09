@@ -23,6 +23,7 @@ api.get('/usuario-contar/:status/:parametro', md_auth.ensureAuth, UsuarioControl
 api.get('/todos-los-usuarios', md_auth.ensureAuth, UsuarioControler.todosLosUsuarios);
 api.get('/todos-los-usuarios2/:page', md_auth.ensureAuth, UsuarioControler.todosLosUsuarios2);
 api.get('/usuarios-sin-activar/:page', md_auth.ensureAuth, UsuarioControler.usuariosSinActivar);
+api.get('/todos-los-empleados', md_auth.ensureAuth, UsuarioControler.todosEmpleados);
 api.delete('/eliminar-usuario/:id/:con', md_auth.ensureAuth, UsuarioControler.eliminarUsuario);
 
 
