@@ -538,6 +538,7 @@ function abrirlos(dia, hora, minuto, min){
     })
 }
 
+
 function activarDesactivar(restauranteId, status){
     if(status == 1){
         var parametro = {status: 'inactivo'};
@@ -551,6 +552,31 @@ function activarDesactivar(restauranteId, status){
         if(!restaurante) return
     });
 }
+
+
+function agregarTelefono(req, res){
+    var restauranteId = req.params.id;
+    var telefono = req.params.tel;
+
+    if(req.usuario.rol != 'ADMIN'){
+        return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+    }
+
+    Restaurante.findById(restauranteId, (err, restaurant) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+        if(!restaurant) return res.status(404).send({message: 'El restaurant no existe'});
+
+        restaurant.llamadas.push(telefono);
+
+        Restaurante.findByIdAndUpdate(restauranteId, restaurant, {new:true}, (err, restaurante) => {
+            if(err) return res.status(500).send({message: 'Error en la petición'});
+            if(!restaurante) return res.status(404).send({message: 'El restaurante no existe'});
+            return res.status(200).send({restaurante: restaurante});
+        });
+    });
+}
+
+
 
 module.exports = {
     registrarRestaurante,
@@ -568,7 +594,8 @@ module.exports = {
     ActualizarCredito,
     darDeAltaRestaurante,
     crearHorario,
-    abrirRestaurantes
+    abrirRestaurantes,
+    agregarTelefono
 }
 
 

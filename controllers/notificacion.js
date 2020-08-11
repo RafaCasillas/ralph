@@ -10,6 +10,8 @@ const fs = require('fs');
 const twilio = require('../twilio');
 const client = require('twilio')(twilio.accountSID, twilio.authToken);
 var Usuario = require('../models/usuario');
+var Restaurante = require('../models/restaurante');
+var Pedido = require('../models/pedido');
 
 
 const api = 'https://ralph.com.mx/api/';
@@ -201,6 +203,10 @@ function pushNotifications(req, res){
 
 function pushNotification(req, res){
 
+  if(req.usuario.rol != 'ADMIN'){
+    return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+  }
+
     const post = {
         "notification": {
           title: 'Ralph',
@@ -296,22 +302,30 @@ function mensajeSMS(req, res){
   var telefono = 52 + req.params.tel;
   var mensaje = 'Hola ralph.com.mx';
 
+  if(req.usuario.rol != 'ADMIN'){
+    return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+  }
+
 // function mensajeSMS(telefono, mensaje){
     client.messages.create({
         to: `+${telefono}`,
-        // from: '+12018229349',
-        from: '+12057843526',
+        // from: '+12057843526' este es el de la cuenta ralphaplication,
+        from: '+12018229349',
         body: mensaje
     })
     .then((message) => {
       console.log(message);
       return res.status(200).send(message);
-    })
+    });
 }
 
 
 function llamada(req, res){
   var usuarioId = req.params.usuario;
+
+  if(req.usuario.rol != 'ADMIN'){
+    return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+  }
 
   Usuario.findById((usuarioId), (err, usuario) => {
     if(err) return          
@@ -331,23 +345,106 @@ function llamada(req, res){
         })
         .done();
     } else {return}
-  })
+  });
+}
 
+
+function llamadaPedido(pedidoId, restauranteId){
+  var time = 180000;
+
+  Restaurante.findById(restauranteId, (err, restaurante) => {
+    if(err) return          
+    if(!restaurante) return     
+    if(restaurante && restaurante.llamadas[0]){
+      llamadaLocal(restaurante.llamadas[0]);
+
+      setTimeout(() => {
+        Pedido.findById(pedidoId, (err, pedido) => {
+          if(err) return          
+          if(!pedido) return     
+          if(pedido && pedido.status == 'En espera'){
+            if(restaurante.llamadas[1]){
+              llamadaLocal(restaurante.llamadas[1]);
+              
+            } else {
+              llamadaLocal(restaurante.llamadas[0]);
+            }
+
+            setTimeout(() => {
+              Pedido.findById(pedidoId, (err, pedido) => {
+                if(err) return          
+                if(!pedido) return     
+                if(pedido && pedido.status == 'En espera'){
+                  if(restaurante.llamadas[2]){
+                    llamadaLocal(restaurante.llamadas[2]);
+                    
+                  } else {
+                    llamadaLocal(restaurante.llamadas[0]);
+                  }
+
+                  setTimeout(() => {
+                    Pedido.findById(pedidoId, (err, pedido) => {
+                      if(err) return          
+                      if(!pedido) return     
+                      if(pedido && pedido.status == 'En espera'){
+                        llamadaLocal(restaurante.llamadas[0]);
+
+                        setTimeout(() => {
+                          Pedido.findById(pedidoId, (err, pedido) => {
+                            if(err) return          
+                            if(!pedido) return     
+                            if(pedido && pedido.status == 'En espera'){
+                              if(restaurante.llamadas[1]){
+                                llamadaLocal(restaurante.llamadas[1]);
+                                
+                              } else {
+                                llamadaLocal(restaurante.llamadas[0]);
+                              }
+                            } else {return}
+                          })
+                        }, time);            
+                      } else {return}
+                    })
+                  }, time);      
+                } else {return}
+              })
+            }, time);
+          } else {return}
+        })
+      }, time);
+    } else {return}
+  });
+}
+
+
+function llamadaLocal(tel){
+  var telefono = 52 + tel;
+
+  client.calls.create({
+    url: 'http://demo.twilio.com/docs/voice.xml',
+    // url: 'https://demo.twilio.com/welcome/voice/',
+    to: telefono,
+    from: '+12018229349' 
+  })
+  .then(call => {
+  })
+  .done();
 }
 
 
 
 module.exports = {
-    saveSubscripcion,
-    key,
-    pushNotification,
-    pushNotifications,
-    NotificacionRestaurante,
-    NotificacionUsuario,
-    NotificacionAdmin,
-    obtenerLogo,
-    codigoVerificacion,
-    verificarTelefono,
-    mensajeSMS,
-    llamada
+  saveSubscripcion,
+  key,
+  pushNotification,
+  pushNotifications,
+  NotificacionRestaurante,
+  NotificacionUsuario,
+  NotificacionAdmin,
+  obtenerLogo,
+  codigoVerificacion,
+  verificarTelefono,
+  mensajeSMS,
+  llamada,
+  llamadaPedido
 }

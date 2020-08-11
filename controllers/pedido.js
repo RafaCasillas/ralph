@@ -44,11 +44,11 @@ function crearPedido(req, res){
                         notificacion.NotificacionAdmin('Hay un nuevo pedido', '');
                         notificacion.NotificacionRestaurante('Tienes un nuevo pedido', '', pedidoStored.restaurante, '/restaurante/inicio');
                         notificacion.NotificacionUsuario('Tu pedido está en proceso', '', pedidoStored.usuario, '/mis-pedidos');
+                        notificacion.llamadaPedido(pedidoStored._id, pedidoStored.restaurante);
                         return res.status(200).send({pedido: pedidoStored});
                     }
                 });
             }
-
         })
                                 
     } else {
