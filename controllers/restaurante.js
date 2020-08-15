@@ -100,7 +100,9 @@ function actualizarRestaurante(req, res){
     var restaurante_id = req.params.id; //el id se almacena en el local storage del usuario: identity.restaurante
 
     if(restaurante_id != req.usuario.restaurante){
-        return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+        if(req.usuario.rol != 'ADMIN'){
+            return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+        }
     }
 
     Restaurante.findByIdAndUpdate(restaurante_id, update, {new:true}, (err, restauranteUpdated) => {
@@ -554,6 +556,26 @@ function activarDesactivar(restauranteId, status){
 }
 
 
+function obtenerHorario(req, res){
+    var restauranteId = req.params.res;
+
+    var page = 1;
+    var itemsPerPage = 10;
+
+    Horario.find({restaurante: restauranteId}).sort('nombre').paginate(page, itemsPerPage, (err, horario) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+
+        if(!horario) return res.status(404).send({message: 'El horario no existe'});
+
+        var now = new Date();
+        var date = new Date(now.getTime() - 18000000);
+        var dia = date.getDay();
+        
+        return res.status(200).send({horario: horario, dia});
+    })
+}
+
+
 function agregarTelefono(req, res){
     var restauranteId = req.params.id;
     var telefono = req.params.tel;
@@ -595,6 +617,7 @@ module.exports = {
     darDeAltaRestaurante,
     crearHorario,
     abrirRestaurantes,
+    obtenerHorario,
     agregarTelefono
 }
 

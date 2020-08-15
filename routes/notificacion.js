@@ -15,6 +15,6 @@ api.get('/logo', NotificacionesControler.obtenerLogo);
 api.get('/codigo/:tel', NotificacionesControler.codigoVerificacion);
 api.get('/verificacion/:tel/:cod', NotificacionesControler.verificarTelefono);
 api.get('/sms/:tel/', NotificacionesControler.mensajeSMS);
-api.get('/llamada/:usuario/', NotificacionesControler.llamada);
+api.get('/llamada/:usuario/', md_auth.ensureAuth, NotificacionesControler.llamada);
 
 module.exports = api;

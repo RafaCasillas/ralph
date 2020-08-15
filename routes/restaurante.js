@@ -24,6 +24,7 @@ api.get('/credito/:id/:num/:can', md_auth.ensureAuth, RestauranteControler.Actua
 api.get('/alta-restaurante/:id/:status', md_auth.ensureAuth, RestauranteControler.darDeAltaRestaurante);
 api.post('/crear-horario', md_auth.ensureAuth, RestauranteControler.crearHorario);
 api.get('/abrirrestaurantes/:con', md_auth.ensureAuth, RestauranteControler.abrirRestaurantes);
+api.get('/obtener-horario/:res', md_auth.ensureAuth, RestauranteControler.obtenerHorario);
 api.get('/agregar-telefono/:id/:tel', md_auth.ensureAuth, RestauranteControler.agregarTelefono);
 
 module.exports = api;

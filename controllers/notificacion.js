@@ -9,6 +9,7 @@ const fs = require('fs');
 
 const twilio = require('../twilio');
 const client = require('twilio')(twilio.accountSID, twilio.authToken);
+const client2 = require('twilio')(twilio.accountSID, twilio.authToken);
 var Usuario = require('../models/usuario');
 var Restaurante = require('../models/restaurante');
 var Pedido = require('../models/pedido');
@@ -120,11 +121,55 @@ function NotificacionUsuario(title, body, usuario, url){
     });
 }
 
-function NotificacionAdmin(title, body){
+function NotificacionRepartidor(title, restauranteId){
+
+  Restaurante.findById(restauranteId, (err, restaurante) => {
+    if(err) return
+    if(!restaurante) return
+
+    if(restaurante.servicioDomicilio == false){
+      const post = {
+        "notification": {
+          title: title,
+          icon: api + 'logo',
+          badge: api + 'logo',
+          data: {
+            url: '/repartidor/inicio'
+          },
+          webpush: {
+            headers: {
+              Urgency: 'high'
+            }
+          },
+          android: {
+            priority: 'high'
+          },
+          priority: 10
+        }
+      };
+
+      if(restaurante.municipio == '5ea75e0f006fd271928efe33'){
+        var usuarioId = 'id';
+      } else {
+        var usuarioId = 'id';
+      }
+    
+      Notificacion.find({usuario: usuarioId}).exec((err, notificaciones) => {
+        if(err) res.status(500).send({ message: 'Error en el servidor' });
+        if(!notificaciones) return res.status(404).send({message: 'No hay notificaciones'});
+    
+        if(notificaciones){
+          return sendPush(post, notificaciones);
+        }
+      });
+    }
+  })
+}
+
+function NotificacionAdmin(title){
     const post = {
       "notification": {
         title: title,
-        body: body,
         icon: api + 'logo',
         badge: api + 'logo',
         requireInteraction: true,
@@ -258,7 +303,7 @@ function obtenerLogo(req, res){
 function codigoVerificacion(req, res){
   var telefono = 52 + req.params.tel;
 
-    client.verify.services(twilio.serviceID).verifications.create({
+    client2.verify.services(twilio.serviceID).verifications.create({
         to: `+${telefono}`,
         channel: 'sms'
       })
@@ -273,7 +318,7 @@ function verificarTelefono(req, res){
   var telefono = 52 + req.params.tel;
   var codigo = req.params.cod;
 
-    client.verify.services(twilio.serviceID).verificationChecks.create({
+    client2.verify.services(twilio.serviceID).verificationChecks.create({
         to: `+${telefono}`,
         code: codigo
       })
@@ -310,7 +355,7 @@ function mensajeSMS(req, res){
     client.messages.create({
         to: `+${telefono}`,
         // from: '+12057843526' este es el de la cuenta ralphaplication,
-        from: '+12018229349',
+        from: '+18053011198',
         body: mensaje
     })
     .then((message) => {
@@ -337,7 +382,7 @@ function llamada(req, res){
           url: 'http://demo.twilio.com/docs/voice.xml',
           // url: 'https://demo.twilio.com/welcome/voice/',
           to: telefono,
-          from: '+12018229349' 
+          from: '+18053011198'
         })
         .then(call => {
           console.log(call.sid)
@@ -424,7 +469,7 @@ function llamadaLocal(tel){
     url: 'http://demo.twilio.com/docs/voice.xml',
     // url: 'https://demo.twilio.com/welcome/voice/',
     to: telefono,
-    from: '+12018229349' 
+    from: '+18053011198' 
   })
   .then(call => {
   })
@@ -440,6 +485,7 @@ module.exports = {
   pushNotifications,
   NotificacionRestaurante,
   NotificacionUsuario,
+  NotificacionRepartidor,
   NotificacionAdmin,
   obtenerLogo,
   codigoVerificacion,

@@ -41,10 +41,11 @@ function crearPedido(req, res){
                     if(!pedidoStored) return res.status(404).send({message: 'No se ha registrado el pedido'});
         
                     if(pedidoStored) {
-                        notificacion.NotificacionAdmin('Hay un nuevo pedido', '');
+                        notificacion.NotificacionAdmin('Hay un nuevo pedido');
                         notificacion.NotificacionRestaurante('Tienes un nuevo pedido', '', pedidoStored.restaurante, '/restaurante/inicio');
                         notificacion.NotificacionUsuario('Tu pedido está en proceso', '', pedidoStored.usuario, '/mis-pedidos');
                         notificacion.llamadaPedido(pedidoStored._id, pedidoStored.restaurante);
+                        // notificacion.NotificacionRepartidor('Hay un nuevo pedido', pedidoStored.restaurante);
                         return res.status(200).send({pedido: pedidoStored});
                     }
                 });
@@ -102,6 +103,10 @@ function obtenerPedido(req, res){
 
     if(req.params.who == 2){
         var who = 'restaurante'
+    }
+
+    if(req.params.who == 3){
+        var who = ['restaurante', 'usuario']
     }
 
     let page = 1;
@@ -226,6 +231,24 @@ function eliminarPedido(req, res){
 }
 
 
+function obtenerPedidosRepartidor(req, res){
+
+    var itemsPerPage = 10;
+    var page = 1;
+    
+    Pedido.find({status: ['En espera', 'En preparacion', 'En camino']}).sort('-fecha').populate('restaurante').paginate(page, itemsPerPage, (err, pedidos, total) => {
+        if(err) return res.status(500).send({message: err});
+
+        if(!pedidos) return res.status(404).send({message: 'No hay pedidos disponibles'});
+
+        return res.status(200).send({
+            pedidos,
+            total,
+            pages: Math.ceil(total/itemsPerPage)
+        })
+    });
+}
+
 module.exports = {
     crearPedido,
     actualizarPedido,
@@ -233,5 +256,6 @@ module.exports = {
     obtenerPedidos,
     obtenerPedidosUsuario,
     contarPedidos,
-    eliminarPedido
+    eliminarPedido,
+    obtenerPedidosRepartidor
 }

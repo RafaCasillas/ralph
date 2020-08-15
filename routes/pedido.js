@@ -12,5 +12,6 @@ api.get('/contar-pedidos/:id/:who', md_auth.ensureAuth, PedidoControler.contarPe
 api.get('/pedidos/:id/:page?/:stats?', md_auth.ensureAuth, PedidoControler.obtenerPedidos);
 api.get('/pedidos-usuario/:id/:page?/:stats?', md_auth.ensureAuth, PedidoControler.obtenerPedidosUsuario);
 api.delete('/eliminar-pedido/:id', md_auth.ensureAuth, PedidoControler.eliminarPedido);
+api.get('/pedidos-repartidor', md_auth.ensureAuth, PedidoControler.obtenerPedidosRepartidor);
 
 module.exports = api;
