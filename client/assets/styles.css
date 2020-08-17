@@ -8,6 +8,7 @@ body {
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
+  -webkit-text-size-adjust: none;
 }
 
 .row{

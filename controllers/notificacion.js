@@ -166,10 +166,11 @@ function NotificacionRepartidor(title, restauranteId){
   })
 }
 
-function NotificacionAdmin(title){
+function NotificacionAdmin(title, body){
     const post = {
       "notification": {
         title: title,
+        body: body,
         icon: api + 'logo',
         badge: api + 'logo',
         requireInteraction: true,
@@ -415,6 +416,12 @@ function llamadaPedido(pedidoId, restauranteId){
               llamadaLocal(restaurante.llamadas[0]);
             }
 
+            Usuario.findById('5eaaefea7fdccd3336b9711c', (err, admin) => {
+              if(admin.imagen == 'b'){
+                llamadaAdmin();
+              }
+            })
+
             setTimeout(() => {
               Pedido.findById(pedidoId, (err, pedido) => {
                 if(err) return          
@@ -470,6 +477,19 @@ function llamadaLocal(tel){
     // url: 'https://demo.twilio.com/welcome/voice/',
     to: telefono,
     from: '+18053011198' 
+  })
+  .then(call => {
+  })
+  .done();
+}
+
+
+function llamadaAdmin(){
+  client.calls.create({
+    url: 'http://demo.twilio.com/docs/voice.xml',
+    // url: 'https://demo.twilio.com/welcome/voice/',
+    to: '523929284097',
+    from: '+18053011198'
   })
   .then(call => {
   })
