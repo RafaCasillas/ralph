@@ -9,7 +9,7 @@ const fs = require('fs');
 
 const twilio = require('../twilio');
 const client = require('twilio')(twilio.accountSID, twilio.authToken);
-const client2 = require('twilio')(twilio.accountSID, twilio.authToken);
+const client2 = require('twilio')(twilio.account, twilio.token);
 var Usuario = require('../models/usuario');
 var Restaurante = require('../models/restaurante');
 var Pedido = require('../models/pedido');
@@ -149,7 +149,7 @@ function NotificacionRepartidor(title, restauranteId){
       };
 
       if(restaurante.municipio == '5ea75e0f006fd271928efe33'){
-        var usuarioId = 'id';
+        var usuarioId = '5f43476ceabb406c7dfbe4eb';
       } else {
         var usuarioId = 'id';
       }
@@ -416,11 +416,19 @@ function llamadaPedido(pedidoId, restauranteId){
               llamadaLocal(restaurante.llamadas[0]);
             }
 
-            Usuario.findById('5eaaefea7fdccd3336b9711c', (err, admin) => {
-              if(admin.imagen == 'b'){
-                llamadaAdmin();
-              }
-            })
+            setTimeout(() => {
+              Usuario.findById('5eaaefea7fdccd3336b9711c', (err, admin) => {
+                if(admin.imagen == 'b'){
+                  Pedido.findById(pedidoId, (err, pedido) => {
+                    if(err) return          
+                    if(!pedido) return     
+                    if(pedido && pedido.status == 'En espera'){
+                      llamadaAdmin();
+                    }
+                  })
+                }
+              })
+            },60000);
 
             setTimeout(() => {
               Pedido.findById(pedidoId, (err, pedido) => {

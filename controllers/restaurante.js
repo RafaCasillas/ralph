@@ -453,31 +453,7 @@ function abrirRestaurantes(req, res){
     
     res.status(200).send('Función activada correctamente');
 
-
-    var miFuncion =  setInterval(() => {
-        var now = new Date();
-        var date = new Date(now.getTime() - 18000000);
-
-        var dia = date.getDay();
-        var hora = date.getHours();
-        var min = date.getMinutes();
-    
-        if(min >= 0 && min < 10){
-            var minuto = 0;
-            
-        } else if(min >= 25 && min < 35){
-            var minuto = 30;
-        }
-
-
-        if(hora == 0){
-            clearInterval(miFuncion);
-        }
-
-
-        abrirlos(dia, hora, minuto, min);
-
-    }, 1800000);
+    abrirRestaurantesLocal();
     
     setTimeout(() => {
         var now = new Date();
@@ -498,6 +474,46 @@ function abrirRestaurantes(req, res){
 
         notificacion.NotificacionAdmin('Se activó el abrir restaurantes', 'El día ' + dia + ', a las ' + hora + ' : ' + minuto);
     }, 100);
+}
+
+
+function abrirRestaurantesLocal(){
+
+    var miFuncion =  setInterval(() => {
+        var now = new Date();
+        var date = new Date(now.getTime() - 18000000);
+    
+        var dia = date.getDay();
+        var hora = date.getHours();
+        var min = date.getMinutes();
+    
+        if(min >= 0 && min < 10){
+            var minuto = 0;
+            
+        } else if(min >= 25 && min < 35){
+            var minuto = 30;
+        }
+    
+    
+        if(hora == 0){
+            clearInterval(miFuncion);
+            reactivarFuncion();
+        }
+        
+        if(hora == 7){
+            notificacion.NotificacionAdmin('Se activó el abrir restaurantes', 'El día ' + dia + ', a las ' + hora + ' : ' + minuto);
+        }
+    
+    
+        abrirlos(dia, hora, minuto, min);
+    
+    }, 1800000);
+}
+
+function reactivarFuncion(){
+    setTimeout(() => {
+        abrirRestaurantesLocal();
+    }, 25200000);
 }
 
 
@@ -792,4 +808,36 @@ module.exports = {
 //     "nombre" : "Loncheria Yazid 2",
 //     "apertura" : [19.5,null,19.5,19.5,19.5,19.5,19.5],
 //     "cierre" :  [23,null,23,23,23,23,23]
+// }
+
+
+// {
+//     "restaurante" : "5f347ca3d4dc1f4d56422c3a",
+//     "nombre" : "El herradero",
+//     "apertura" : [13,null,13,13,13,13,13],
+//     "cierre" :  [22,null,22,22,22,22,22]
+// }
+
+
+// {
+//     "restaurante" : "5f3490fdd4dc1f4d56422c3d",
+//     "nombre" : "Listo",
+//     "apertura" : [14,null,14,14,14,14,14],
+//     "cierre" :  [21,null,21,21,21,21,21]
+// }
+
+
+// {
+//     "restaurante" : "5eb1fefbb1739471c9b7b9b8",
+//     "nombre" : "Cueva Toscana",
+//     "apertura" : [14,null,14,14,14,14,14],
+//     "cierre" :  [21,null,21,21,21,21,21]
+// }
+
+
+// {
+//     "restaurante" : "5eb1fefbb1739471c9b7b9b8",
+//     "nombre" : "Cueva Toscana 2",
+//     "apertura" : [14,null,14,14,14,14,14],
+//     "cierre" :  [21,null,21,21,21,21,21]
 // }

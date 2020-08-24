@@ -41,14 +41,17 @@ function crearPedido(req, res){
                     if(!pedidoStored) return res.status(404).send({message: 'No se ha registrado el pedido'});
         
                     if(pedidoStored) {
-                        notificacion.NotificacionAdmin('Hay un nuevo pedido', '');
                         notificacion.NotificacionRestaurante('Tienes un nuevo pedido', '', pedidoStored.restaurante, '/restaurante/inicio');
-                        notificacion.NotificacionUsuario('Tu pedido está en proceso', '', pedidoStored.usuario, '/mis-pedidos');
+                        
                         if(pedidoStored.usuario == '5eaaefea7fdccd3336b9711c' && pedidoStored.direccion == 'Madero #345'){
+
                         } else {
+                            notificacion.NotificacionAdmin('Hay un nuevo pedido', '');
+                            notificacion.NotificacionUsuario('Tu pedido está en proceso', '', pedidoStored.usuario, '/mis-pedidos');
                             notificacion.llamadaPedido(pedidoStored._id, pedidoStored.restaurante);
+                            notificacion.NotificacionRepartidor('Hay un nuevo pedido', pedidoStored.restaurante);
                         }
-                        // notificacion.NotificacionRepartidor('Hay un nuevo pedido', pedidoStored.restaurante);
+
                         return res.status(200).send({pedido: pedidoStored});
                     }
                 });
