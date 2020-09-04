@@ -12,7 +12,8 @@ var ProductoSchema = Schema({
    tiempoEntrega: Number,
    categoria: String,
    seccion: String,
-   status: String
+   status: String,
+   ingredientes: Array
 });
 
 module.exports = mongoose.model('Producto', ProductoSchema);

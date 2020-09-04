@@ -8,8 +8,9 @@ var path = require('path');
 const fs = require('fs');
 
 const twilio = require('../twilio');
+const twilio2 = require('../code');
 const client = require('twilio')(twilio.accountSID, twilio.authToken);
-const client2 = require('twilio')(twilio.account, twilio.token);
+const client2 = require('twilio')(twilio2.account, twilio2.token);
 var Usuario = require('../models/usuario');
 var Restaurante = require('../models/restaurante');
 var Pedido = require('../models/pedido');
@@ -151,7 +152,7 @@ function NotificacionRepartidor(title, restauranteId){
       if(restaurante.municipio == '5ea75e0f006fd271928efe33'){
         var usuarioId = '5f43476ceabb406c7dfbe4eb';
       } else {
-        var usuarioId = 'id';
+        var usuarioId = '5f4a7b4b5156bd72401fd99a';
       }
     
       Notificacion.find({usuario: usuarioId}).exec((err, notificaciones) => {
@@ -304,7 +305,7 @@ function obtenerLogo(req, res){
 function codigoVerificacion(req, res){
   var telefono = 52 + req.params.tel;
 
-    client2.verify.services(twilio.serviceID).verifications.create({
+    client2.verify.services(twilio2.serviceID).verifications.create({
         to: `+${telefono}`,
         channel: 'sms'
       })
@@ -319,7 +320,7 @@ function verificarTelefono(req, res){
   var telefono = 52 + req.params.tel;
   var codigo = req.params.cod;
 
-    client2.verify.services(twilio.serviceID).verificationChecks.create({
+    client2.verify.services(twilio2.serviceID).verificationChecks.create({
         to: `+${telefono}`,
         code: codigo
       })
@@ -396,6 +397,22 @@ function llamada(req, res){
 
 
 function llamadaPedido(pedidoId, restauranteId){
+
+  setTimeout(() => {
+    Usuario.findById('5eaaefea7fdccd3336b9711c', (err, admin) => {
+      if(admin.imagen == 'b'){
+        Pedido.findById(pedidoId, (err, pedido) => {
+          if(err) return          
+          if(!pedido) return     
+          if(pedido && pedido.status == 'En espera'){
+            llamadaAdmin();
+          }
+        })
+      }
+    })
+  },240000);
+
+
   var time = 180000;
 
   Restaurante.findById(restauranteId, (err, restaurante) => {
@@ -415,20 +432,6 @@ function llamadaPedido(pedidoId, restauranteId){
             } else {
               llamadaLocal(restaurante.llamadas[0]);
             }
-
-            setTimeout(() => {
-              Usuario.findById('5eaaefea7fdccd3336b9711c', (err, admin) => {
-                if(admin.imagen == 'b'){
-                  Pedido.findById(pedidoId, (err, pedido) => {
-                    if(err) return          
-                    if(!pedido) return     
-                    if(pedido && pedido.status == 'En espera'){
-                      llamadaAdmin();
-                    }
-                  })
-                }
-              })
-            },60000);
 
             setTimeout(() => {
               Pedido.findById(pedidoId, (err, pedido) => {

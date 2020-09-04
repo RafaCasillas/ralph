@@ -19,6 +19,10 @@ function crearProducto(req, res){
         producto.categoria = params.categoria;
         producto.seccion = params.seccion;
         
+        if(params.ingredientes && params.ingredientes != []){
+            producto.ingredientes = params.ingredientes;
+        }
+
         producto.restaurante = req.usuario.restaurante;
         producto.status = 'activo';
         producto.imagen = null;
