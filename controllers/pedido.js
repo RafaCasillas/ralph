@@ -136,13 +136,11 @@ function obtenerPedidos(req, res){
     if(req.params.stats && req.params.stats == 1){
         var parametro = {status: ['En camino', 'Completado', 'Cancelado'], restaurante: req.params.id};
         var fecha = '-fecha';
-        var itemsPerPage = 5;
     }
 
     if(req.params.stats && req.params.stats == 2){
         var parametro = {restaurante: req.params.id};
         var fecha = '-fecha';
-        var itemsPerPage = 5;
     }
     
     var page = 1;

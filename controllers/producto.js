@@ -19,14 +19,14 @@ function crearProducto(req, res){
         producto.categoria = params.categoria;
         producto.seccion = params.seccion;
         
-        if(params.ingredientes && params.ingredientes != []){
+        if(params.ingredientes[0]){
             producto.ingredientes = params.ingredientes;
         }
 
         producto.restaurante = req.usuario.restaurante;
         producto.status = 'activo';
         producto.imagen = null;
-                                
+                         
         producto.save((err, productoStored) => {
             if(err){
                 return res.status(500).send({
@@ -39,7 +39,7 @@ function crearProducto(req, res){
             } else {
                 return res.status(404).send({message: 'No se ha registrado el producto'});
             }
-            });
+        });
     } else {
         res.status(200).send({
             message: 'Envia todos los campos necesarios'
