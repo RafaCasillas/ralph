@@ -453,7 +453,7 @@ function abrirRestaurantes(req, res){
     
     res.status(200).send('Función activada correctamente');
 
-    abrirRestaurantesLocal();
+    abrirRestaurantesLocal(1);
     
     setTimeout(() => {
         var now = new Date();
@@ -472,14 +472,16 @@ function abrirRestaurantes(req, res){
 
         abrirlos(dia, hora, minuto, min);
 
-        notificacion.NotificacionAdmin('Se activó el abrir restaurantes', 'El día ' + dia + ', a las ' + hora + ' : ' + minuto);
+        // notificacion.NotificacionAdmin('Se activó el abrir restaurantes', 'El día ' + dia + ', a las ' + hora + ' : ' + minuto);
     }, 100);
 }
 
 
-function abrirRestaurantesLocal(){
+function abrirRestaurantesLocal(n){
 
-    notificacion.NotificacionAdmin('Se reactivó el abrir restaurantes', '');
+    if(n == 1){
+        notificacion.NotificacionAdmin('Se reactivó el abrir restaurantes', '');
+    }
 
     var miFuncion =  setInterval(() => {
         var now = new Date();
@@ -499,12 +501,17 @@ function abrirRestaurantesLocal(){
     
         if(hora == 15){
             clearInterval(miFuncion);
-            reactivarFuncion(100);
+            reactivarFuncion(100, 0);
         }
 
         if(hora == 0){
             clearInterval(miFuncion);
-            reactivarFuncion(25200000);
+            reactivarFuncion(10800000, 0);
+        }
+        
+        if(hora == 4){
+            clearInterval(miFuncion);
+            reactivarFuncion(10800000, 1);
         }
         
         // if(hora == 8){
@@ -517,9 +524,9 @@ function abrirRestaurantesLocal(){
     }, 1800000);
 }
 
-function reactivarFuncion(tiempo){
+function reactivarFuncion(tiempo, n){
     setTimeout(() => {
-        abrirRestaurantesLocal();
+        abrirRestaurantesLocal(n);
     }, tiempo);
 }
 

@@ -190,6 +190,24 @@ function obtenerProductos(req, res){
     });
 }
 
+function obtenerTodosProductos(req, res){
+
+    var page = req.params.page;
+    var itemsPerPage = 100;
+
+    Producto.find().paginate(page, itemsPerPage, (err, productos, total) => {
+        if(err) return res.status(500).send({message: err});
+
+        if(!productos) return res.status(404).send({message: 'No hay productos disponibles'});
+
+        return res.status(200).send({
+            productos,
+            total,
+            pages: Math.ceil(total/itemsPerPage)
+        })
+    });
+}
+
 function obtenerProductosRestaurante(req, res){
 
     var itemsPerPage = 10;
@@ -327,6 +345,7 @@ module.exports = {
     obtenerImagenProducto,
     obtenerProducto,
     obtenerProductos,
+    obtenerTodosProductos,
     obtenerProductosRestaurante,
     obtenerProductosRandom,
     activarProducto,
