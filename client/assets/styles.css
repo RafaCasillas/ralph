@@ -856,6 +856,10 @@ input[type="file"] {
   margin-right: 5px;
 }
 
+.producto-ing{
+  font-size: 17px;
+}
+
 .btn-modal-cancel{
   background-color: #f8cbad !important;
   border-color: yellow !important;
