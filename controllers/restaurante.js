@@ -506,12 +506,22 @@ function abrirRestaurantesLocal(n){
 
         if(hora == 0){
             clearInterval(miFuncion);
-            reactivarFuncion(10800000, 0);
+            reactivarFuncion(3600000, 0);
+        }
+        
+        if(hora == 2){
+            clearInterval(miFuncion);
+            reactivarFuncion(3600000, 1);
         }
         
         if(hora == 4){
             clearInterval(miFuncion);
-            reactivarFuncion(10800000, 1);
+            reactivarFuncion(3600000, 1);
+        }
+        
+        if(hora == 6){
+            clearInterval(miFuncion);
+            reactivarFuncion(3600000, 1);
         }
         
         // if(hora == 8){

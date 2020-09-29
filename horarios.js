@@ -225,3 +225,67 @@
 //     "apertura" : [13,13,null,13,13,13,13],
 //     "cierre" :  [23,23,null,23,23,23,23]
 // }
+
+
+// {
+//     "restaurante" : "5f4bd2de2817da1d70987328",
+//     "nombre" : "La pasadita",
+//     "apertura" : [null,9,9,9,9,9,null],
+//     "cierre" :  [null,17,17,17,17,17,null]
+// }
+
+
+// {
+//     "restaurante" : "5f519a42f4b7b7552579e8b0",
+//     "nombre" : "La casa vieja",
+//     "apertura" : [9,9,9,9,9,9,9],
+//     "cierre" :  [13,23,23,23,23,23,23]
+// }
+
+
+// {
+//     "restaurante" : "5f540cfe299fb80b038928db",
+//     "nombre" : "Pollos Ca’Pepe",
+//     "apertura" : [12,12,12,12,12,12,12],
+//     "cierre" :  [16.5,16.5,16.5,16.5,16.5,16.5,16.5]
+// }
+
+
+// {
+//     "restaurante" : "5f4419b265032c2c0415111b",
+//     "nombre" : "Notas de café",
+//     "apertura" : [null,9,9,9,9,9,null],
+//     "cierre" :  [null,14,14,14,14,14,null]
+// }
+
+
+// {
+//     "restaurante" : "5f4419b265032c2c0415111b",
+//     "nombre" : "Notas de café 2",
+//     "apertura" : [17,17,17,17,17,17,17],
+//     "cierre" :  [22,22,22,22,22,22,22]
+// }
+
+
+// {
+//     "restaurante" : "5f3eb8615854ca30757870a2",
+//     "nombre" : "Hiballs",
+//     "apertura" : [14.5,14.5,14.5,14.5,14.5,14.5,14.5],
+//     "cierre" :  [22,22,22,22,22,22,22]
+// }
+
+
+// {
+//     "restaurante" : "5f5bd4e9f5035406152fe9f9",
+//     "nombre" : "King Wing",
+//     "apertura" : [13,13,null,13,13,13,13],
+//     "cierre" :  [22,22,null,22,22,22,22]
+// }
+
+
+// {
+//     "restaurante" : "5f51772ef4b7b7552579e8a9",
+//     "nombre" : "La Gourmeteria",
+//     "apertura" : [9,9,9,null,9,9,9],
+//     "cierre" :  [18,18,18,null,18,18,18]
+// }
