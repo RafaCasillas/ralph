@@ -4,7 +4,10 @@ var Restaurante = require('../models/restaurante');
 var Usuario = require('../models/usuario');
 var Seccion = require('../models/seccion-restaurante');
 var Horario = require('../models/horario');
+var Deposito = require('../models/deposito');
+var Cobro = require('../models/cobro');
 
+var moment = require('moment');
 var notificacion = require('./notificacion')
 var mongoosePaginate = require('mongoose-pagination');
 var path = require('path');
@@ -351,7 +354,7 @@ function eliminarSeccion(req, res){
     })
 }
 
-function ActualizarCredito(req, res){
+function actualizarCredito(req, res){
     var restauranteId = req.params.id
     var cantidad = req.params.can
     var creditoOdebo = req.params.num
@@ -639,6 +642,213 @@ function agregarTelefono(req, res){
 }
 
 
+function opcionesRestaurante(req, res){
+    var restauranteId = req.params.id
+    var opcion = req.params.op
+
+    if(opcion == 'true'){
+        var params = {FBads: true};
+
+    } else if (opcion == 'false'){
+        var params = {FBads: false};
+
+    } else {
+        var params = {pedidoMinimo: Number(opcion)};
+    }
+    
+    if(req.usuario.rol != 'ADMIN'){
+        return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+    }
+
+
+    Restaurante.findByIdAndUpdate(restauranteId, params, {new:true}, (err, restaurante) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+
+        if(!restaurante) return res.status(404).send({message: 'El restaurante no existe'});
+
+        return res.status(200).send({restaurante: restaurante});
+    });
+}
+
+
+function crearDeposito(req, res){
+    var params = req.body;
+
+    if(params.restaurante && params.cantidad && params.metodoPago && params.credito && params.debe && params.ralphDebe){
+        var deposito = new Deposito();
+        deposito.restaurante = params.restaurante;
+        deposito.cantidad = params.cantidad;
+        deposito.metodoPago = params.metodoPago;
+        deposito.credito = params.credito;
+        deposito.debe = params.debe;
+        deposito.ralphDebe = params.ralphDebe;
+        deposito.fecha = moment().unix();
+
+        if(params.nota){
+            deposito.nota = params.nota;
+        } else {
+            deposito.nota = null;
+        }
+        
+        deposito.save((err, depositoStored) => {
+            if(err){ 
+                return res.status(500).send({message: 'Error al guardar el deposito'});
+            }
+
+            if(depositoStored){
+                return res.status(200).send({deposito: depositoStored});
+
+            } else {
+                return res.status(404).send({message: 'No se ha registrado el deposito'});
+            }
+        });
+    } else {
+        res.status(200).send({
+            message: 'Envia todos los campos necesarios'
+        });
+    }
+}
+
+
+function obtenerDeposito(req, res){
+    var depositoId = req.params.id;
+
+    Deposito.findById(depositoId, (err, deposito) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+
+        if(!deposito) return res.status(404).send({message: 'El deposito no existe'});
+        
+        return res.status(200).send({deposito: deposito});
+    });
+}
+
+
+
+function obtenerDepositos(req, res){
+    var itemsPerPage = 6;
+    var page = 1;
+    if(req.params.page){
+        page = req.params.page;
+    }
+    
+    Deposito.find({restaurante: req.params.id}).sort('-fecha').paginate(page, itemsPerPage, (err, depositos, total) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+
+        if(!depositos) return res.status(404).send({message: 'No hay depositos disponibles'});
+
+        return res.status(200).send({
+            depositos,
+            total,
+            pages: Math.ceil(total/itemsPerPage)
+        })
+    });
+}
+
+
+// function crearCobroLocal(req, res){
+//     var params = req.body;
+
+//     if(params.restaurante && params.cantidad){
+//         var cobro = new Cobro();
+//         cobro.restaurante = params.restaurante;
+//         cobro.cantidad = params.cantidad;
+//         cobro.fecha = moment().unix();
+
+//         if(params.nota){
+//             cobro.nota = params.nota;
+//         } else {
+//             cobro.nota = null;
+//         }
+        
+//         cobro.save((err, cobroStored) => {
+//             if(err){ 
+//                 return res.status(500).send({message: 'Error al guardar el cobro'});
+//             }
+
+//             if(cobroStored){
+//                 return res.status(200).send({cobro: cobroStored});
+
+//             } else {
+//                 return res.status(404).send({message: 'No se ha registrado el cobro'});
+//             }
+//         });
+//     } else {
+//         res.status(200).send({
+//             message: 'Envia todos los campos necesarios'
+//         });
+//     }
+// }
+
+
+function crearCobro(req, res){
+    var params = req.body;
+
+    if(params.restaurante && params.cantidad){
+        var cobro = new Cobro();
+        cobro.restaurante = params.restaurante;
+        cobro.cantidad = params.cantidad;
+        cobro.fecha = moment().unix();
+
+        if(params.nota){
+            cobro.nota = params.nota;
+        } else {
+            cobro.nota = null;
+        }
+        
+        cobro.save((err, cobroStored) => {
+            if(err){ 
+                return res.status(500).send({message: 'Error al guardar el cobro'});
+            }
+
+            if(cobroStored){
+                return res.status(200).send({cobro: cobroStored});
+
+            } else {
+                return res.status(404).send({message: 'No se ha registrado el cobro'});
+            }
+        });
+    } else {
+        res.status(200).send({
+            message: 'Envia todos los campos necesarios'
+        });
+    }
+}
+
+
+function obtenerCobro(req, res){
+    var cobroId = req.params.id;
+
+    Cobro.findById(cobroId, (err, cobro) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+
+        if(!cobro) return res.status(404).send({message: 'El cobro no existe'});
+        
+        return res.status(200).send({cobro: cobro});
+    });
+}
+
+
+function obtenerCobros(req, res){
+    var itemsPerPage = 6;
+    var page = 1;
+    if(req.params.page){
+        page = req.params.page;
+    }
+    
+    Cobro.find({restaurante: req.params.id}).sort('-fecha').paginate(page, itemsPerPage, (err, cobros, total) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+
+        if(!cobros) return res.status(404).send({message: 'No hay cobros disponibles'});
+
+        return res.status(200).send({
+            cobros,
+            total,
+            pages: Math.ceil(total/itemsPerPage)
+        })
+    });
+}
+
+
 
 module.exports = {
     registrarRestaurante,
@@ -653,10 +863,17 @@ module.exports = {
     obtenerSeccion,
     obtenerSecciones,
     eliminarSeccion,
-    ActualizarCredito,
+    actualizarCredito,
     darDeAltaRestaurante,
     crearHorario,
     abrirRestaurantes,
     obtenerHorario,
-    agregarTelefono
+    agregarTelefono,
+    opcionesRestaurante,
+    crearDeposito,
+    obtenerDeposito,
+    obtenerDepositos,
+    crearCobro,
+    obtenerCobro,
+    obtenerCobros
 }

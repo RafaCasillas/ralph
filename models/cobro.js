@@ -3,15 +3,11 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var DepositoSchema = Schema({
+var CobroSchema = Schema({
     restaurante: {type: Schema.ObjectId, ref: 'Restaurante'},
     cantidad: Number,
-    metodoPago: String,
     nota: String,
-    credito: Array,
-    debe: Array,
-    ralphDebe: Array,
     fecha: String
 });
 
-module.exports = mongoose.model('Deposito', DepositoSchema);
+module.exports = mongoose.model('Cobro', CobroSchema);

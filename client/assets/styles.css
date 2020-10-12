@@ -410,6 +410,12 @@ body {
   color: #868585e8;
 }
 
+.icon-trash2{
+  font-size: 22px;
+  margin-top: 2px;
+  color: #868585e8;
+}
+
 .icon-black{
   font-size: 28px;
   color: #131313f8;
@@ -587,6 +593,11 @@ color: #ff4409;
   background-color: #fff;
 }
 
+.credito-info2{
+  padding-top: 10px;
+  background-color: #fff;
+}
+
 .card-credito{
   margin-top: -10px;
 }
@@ -594,6 +605,28 @@ color: #ff4409;
 .credito-card-text{
   font-size: 23px;
   margin-top: -20px;
+}
+
+.deposito-text{
+  font-size: 23px;
+  margin-top: 5px;
+}
+
+.deposito-nota{
+  font-size: 18px;
+  margin-top: 5px;
+}
+
+.deposito-cant{
+  font-size: 23px;
+  margin-top: 5px;
+  color: #22b122;
+}
+
+.deposito-cant2{
+  font-size: 23px;
+  margin-top: 5px;
+  color: rgba(255, 0, 0, 0.863);
 }
 
 .text-credito{
@@ -906,6 +939,11 @@ input[type="file"] {
 
 .modal-header *{
   font-size: 22px !important;
+}
+
+.modal-credito{
+  font-size: 18px !important;
+  margin-bottom: 0 !important;
 }
 
 .clickable {

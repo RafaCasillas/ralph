@@ -15,7 +15,7 @@ var moment = require('moment');
                 //     xDias (20 dias) = 1728000
                 //     un mes (30 días) = 2592000
 
-                        const xDias = 1728000
+                        const xDias = 1728000;
                         const unMes = 2592000;
 
 
@@ -71,7 +71,7 @@ function cuponBienvenido(usuarioId){
     cupon.nombre = 'Bienvenido';
     cupon.cupones = [40, 30, 30];
     cupon.compraMinima = 100;
-    cupon.fechaVencimiento = (moment().unix() + unMes);
+    cupon.fechaVencimiento = (moment().unix() + xDias);
     cupon.status = 'Vigente';
 
     cupon.save((err, cuponStored) => {
@@ -91,7 +91,7 @@ function cuponEnvioGratis(usuarioId){
     cupon.nombre = 'Envío gratis';
     cupon.cupones = [20, 20, 20];
     cupon.compraMinima = 20;
-    cupon.fechaVencimiento = (moment().unix() + unMes);
+    cupon.fechaVencimiento = (moment().unix() + xDias);
     cupon.status = 'Vigente';
 
     cupon.save((err, cuponStored) => {

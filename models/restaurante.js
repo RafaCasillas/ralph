@@ -17,7 +17,9 @@ var RestauranteSchema = Schema({
     ralphDebe: Number,
     servicioDomicilio: Boolean,
     visitas: Number,
-    llamadas: Array
+    llamadas: Array,
+    pedidoMinimo: Number,
+    FBads: Boolean
 });
 
 module.exports = mongoose.model('Restaurante', RestauranteSchema);
