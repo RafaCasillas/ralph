@@ -24,6 +24,15 @@ body {
   font-size: 20px;
 }
 
+@media (min-width: 576px){
+  .card-deck .card {
+      margin-right: 0.5cm !important;
+      margin-left: 0.5cm !important;
+      width: 250px !important; 
+      height: 250px !important;
+  }
+}
+
 .panel-body1{
   background-color: white;
   border-radius: 10px;
@@ -111,6 +120,7 @@ body {
   border-color: #f57d05 !important;
   font-size: 22px;
   border-radius: 4px;
+  color: white !important;
 }
 
 .btn-orange2{

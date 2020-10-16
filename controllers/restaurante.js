@@ -253,11 +253,13 @@ function crearSeccion(req, res){
     if(restaurante_id != req.usuario.restaurante){
         return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
     }
-
-    if(params.nombre){
+    
+    if(params.nombre && params.posicion){
         var seccion = new Seccion();
         seccion.nombre = params.nombre;
         seccion.restaurante = req.params.id;
+        seccion.posicion = req.params.posicion;
+        seccion.posicion = params.posicion;
 
         seccion.save((err, seccionStored) => {
             if(err){ 
@@ -323,12 +325,12 @@ function obtenerSecciones(req, res){
     }
 
     if(req.params.who == 1){
-        var itemsPerPage = 30;
+        var itemsPerPage = 50;
     }
 
     // Seccion.aggregate([ { $match: { restaurante: '5ea9f726110e020ee7e1c2a0' }}, { $sample: { size: 3 } } ], (err, secciones, total) => {
 
-    Seccion.find({'restaurante': restaurante}).paginate(page, itemsPerPage, (err, secciones, total) => {
+    Seccion.find({'restaurante': restaurante}).sort('posicion').paginate(page, itemsPerPage, (err, secciones, total) => {
         if(err) return res.status(500).send({message: 'Error en la petición'});
 
         if(!secciones) return res.status(404).send({message: 'Las secciones no existen'});
@@ -509,22 +511,22 @@ function abrirRestaurantesLocal(n){
 
         if(hora == 0){
             clearInterval(miFuncion);
-            reactivarFuncion(3600000, 0);
+            reactivarFuncion(100, 1);
         }
         
         if(hora == 2){
             clearInterval(miFuncion);
-            reactivarFuncion(3600000, 1);
+            reactivarFuncion(100, 1);
         }
         
         if(hora == 4){
             clearInterval(miFuncion);
-            reactivarFuncion(3600000, 1);
+            reactivarFuncion(100, 1);
         }
         
         if(hora == 6){
             clearInterval(miFuncion);
-            reactivarFuncion(3600000, 1);
+            reactivarFuncion(100, 1);
         }
         
         // if(hora == 8){

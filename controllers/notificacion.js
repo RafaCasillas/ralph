@@ -400,7 +400,7 @@ function llamadaPedido(pedidoId, restauranteId){
 
   setTimeout(() => {
     Usuario.findById('5eaaefea7fdccd3336b9711c', (err, admin) => {
-      if(admin.imagen == 'b'){
+      if(admin && admin.imagen == 'b'){
         Pedido.findById(pedidoId, (err, pedido) => {
           if(err) return          
           if(!pedido) return     
