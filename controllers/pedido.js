@@ -147,8 +147,7 @@ function obtenerPedidos(req, res){
     if(req.params.page){
         page = req.params.page;
     }
-    
-
+        
     Pedido.find(parametro).sort(fecha).populate('usuario').paginate(page, itemsPerPage, (err, pedidos, total) => {
         if(err) return res.status(500).send({message: 'Error en la petición'});
 

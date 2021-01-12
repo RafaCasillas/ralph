@@ -19,6 +19,7 @@ var RestauranteSchema = Schema({
     visitas: Number,
     llamadas: Array,
     pedidoMinimo: Number,
+    envio: Array,
     FBads: Boolean
 });
 

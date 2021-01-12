@@ -24,43 +24,44 @@ function nuevoCupon(req, res){
     var codigoActivacion = req.params.codigo.toLowerCase();
     var usuarioId = req.usuario.sub;
 
+    res.status(200).send({message: 'Los cupones han sido inhabilitados'});
 
     // Cupón Bienvenido
-    if(codigoActivacion == 'noerapenal' || codigoActivacion == 'ralph2020' || codigoActivacion == 'ralphesfelicidad'){
-        Cupon.find({usuario: usuarioId, nombre: 'Bienvenido'}, (err, cupones) => {
+    // if(codigoActivacion == 'noerapenal' || codigoActivacion == 'ralph2020' || codigoActivacion == 'ralphesfelicidad'){
+    //     Cupon.find({usuario: usuarioId, nombre: 'Bienvenido'}, (err, cupones) => {
 
-            if(err) return res.status(500).send({message: 'Error en la petición'});
+    //         if(err) return res.status(500).send({message: 'Error en la petición'});
 
-            if(!cupones) return res.status(404).send({message: 'El cupón no existe'});
+    //         if(!cupones) return res.status(404).send({message: 'El cupón no existe'});
 
-            if(cupones.length == 0){
-                cuponBienvenido(usuarioId);
-                return res.status(200).send({message: 'Cupón creado correctamente'});
+    //         if(cupones.length == 0){
+    //             cuponBienvenido(usuarioId);
+    //             return res.status(200).send({message: 'Cupón creado correctamente'});
 
-            } else{
-                return res.status(200).send({message: 'Ya has usado este cupón'});
-            }            
-        });
+    //         } else{
+    //             return res.status(200).send({message: 'Ya has usado este cupón'});
+    //         }            
+    //     });
 
-    } else if(codigoActivacion == 'ralphmeencanta' || codigoActivacion == 'yousoralph'){
-        Cupon.find({usuario: usuarioId, nombre: 'Envío gratis'}, (err, cupones) => {
+    // } else if(codigoActivacion == 'ralphmeencanta' || codigoActivacion == 'yousoralph'){
+    //     Cupon.find({usuario: usuarioId, nombre: 'Envío gratis'}, (err, cupones) => {
 
-            if(err) return res.status(500).send({message: 'Error en la petición'});
+    //         if(err) return res.status(500).send({message: 'Error en la petición'});
 
-            if(!cupones) return res.status(404).send({message: 'El cupón no existe'});
+    //         if(!cupones) return res.status(404).send({message: 'El cupón no existe'});
 
-            if(cupones.length == 0){
-                cuponEnvioGratis(usuarioId);
-                return res.status(200).send({message: 'Cupón creado correctamente'});
+    //         if(cupones.length == 0){
+    //             cuponEnvioGratis(usuarioId);
+    //             return res.status(200).send({message: 'Cupón creado correctamente'});
 
-            } else{
-                return res.status(200).send({message: 'Ya has usado este cupón'});
-            }            
-        });
+    //         } else{
+    //             return res.status(200).send({message: 'Ya has usado este cupón'});
+    //         }
+    //     });
 
-    } else {
-        return res.status(200).send({message: 'Código inválido'});
-    }
+    // } else {
+    //     return res.status(200).send({message: 'Código inválido'});
+    // }
 }
 
 
@@ -198,11 +199,36 @@ function todosLosCupones(req, res){
 }
 
 
+function desactivarlosTodos(req, res){
+    if(req.usuario.rol != 'ADMIN'){
+        return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+    }
+    
+    Cupon.find({status: "Vigente"},(err, cupones) => {
+
+        if(cupones[0]){
+            cupones.forEach(cupon => {
+                cupon.status = "Vencido";
+
+                Cupon.findByIdAndUpdate(cupon.id, cupon, {new:true}, (err, cuponUpdated) => {
+                    if(err) return res.status(500).send({message: 'Error en la petición'});
+                    
+                    if(!cuponUpdated) return res.status(404).send({message: 'No se ha podido actualizar el cupon'});
+                    
+                    return res.status(200).send({cupon: cuponUpdated});
+                });
+            });
+        }
+    });
+}
+
+
 module.exports = {
     nuevoCupon,
     obtenerCupones,
     actualizarCupon,
     actualizarCupon2,
     eliminarCupon,
-    todosLosCupones
+    todosLosCupones,
+    desactivarlosTodos
 }

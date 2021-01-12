@@ -36,6 +36,7 @@ function registrarRestaurante(req, res){
         restaurante.debe = 0;
         restaurante.ralphDebe = 0;
         restaurante.horario = [];
+        restaurante.envio = [];
         restaurante.visitas = 0;
 
 
@@ -459,19 +460,26 @@ function abrirRestaurantes(req, res){
     res.status(200).send('Función activada correctamente');
 
     abrirRestaurantesLocal(1);
+
+    if(req.params.horas != 0){
+        abrirAnteriores(req.params.horas);
+    }
     
     setTimeout(() => {
         var now = new Date();
-        var date = new Date(now.getTime() - 18000000);
+        var date = new Date(now.getTime() - 21600000);
 
         var dia = date.getDay();
         var hora = date.getHours();
         var min = date.getMinutes();
-    
-        if(min >= 0 && min < 10){
+
+        if(min >= 55 || min <= 5){
             var minuto = 0;
+            if(min >= 55){
+                hora = hora + 1;
+            }
             
-        } else if(min >= 25 && min < 35){
+        } else if(min >= 25 && min <= 35){
             var minuto = 30;
         }
 
@@ -488,18 +496,25 @@ function abrirRestaurantesLocal(n){
         notificacion.NotificacionAdmin('Se reactivó el abrir restaurantes', '');
     }
 
+    // Horario de verano = UTC - 5 = 18000000;
+    // El hotro horario = UTC - 6 = 21600000;
+
+
     var miFuncion =  setInterval(() => {
         var now = new Date();
-        var date = new Date(now.getTime() - 18000000);
+        var date = new Date(now.getTime() - 21600000);
     
         var dia = date.getDay();
         var hora = date.getHours();
         var min = date.getMinutes();
     
-        if(min >= 0 && min < 10){
+        if(min >= 55 || min <= 5){
             var minuto = 0;
+            if(min >= 55){
+                hora = hora + 1;
+            }
             
-        } else if(min >= 25 && min < 35){
+        } else if(min >= 25 && min <= 35){
             var minuto = 30;
         }
     
@@ -543,6 +558,39 @@ function reactivarFuncion(tiempo, n){
     setTimeout(() => {
         abrirRestaurantesLocal(n);
     }, tiempo);
+}
+
+
+function abrirAnteriores(horas){
+
+    var mediasHoras = 0;
+    
+    var timer = setInterval(() => {
+        var now = new Date();
+        var date = new Date((now.getTime() - (21600000 + horas*3600000) + (mediasHoras*1800000)));
+    
+        var dia = date.getDay();
+        var hora = date.getHours();
+        var min = date.getMinutes(); 
+        
+        if(min >= 55 || min <= 5){
+            var minuto = 0;
+            if(min >= 55){
+                hora = hora + 1;
+            }
+            
+        } else if(min >= 25 && min <= 35){
+            var minuto = 30;
+        }
+
+        abrirlos(dia, hora, minuto, min);
+        
+        mediasHoras = mediasHoras + 1;
+
+        if(mediasHoras == (horas*2)){
+            clearInterval(timer);
+        }
+    }, 100)
 }
 
 
@@ -613,7 +661,7 @@ function obtenerHorario(req, res){
         if(!horario) return res.status(404).send({message: 'El horario no existe'});
 
         var now = new Date();
-        var date = new Date(now.getTime() - 18000000);
+        var date = new Date(now.getTime() - 21600000);
         var dia = date.getDay();
         
         return res.status(200).send({horario: horario, dia});
@@ -662,6 +710,42 @@ function opcionesRestaurante(req, res){
         return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
     }
 
+
+    Restaurante.findByIdAndUpdate(restauranteId, params, {new:true}, (err, restaurante) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+
+        if(!restaurante) return res.status(404).send({message: 'El restaurante no existe'});
+
+        return res.status(200).send({restaurante: restaurante});
+    });
+}
+
+
+function servicioDom(req, res){
+    var restauranteId = req.params.id
+    var opcion = req.params.op
+
+    if(opcion == 'true'){
+        var params = {servicioDomicilio: true};
+
+    } else if (opcion == 'false'){
+        var params = {servicioDomicilio: false};
+
+    } else {
+        opcion = opcion.split(',');
+        var arreglo = []
+        opcion.forEach(element => {
+            var element2 = parseInt(element)
+            arreglo.push(element2);
+        });
+
+        var params = {envio: arreglo};
+    }
+
+    
+    if(req.usuario.rol != 'ADMIN'){
+        return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+    }
 
     Restaurante.findByIdAndUpdate(restauranteId, params, {new:true}, (err, restaurante) => {
         if(err) return res.status(500).send({message: 'Error en la petición'});
@@ -851,6 +935,18 @@ function obtenerCobros(req, res){
 }
 
 
+function eliminarHorario(req, res){
+    var horario_id = req.params.id;
+
+    Horario.find({_id: horario_id}).deleteOne((err, horarioRemoved) => {
+        if(err) return res.status(500).send({message: 'Error al borrar el horario'});
+
+        if(!horarioRemoved) return res.status(404).send({message: 'No se ha borrado el horario'});
+
+        return res.status(200).send({horario: horarioRemoved});
+    })
+}
+
 
 module.exports = {
     registrarRestaurante,
@@ -872,10 +968,12 @@ module.exports = {
     obtenerHorario,
     agregarTelefono,
     opcionesRestaurante,
+    servicioDom,
     crearDeposito,
     obtenerDeposito,
     obtenerDepositos,
     crearCobro,
     obtenerCobro,
-    obtenerCobros
+    obtenerCobros,
+    eliminarHorario
 }

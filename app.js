@@ -15,6 +15,7 @@ var pedido_routes = require('./routes/pedido');
 var notificaciones_routes = require('./routes/notificacion');
 var stats_routes = require('./routes/stats');
 var cupon_routes = require('./routes/cupon');
+var premios_routes = require('./routes/premios');
 
 
 // Cargar middlewares
@@ -41,6 +42,7 @@ app.use('/api', pedido_routes);
 app.use('/api', notificaciones_routes);
 app.use('/api', stats_routes);
 app.use('/api', cupon_routes);
+app.use('/api', premios_routes);
 
   
 // Para que funcione en produccion

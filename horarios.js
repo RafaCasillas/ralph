@@ -15,7 +15,7 @@
 //     "restaurante" : "5eb4ac7db1739471c9b7b9eb",
 //     "nombre" : "Azotea",
 //     "apertura" : [9,9,9,null,9,9,9],
-//     "cierre" :  [23,23,23,null,23,23.5,23.5]
+//     "cierre" :  [21,21,21,null,21,21,21]
 // }
 
 
@@ -47,7 +47,7 @@
 //     "restaurante" : "5eacb494b1739471c9b7b932",
 //     "nombre" : "Bull Dogos",
 //     "apertura" : [14.5,14.5,14.5,14.5,14.5,14.5,14.5],
-//     "cierre" :  [22.5,22.5,22.5,22.5,22.5,22.5,22.5]
+//     "cierre" :  [22,22,22,22,22,22,22]
 // }
 
 
@@ -79,7 +79,7 @@
 //     "restaurante" : "5eb44150b1739471c9b7b9cf",
 //     "nombre" : "Los Portales",
 //     "apertura" : [9,9,9,null,9,9,9],
-//     "cierre" :  [18,18,18,null,18,18,18]
+//     "cierre" :  [17.5,17.5,17.5,null,17.5,17.5,17.5]
 // }
 
 
@@ -157,9 +157,9 @@
 
 // {
 //     "restaurante" : "5f187d44431e9c4328947b96",
-//     "nombre" : "Loncheria Yazid 1",
-//     "apertura" : [8.5,8.5,8.5,8.5,8.5,8.5,8.5],
-//     "cierre" :  [14,14,14,14,14,14,14]
+//     "nombre" : "Loncheria Yazid",
+//     "apertura" : [8,8,8,8,8,8,8],
+//     "cierre" :  [17.5,17.5,17.5,17.5,17.5,17.5,17.5]
 // }
 
 
@@ -288,4 +288,58 @@
 //     "nombre" : "La Gourmeteria",
 //     "apertura" : [9,9,9,null,9,9,9],
 //     "cierre" :  [18,18,18,null,18,18,18]
+// }
+
+
+// {
+//     "restaurante" : "5f44605565032c2c0415111e",
+//     "nombre" : "Helados Don Chicho",
+//     "apertura" : [9,null,9,9,9,9,9],
+//     "cierre" :  [20,null,20,20,20,20,20]
+// }
+
+
+// {
+//     "restaurante" : "5f728df0572a68632e4593b2",
+//     "nombre" : "Delicias de Michoacan",
+//     "apertura" : [9,9,9,9,9,9,9],
+//     "cierre" :  [22,22,22,22,22,22,22]
+// }
+
+
+// {
+//     "restaurante" : "5f601388297dfc4fb6698b65",
+//     "nombre" : "TaqueríaBar-Los Gallos",
+//     "apertura" : [17,17,17,17,17,17,17],
+//     "cierre" :  [1,1,1,1,1,2.5,5]
+// }
+// {
+//     "restaurante" : "5f601388297dfc4fb6698b65",
+//     "nombre" : "TaqueríaBar-Los Gallos",
+//     "apertura" : [17,17,17,17,17,17,17],
+//     "cierre" :  [23.5,23.5,23.5,23.5,23.5,23.5,23.5]
+// }
+
+
+// {
+//     "restaurante" : "5f7fc00eef8ae5687d8d6987",
+//     "nombre" : "La Michoacana",
+//     "apertura" : [9.5,9.5,9.5,9.5,9.5,9.5,9.5],
+//     "cierre" :  [21,21,21,21,21,21,21]
+// }
+
+
+// {
+//     "restaurante" : "5f7f5901ef8ae5687d8d6980",
+//     "nombre" : "La Luna",
+//     "apertura" : [null,null,null,null,null,12,12],
+//     "cierre" :  [null,null,null,null,null,18.5,18.5]
+// }
+
+
+// {
+//     "restaurante" : "5f511123f4b7b7552579e890",
+//     "nombre" : "El Senador",
+//     "apertura" : [12,12,12,12,12,12,12],
+//     "cierre" :  [18.5,18.5,18.5,18.5,18.5,18.5,18.5]
 // }
