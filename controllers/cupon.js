@@ -199,28 +199,28 @@ function todosLosCupones(req, res){
 }
 
 
-function desactivarlosTodos(req, res){
-    if(req.usuario.rol != 'ADMIN'){
-        return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
-    }
+// function desactivarlosTodos(req, res){
+//     if(req.usuario.rol != 'ADMIN'){
+//         return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+//     }
     
-    Cupon.find({status: "Vigente"},(err, cupones) => {
+//     Cupon.find({status: "Vigente"},(err, cupones) => {
 
-        if(cupones[0]){
-            cupones.forEach(cupon => {
-                cupon.status = "Vencido";
+//         if(cupones[0]){
+//             cupones.forEach(cupon => {
+//                 cupon.status = "Vencido";
 
-                Cupon.findByIdAndUpdate(cupon.id, cupon, {new:true}, (err, cuponUpdated) => {
-                    if(err) return res.status(500).send({message: 'Error en la petición'});
+//                 Cupon.findByIdAndUpdate(cupon.id, cupon, {new:true}, (err, cuponUpdated) => {
+//                     if(err) return res.status(500).send({message: 'Error en la petición'});
                     
-                    if(!cuponUpdated) return res.status(404).send({message: 'No se ha podido actualizar el cupon'});
+//                     if(!cuponUpdated) return res.status(404).send({message: 'No se ha podido actualizar el cupon'});
                     
-                    return res.status(200).send({cupon: cuponUpdated});
-                });
-            });
-        }
-    });
-}
+//                     return res.status(200).send({cupon: cuponUpdated});
+//                 });
+//             });
+//         }
+//     });
+// }
 
 
 module.exports = {
@@ -230,5 +230,5 @@ module.exports = {
     actualizarCupon2,
     eliminarCupon,
     todosLosCupones,
-    desactivarlosTodos
+    // desactivarlosTodos
 }

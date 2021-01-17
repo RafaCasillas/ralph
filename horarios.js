@@ -6,8 +6,8 @@
 // {
 //     "restaurante" : "5ee7b6dc06de0d53a65623cd",
 //     "nombre" : "El Sazón de la Abuela",
-//     "apertura" : [null,8,8,8,8,8,8],
-//     "cierre" :  [null,15.5,15.5,15.5,15.5,15.5,15.5]
+//     "apertura" : [null,8,8,8,8,8,null],
+//     "cierre" :  [null,15.5,15.5,15.5,15.5,15.5,null]
 // }
 
 

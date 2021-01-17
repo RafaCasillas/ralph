@@ -13,7 +13,7 @@ api.post('/actualizar-cupon', md_auth.ensureAuth, CuponControler.actualizarCupon
 api.get('/actualizar-cupon2/:id/:x', md_auth.ensureAuth, CuponControler.actualizarCupon2);
 api.delete('/eliminar-cupon/:id', md_auth.ensureAuth, CuponControler.eliminarCupon);
 api.get('/todos-los-cupones', md_auth.ensureAuth, CuponControler.todosLosCupones);
-api.get('/desactivarlo-sTodos-los-cupone', md_auth.ensureAuth, CuponControler.desactivarlosTodos);
+// api.get('/desactivarlo-sTodos-los-cupone', md_auth.ensureAuth, CuponControler.desactivarlosTodos);
 
 
 module.exports = api;

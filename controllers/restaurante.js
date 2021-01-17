@@ -492,9 +492,9 @@ function abrirRestaurantes(req, res){
 
 function abrirRestaurantesLocal(n){
 
-    if(n == 1){
-        notificacion.NotificacionAdmin('Se reactivó el abrir restaurantes', '');
-    }
+    // if(n == 1){
+    //     notificacion.NotificacionAdmin('Se reactivó el abrir restaurantes', '');
+    // }
 
     // Horario de verano = UTC - 5 = 18000000;
     // El hotro horario = UTC - 6 = 21600000;

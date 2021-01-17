@@ -95,7 +95,7 @@ function logearUsuario(req, res){
     var correo = params.correo.toLowerCase();
     var password = params.password;
 
-    Usuario.findOne({correo: correo}, (err, usuario) => {
+    Usuario.findOne({$or: [{correo: correo}, {telefono: correo}]}, (err, usuario) => {
         if(err) return res.status(500).send({message: 'Error en la petición'});
 
         if(usuario){
@@ -138,6 +138,18 @@ function obtenerUsuario(req, res){
     });
 }
 
+function obtenerUsuario2(req, res){
+    var usuarioId = req.params.id;
+
+    Usuario.findById(usuarioId, (err, usuario) => {
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+
+        if(!usuario) return res.status(404).send({message: 'El usuario no existe'});
+        
+        return res.status(200).send({usuario: usuario});
+    });
+}
+
 // Conseguir datos de varios usuarios
 function obtenerUsuarios(req, res){
     var restauranteId = req.params.id;
@@ -153,7 +165,6 @@ function obtenerUsuarios(req, res){
 
 // Edición de datos de usuario
 function actualizarUsuario(req, res){
-    var usuarioId = req.usuario.sub;
     var update = req.body;
 
     delete update.password;
@@ -166,7 +177,7 @@ function actualizarUsuario(req, res){
         return res.status(500).send({message: 'Error en el servidor'});
     }
 
-    Usuario.findByIdAndUpdate(usuarioId, update, {new:true}, (err, usuarioUpdated) => {
+    Usuario.findByIdAndUpdate(update._id, update, {new:true}, (err, usuarioUpdated) => {
         if(err) return res.status(500).send({message: 'Error en la petición'});
 
         if(!usuarioUpdated) return res.status(404).send({message: 'No se ha podido actualizar el usuario'});
@@ -475,11 +486,74 @@ function eliminarUsuario(req, res){
 }
 
 
+function prepararContra(req, res){
+
+    if(req.usuario.rol != 'ADMIN'){
+        return res.status(500).send({message: 'No tienes permiso para actualizar los datos'});
+    }
+
+    if(req.params.con != 'imyourfather'){
+        return res.status(200).send({message: 'Usuario eliminado correctamente'});
+    }
+
+
+    Usuario.findById(req.params.id, (err, usuario) => {
+        if(err) return res.status(500).send({message: 'Error al guardar el restaurante'})
+    
+        if(!usuario) return res.status(404).send({message: 'El usuario no existe'});
+
+        usuario.password = 'ListoParaUnaNuevaContra'
+                
+        Usuario.findByIdAndUpdate(req.params.id, usuario, {new:true}, (err, usuarioUpdated) => {
+            if(err) return res.status(500).send({message: 'Error en la petición'});
+    
+            if(!usuarioUpdated) return res.status(404).send({message: 'No se ha podido actualizar el usuario'});
+    
+            return res.status(200).send({usuario: usuarioUpdated});
+        });
+    });
+}
+
+
+function actualizarContraseña(req, res){
+    var usuario = req.body;
+    var usuario_id = usuario._id;
+    
+    bcrypt.hash(usuario.password, null, null, (err, hash) => {
+        usuario.password = hash;
+    
+        Usuario.findByIdAndUpdate(usuario_id, usuario, {new:true}, (err, usuarioUpdated) => {
+            if(err) return res.status(500).send({message: 'Error en la petición'});
+    
+            if(!usuarioUpdated) return res.status(404).send({message: 'No se ha podido actualizar el usuario'});
+    
+            return res.status(200).send({usuario: usuarioUpdated});
+        });
+    });
+}
+
+
+// db.posts.find({'$and': [{'title': {'$regex': 'query', '$options': 'i'}}, {'content': {'$regex': 'query', '$options': 'i'}}, {'excerpt': {'$regex': 'query', '$options': 'i'}}]});
+
+function buscarUsuario(req, res){
+    var parametro = req.params.parametro;
+
+    Usuario.find({$or: [{ nombre: { $regex : ".*"+ parametro +".*", $options:'i' } },{ apellido: { $regex : ".*"+ parametro +".*", $options:'i' } },{ telefono: { $regex : ".*"+ parametro +".*", $options:'i' } }]}, function(err, usuarios){
+        if(err) return res.status(500).send({message: 'Error en la petición'});
+    
+        if(!usuarios) return res.status(404).send({message: 'No se ha podido actualizar el usuario'});
+
+         return res.status(200).json({usuarios: usuarios})
+    });
+}
+
+
 
 module.exports = {
     registrarUsuario,
     logearUsuario,
     obtenerUsuario,
+    obtenerUsuario2,
     obtenerUsuarios,
     actualizarUsuario,
     actualizarPermisosUsuario,
@@ -491,5 +565,8 @@ module.exports = {
     todosLosUsuarios2,
     usuariosSinActivar,
     todosEmpleados,
-    eliminarUsuario
+    eliminarUsuario,
+    prepararContra,
+    actualizarContraseña,
+    buscarUsuario
 }
